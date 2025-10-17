@@ -1,0 +1,25 @@
+{
+  "tool_dependencies": {
+    "FastQC": [
+      "java-11"
+    ],
+    "BLAST": [
+      "python-3.8"
+    ],
+    "BWA": [
+      "gcc-runtime"
+    ],
+    "SAMtools": [
+      "python-3.8"
+    ],
+    "HISAT2": [
+      "python-3.8",
+      "gcc-runtime"
+    ],
+    "IQ-TREE": [
+      "gcc-runtime"
+    ]
+  },
+  "last_updated": "2025-01-15",
+  "version": "1.0"
+}

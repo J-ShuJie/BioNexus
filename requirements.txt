@@ -1,0 +1,47 @@
+# BioNexus Launcher 依赖包列表
+# 安装方式: pip install -r requirements.txt
+
+# GUI框架 - 必需
+PyQt5>=5.15.0
+
+# 系统信息获取 - 可选，用于系统监控
+psutil>=5.8.0
+
+# Windows快捷方式支持 - 可选，仅Windows需要
+winshell>=0.6.0; sys_platform == "win32"
+
+# 网络请求 - 可选，用于在线功能
+requests>=2.25.0
+
+# JSON配置处理 - 内置模块，无需安装
+# json (built-in)
+
+# 路径处理 - 内置模块，无需安装
+# pathlib (built-in)
+
+# 多线程支持 - 内置模块，无需安装
+# threading (built-in)
+
+# 子进程管理 - 内置模块，无需安装
+# subprocess (built-in)
+
+# 日期时间处理 - 内置模块，无需安装
+# datetime (built-in)
+
+# 数据类支持 - Python 3.7+内置
+# dataclasses (built-in for Python 3.7+)
+
+# 类型提示 - 内置模块，无需安装
+# typing (built-in)
+
+# 枚举支持 - 内置模块，无需安装
+# enum (built-in)
+
+# 正则表达式 - 内置模块，无需安装
+# re (built-in)
+
+# 操作系统接口 - 内置模块，无需安装
+# os (built-in)
+
+# 平台信息 - 内置模块，无需安装
+# platform (built-in)

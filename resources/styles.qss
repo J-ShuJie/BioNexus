@@ -1,0 +1,518 @@
+/*
+=============================================================================
+BioNexus Launcher 样式表
+=============================================================================
+从HTML/CSS转换为PyQt QSS样式表
+保持与原始设计一致的现代化界面风格
+*/
+
+/* 
+=============================================================================
+主窗口和基础样式
+=============================================================================
+清除默认样式，设置统一的字体和背景色
+*/
+QMainWindow {
+    background-color: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+QWidget {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 
+=============================================================================
+自定义标题栏样式已移除 (使用系统原生标题栏)
+=============================================================================
+现在使用Windows/Mac/Linux原生标题栏，避免版权风险
+*/
+
+/* 
+=============================================================================
+左侧边栏样式 (Sidebar)
+=============================================================================
+包含搜索框、导航菜单、最近使用工具列表
+固定宽度250px，浅灰背景
+*/
+QWidget#Sidebar {
+    background-color: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    min-width: 250px;
+    max-width: 250px;
+    padding: 20px;
+}
+
+/* 
+=============================================================================
+搜索功能样式
+=============================================================================
+圆角输入框，聚焦时蓝色边框
+*/
+QLineEdit#SearchInput {
+    background-color: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 10px 16px 10px 36px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+QLineEdit#SearchInput:focus {
+    border-color: #2563eb;
+}
+
+/* 
+=============================================================================
+导航菜单样式
+=============================================================================
+三个主要视图的切换按钮
+活跃状态用蓝色背景和白色文字
+*/
+QListWidget#NavMenu {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+QListWidget#NavMenu::item {
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 14px;
+}
+
+QListWidget#NavMenu::item:hover,
+QListWidget#NavMenu::item:selected {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* 或者使用QPushButton样式 */
+QPushButton.NavButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #475569;
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+QPushButton.NavButton:hover,
+QPushButton.NavButton:checked {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* 
+=============================================================================
+最近使用工具区域样式
+=============================================================================
+显示最近使用的工具，包含状态指示器
+*/
+QWidget#RecentTools {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+QLabel#SectionTitle {
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+QWidget.RecentItem {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+QWidget.RecentItem:hover {
+    background-color: #f1f5f9;
+    border-color: #2563eb;
+}
+
+QLabel.ToolName {
+    color: #475569;
+    font-size: 13px;
+}
+
+/* 状态指示器 - 使用QLabel的样式表模拟圆点 */
+QLabel.StatusInstalled {
+    background-color: #10b981;
+    border-radius: 3px;
+    min-width: 6px;
+    max-width: 6px;
+    min-height: 6px;
+    max-height: 6px;
+}
+
+QLabel.StatusAvailable {
+    background-color: #f59e0b;
+    border-radius: 3px;
+    min-width: 6px;
+    max-width: 6px;
+    min-height: 6px;
+    max-height: 6px;
+}
+
+/* 
+=============================================================================
+主内容区域样式
+=============================================================================
+右侧工具展示和设置区域
+*/
+QWidget#MainContent {
+    background-color: white;
+}
+
+/* 
+=============================================================================
+顶部工具栏样式
+=============================================================================
+包含下载状态和筛选按钮
+*/
+QWidget#Toolbar {
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 20px;
+    min-height: 68px;
+    max-height: 68px;
+}
+
+QPushButton.ToolbarBtn {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    border-radius: 8px;
+    min-width: 36px;
+    max-width: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    margin-left: 12px;
+}
+
+QPushButton.ToolbarBtn:hover {
+    background-color: #e2e8f0;
+}
+
+/* 
+=============================================================================
+工具展示区域样式 
+=============================================================================
+滚动区域，包含工具卡片网格
+*/
+QScrollArea#ToolsContainer {
+    background-color: white;
+    border: none;
+}
+
+QWidget#ToolsGrid {
+    background-color: white;
+}
+
+/* 
+=============================================================================
+工具卡片样式
+=============================================================================
+每个工具的展示卡片，包含悬停效果
+*/
+/* 工具卡片样式 - 修复双重渲染问题 */
+QWidget#ToolCard {
+    /* 不设置尺寸，让代码控制 */
+    /* 不设置padding和margin，避免布局冲突 */
+    background: transparent;  /* 背景由paintEvent控制 */
+}
+
+/* 移除hover样式避免冲突 */
+
+/* 工具卡片内的元素 */
+QLabel.ToolName {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+QLabel.ToolCategory {
+    color: #64748b;
+    font-size: 12px;
+    background-color: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+QLabel.ToolDescription {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+/* 工具状态标签 */
+QLabel.StatusInstalled {
+    background-color: #d5f4e6;
+    color: #059669;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+QLabel.StatusAvailable {
+    background-color: #fef3cd;
+    color: #d97706;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* 
+=============================================================================
+操作按钮样式
+=============================================================================
+工具卡片中的安装、启动、详情按钮
+颜色编码：绿色=安装，蓝色=启动，灰色=详情
+*/
+QPushButton.InstallBtn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+QPushButton.InstallBtn:hover {
+    background-color: #059669;
+}
+
+QPushButton.InstallBtn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+QPushButton.LaunchBtn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+QPushButton.LaunchBtn:hover {
+    background-color: #1d4ed8;
+}
+
+QPushButton.InfoBtn {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+QPushButton.InfoBtn:hover {
+    background-color: #e2e8f0;
+}
+
+/* 
+=============================================================================
+筛选面板样式 - 现代化版本
+=============================================================================
+右侧滑出的筛选侧边栏 - 已迁移到组件内部样式
+注意：实际样式定义在 ui/filter_panel.py 中
+*/
+
+/* 筛选面板样式已迁移至组件内部，此处保留作为备注 */
+/* 
+新的样式特性：
+- 16px圆角边框
+- 白色到淡灰色渐变背景  
+- 现代化按钮设计
+- 蓝色渐变文字效果
+- 悬停交互动画
+*/
+
+/* 
+=============================================================================
+下载状态面板样式 - 现代化版本
+=============================================================================
+右上角的下载状态侧边栏 - 组件内部样式
+注意：实际样式定义在 ui/download_status_panel.py 中
+*/
+
+/* 下载状态面板样式已定义在组件内部，此处保留作为备注 */
+/* 
+新的样式特性：
+- 16px圆角边框
+- 白色到淡蓝色渐变背景
+- 蓝色渐变标题栏，白色文字
+- 现代化进度条设计
+- 完成/失败状态颜色区分
+- 悬停动画效果
+*/
+
+/* 
+=============================================================================
+设置页面样式
+=============================================================================
+配置和管理界面，包含各种设置选项
+*/
+QScrollArea#SettingsContainer {
+    background-color: white;
+    border: none;
+}
+
+QGroupBox.SettingsSection {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+QGroupBox.SettingsSection::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px 0 5px;
+}
+
+QWidget.SettingItem {
+    padding: 10px 0px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+QLabel.SettingLabel {
+    font-size: 14px;
+    color: #475569;
+}
+
+/* 
+=============================================================================
+开关控件样式
+=============================================================================
+模拟iOS/Android的切换开关
+*/
+QPushButton.ToggleSwitch {
+    background-color: #cbd5e1;
+    border: none;
+    border-radius: 10px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 20px;
+    max-height: 20px;
+}
+
+QPushButton.ToggleSwitch:checked {
+    background-color: #2563eb;
+}
+
+/* 
+=============================================================================
+下载提示框样式
+=============================================================================
+悬停显示的下载任务详情
+*/
+QWidget#DownloadTooltip {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+QLabel.DownloadName {
+    color: #374151;
+    font-size: 12px;
+}
+
+QLabel.DownloadStatus {
+    color: #10b981;
+    font-size: 12px;
+}
+
+/* 
+=============================================================================
+进度条样式
+=============================================================================
+安装进度显示
+*/
+QProgressBar {
+    background-color: #f1f5f9;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 12px;
+    color: #475569;
+    min-height: 8px;
+}
+
+QProgressBar::chunk {
+    background-color: #2563eb;
+    border-radius: 4px;
+}
+
+/* 
+=============================================================================
+滚动条样式
+=============================================================================
+自定义滚动条外观，更现代化
+*/
+QScrollBar:vertical {
+    background-color: #f1f5f9;
+    width: 8px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #94a3b8;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+}
+
+QScrollBar:horizontal {
+    background-color: #f1f5f9;
+    height: 8px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+    min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #94a3b8;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    border: none;
+    background: none;
+}
