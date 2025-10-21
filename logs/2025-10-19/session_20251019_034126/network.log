@@ -1,0 +1,2 @@
+2025-10-19 03:41:28,819 - BioNexus.network - INFO - 网络请求: GET https://api.github.com/repos/s-andrews/FastQC/releases/latest - 状态码: 200 - 用时: 0.46s
+2025-10-19 03:41:28,837 - BioNexus.network - INFO - 网络请求: GET https://api.github.com/repos/s-andrews/FastQC/releases/latest - 状态码: 200 - 用时: 0.38s

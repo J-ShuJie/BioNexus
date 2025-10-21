@@ -37,25 +37,25 @@ class DeletionConfirmationDialog(QDialog):
     
     def _init_ui(self):
         """初始化界面"""
-        self.setWindowTitle("确认删除")
+        self.setWindowTitle(self.tr("确认删除"))
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setModal(True)
         self.setFixedSize(500, 400)
-        
+
         layout = QVBoxLayout(self)
         layout.setSpacing(15)
-        
+
         # 警告标题
         title_layout = QHBoxLayout()
-        
+
         warning_label = QLabel("⚠️")
         warning_label.setFont(QFont("Microsoft YaHei", 24))
         warning_label.setStyleSheet("color: #f39c12;")
-        
-        title_text = QLabel("确认删除工具")
+
+        title_text = QLabel(self.tr("确认删除工具"))
         title_text.setFont(QFont("Microsoft YaHei", 14, QFont.Bold))
         title_text.setStyleSheet("color: #e74c3c;")
-        
+
         title_layout.addWidget(warning_label)
         title_layout.addWidget(title_text)
         title_layout.addStretch()
@@ -69,11 +69,11 @@ class DeletionConfirmationDialog(QDialog):
         layout.addWidget(line)
         
         # 工具列表
-        tools_label = QLabel(f"将删除以下 {len(self.tools_to_delete)} 个工具：")
+        tools_label = QLabel(self.tr("将删除以下 {0} 个工具：").format(len(self.tools_to_delete)))
         tools_label.setFont(QFont("Microsoft YaHei", 10, QFont.Bold))
         tools_label.setStyleSheet("color: #2c3e50;")
         layout.addWidget(tools_label)
-        
+
         # 工具列表显示区域
         tools_text = QTextEdit()
         tools_text.setMaximumHeight(100)
@@ -87,15 +87,15 @@ class DeletionConfirmationDialog(QDialog):
                 padding: 8px;
             }
         """)
-        
+
         tools_list_text = "\\n".join(f"• {tool}" for tool in self.tools_to_delete)
         tools_text.setPlainText(tools_list_text)
         tools_text.setReadOnly(True)
-        
+
         layout.addWidget(tools_text)
-        
+
         # 空间信息
-        self.space_info_label = QLabel("正在计算节省空间...")
+        self.space_info_label = QLabel(self.tr("正在计算节省空间..."))
         self.space_info_label.setStyleSheet("color: #27ae60; font-weight: bold;")
         layout.addWidget(self.space_info_label)
         
@@ -111,12 +111,12 @@ class DeletionConfirmationDialog(QDialog):
             }
         """)
         dependencies_layout = QVBoxLayout(self.dependencies_frame)
-        
-        deps_title = QLabel("🔗 依赖环境处理")
+
+        deps_title = QLabel(self.tr("🔗 依赖环境处理"))
         deps_title.setFont(QFont("Microsoft YaHei", 10, QFont.Bold))
         deps_title.setStyleSheet("color: #f39c12;")
         dependencies_layout.addWidget(deps_title)
-        
+
         self.dependencies_text = QTextEdit()
         self.dependencies_text.setMaximumHeight(80)
         self.dependencies_text.setStyleSheet("""
@@ -129,16 +129,16 @@ class DeletionConfirmationDialog(QDialog):
         """)
         self.dependencies_text.setReadOnly(True)
         dependencies_layout.addWidget(self.dependencies_text)
-        
-        self.cleanup_checkbox = QCheckBox("同时清理不再需要的运行环境")
+
+        self.cleanup_checkbox = QCheckBox(self.tr("同时清理不再需要的运行环境"))
         self.cleanup_checkbox.setChecked(True)
         self.cleanup_checkbox.setStyleSheet("font-weight: bold; color: #e74c3c;")
         dependencies_layout.addWidget(self.cleanup_checkbox)
-        
+
         layout.addWidget(self.dependencies_frame)
-        
+
         # 确认复选框
-        self.confirm_checkbox = QCheckBox("我确认删除上述工具，此操作不可撤销")
+        self.confirm_checkbox = QCheckBox(self.tr("我确认删除上述工具，此操作不可撤销"))
         self.confirm_checkbox.setFont(QFont("Microsoft YaHei", 10))
         self.confirm_checkbox.setStyleSheet("color: #e74c3c; font-weight: bold;")
         self.confirm_checkbox.stateChanged.connect(self._on_confirm_changed)
@@ -150,7 +150,7 @@ class DeletionConfirmationDialog(QDialog):
         button_layout = QHBoxLayout()
         button_layout.addStretch()
         
-        self.cancel_btn = QPushButton("取消")
+        self.cancel_btn = QPushButton(self.tr("取消"))
         self.cancel_btn.setStyleSheet("""
             QPushButton {
                 background-color: #95a5a6;
@@ -166,8 +166,8 @@ class DeletionConfirmationDialog(QDialog):
             }
         """)
         self.cancel_btn.clicked.connect(self.reject)
-        
-        self.delete_btn = QPushButton("确认删除")
+
+        self.delete_btn = QPushButton(self.tr("确认删除"))
         self.delete_btn.setStyleSheet("""
             QPushButton {
                 background-color: #e74c3c;
@@ -208,10 +208,10 @@ class DeletionConfirmationDialog(QDialog):
             
             if deletion_info['environments_size'] > 0:
                 env_size = calc.format_size(deletion_info['environments_size'])
-                space_text = f"💾 节省空间: 工具 {tools_size} + 环境 {env_size} = 总计 {total_savings}"
+                space_text = self.tr("💾 节省空间: 工具 {0} + 环境 {1} = 总计 {2}").format(tools_size, env_size, total_savings)
             else:
-                space_text = f"💾 节省空间: {tools_size}"
-            
+                space_text = self.tr("💾 节省空间: {0}").format(tools_size)
+
             self.space_info_label.setText(space_text)
             
             # 处理依赖环境
@@ -220,14 +220,14 @@ class DeletionConfirmationDialog(QDialog):
             if cleanup_candidates:
                 self.cleanup_environments = [env.name for env in cleanup_candidates]
                 self.dependencies_frame.setVisible(True)
-                
+
                 # 构建依赖信息文本
-                deps_text = "删除这些工具后，以下运行环境将不再被其他工具使用：\\n"
+                deps_text = self.tr("删除这些工具后，以下运行环境将不再被其他工具使用：\n")
                 for env in cleanup_candidates:
                     size_str = calc.format_size(env.size)
                     deps_text += f"• {env.name} ({size_str}) - {env.description}\\n"
-                
-                deps_text += "\\n💡 建议同时清理这些环境以释放更多空间。"
+
+                deps_text += self.tr("\n💡 建议同时清理这些环境以释放更多空间。")
                 self.dependencies_text.setPlainText(deps_text)
             else:
                 self.dependencies_frame.setVisible(False)
@@ -241,7 +241,7 @@ class DeletionConfirmationDialog(QDialog):
             
         except Exception as e:
             self.logger.error(f"分析删除操作失败: {e}")
-            self.space_info_label.setText("⚠️ 分析失败，请检查系统状态")
+            self.space_info_label.setText(self.tr("⚠️ 分析失败，请检查系统状态"))
     
     def _on_confirm_changed(self, state):
         """处理确认复选框状态变化"""
@@ -253,10 +253,9 @@ class DeletionConfirmationDialog(QDialog):
             # 最后的安全检查
             if len(self.tools_to_delete) > 5:
                 reply = QMessageBox.question(
-                    self, 
-                    "最终确认",
-                    f"您即将删除 {len(self.tools_to_delete)} 个工具。\\n"
-                    "这是一个批量操作，确定继续吗？",
+                    self,
+                    self.tr("最终确认"),
+                    self.tr("您即将删除 {0} 个工具。\n这是一个批量操作，确定继续吗？").format(len(self.tools_to_delete)),
                     QMessageBox.Yes | QMessageBox.No,
                     QMessageBox.No
                 )
@@ -274,7 +273,7 @@ class DeletionConfirmationDialog(QDialog):
             
         except Exception as e:
             self.logger.error(f"删除确认处理失败: {e}")
-            QMessageBox.critical(self, "错误", f"操作失败: {e}")
+            QMessageBox.critical(self, self.tr("错误"), self.tr("操作失败: {0}").format(e))
     
     @classmethod
     def confirm_deletion(cls, tools_to_delete: List[str], parent=None) -> tuple:
@@ -317,26 +316,26 @@ class QuickDeleteDialog(QDialog):
     def __init__(self, tool_name: str, parent=None):
         super().__init__(parent)
         self.tool_name = tool_name
-        self.setWindowTitle("确认删除")
+        self.setWindowTitle(self.tr("确认删除"))
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setModal(True)
         self.setFixedSize(350, 150)
-        
+
         self._init_ui()
-    
+
     def _init_ui(self):
         """初始化界面"""
         layout = QVBoxLayout(self)
         layout.setSpacing(20)
-        
+
         # 询问文本
-        question_label = QLabel(f"确定要删除工具 '{self.tool_name}' 吗？")
+        question_label = QLabel(self.tr("确定要删除工具 '{0}' 吗？").format(self.tool_name))
         question_label.setFont(QFont("Microsoft YaHei", 12))
         question_label.setStyleSheet("color: #2c3e50;")
         question_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(question_label)
-        
-        warning_label = QLabel("此操作不可撤销")
+
+        warning_label = QLabel(self.tr("此操作不可撤销"))
         warning_label.setFont(QFont("Microsoft YaHei", 10))
         warning_label.setStyleSheet("color: #e74c3c;")
         warning_label.setAlignment(Qt.AlignCenter)
@@ -346,7 +345,7 @@ class QuickDeleteDialog(QDialog):
         button_layout = QHBoxLayout()
         button_layout.addStretch()
         
-        cancel_btn = QPushButton("取消")
+        cancel_btn = QPushButton(self.tr("取消"))
         cancel_btn.setStyleSheet("""
             QPushButton {
                 background-color: #95a5a6;
@@ -361,8 +360,8 @@ class QuickDeleteDialog(QDialog):
             }
         """)
         cancel_btn.clicked.connect(self.reject)
-        
-        delete_btn = QPushButton("删除")
+
+        delete_btn = QPushButton(self.tr("删除"))
         delete_btn.setStyleSheet("""
             QPushButton {
                 background-color: #e74c3c;

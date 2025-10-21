@@ -50,9 +50,12 @@ class ToolCardV3(QWidget):
         
         # 初始化按钮
         self._init_buttons()
-        
+
         # 设置阴影效果
         self._setup_shadow()
+
+        # Connect to language change signal
+        self._connect_language_change()
         
     def _init_buttons(self):
         """初始化底部按钮"""
@@ -63,7 +66,7 @@ class ToolCardV3(QWidget):
         
         if self.tool_data['status'] == 'installed':
             # 已安装：启动按钮 + 详情按钮
-            self.launch_btn = QPushButton("启动", self)
+            self.launch_btn = QPushButton(self.tr("Launch"), self)
             self.launch_btn.setGeometry(
                 self.PADDING, button_y, button_width, self.BUTTON_HEIGHT
             )
@@ -71,17 +74,17 @@ class ToolCardV3(QWidget):
                 lambda: self.launch_clicked.emit(self.tool_data['name'])
             )
             self._style_button(self.launch_btn, "primary")
-            
-            self.detail_btn = QPushButton("详情", self)
+
+            self.detail_btn = QPushButton(self.tr("Details"), self)
             self.detail_btn.setGeometry(
-                self.PADDING + button_width + button_spacing, 
+                self.PADDING + button_width + button_spacing,
                 button_y, button_width, self.BUTTON_HEIGHT
             )
             self.detail_btn.clicked.connect(self._on_detail_clicked)
             self._style_button(self.detail_btn, "secondary")
         else:
             # 未安装：安装按钮 + 详情按钮
-            self.install_btn = QPushButton("安装", self)
+            self.install_btn = QPushButton(self.tr("Install"), self)
             self.install_btn.setGeometry(
                 self.PADDING, button_y, button_width, self.BUTTON_HEIGHT
             )
@@ -89,8 +92,8 @@ class ToolCardV3(QWidget):
                 lambda: self.install_clicked.emit(self.tool_data['name'])
             )
             self._style_button(self.install_btn, "success")
-            
-            self.detail_btn = QPushButton("详情", self)
+
+            self.detail_btn = QPushButton(self.tr("Details"), self)
             self.detail_btn.setGeometry(
                 self.PADDING + button_width + button_spacing,
                 button_y, button_width, self.BUTTON_HEIGHT
@@ -278,7 +281,11 @@ class ToolCardV3(QWidget):
             self.DESC_HEIGHT
         )
         
-        description = self.tool_data.get('description', '')
+        try:
+            from utils.tool_localization import get_localized_tool_description
+            description = get_localized_tool_description(self.tool_data)
+        except Exception:
+            description = self.tool_data.get('description', '')
         if not description:
             return
             
@@ -437,7 +444,7 @@ class ToolCardV3(QWidget):
         if hasattr(self, 'install_btn'):
             if is_installing:
                 if progress >= 0:
-                    self.install_btn.setText(f"{progress}%")
+                    self.install_btn.setText(self.tr("{0}%").format(progress))
                 elif status_text:
                     display_text = status_text[:6] if len(status_text) > 6 else status_text
                     self.install_btn.setText(display_text)
@@ -445,10 +452,32 @@ class ToolCardV3(QWidget):
                     self.install_btn.setText("...")
                 self.install_btn.setEnabled(False)
             else:
-                self.install_btn.setText("安装")
+                self.install_btn.setText(self.tr("Install"))
                 self.install_btn.setEnabled(True)
     
     def set_favorite(self, is_favorite: bool):
         """设置收藏状态"""
         self.is_favorite = is_favorite
+        self.update()
+
+    def _connect_language_change(self):
+        """Connect to language change signal"""
+        try:
+            from utils.translator import get_translator
+            translator = get_translator()
+            translator.languageChanged.connect(self.retranslateUi)
+        except Exception as e:
+            print(f"Warning: Could not connect language change signal in ToolCardV3: {e}")
+
+    def retranslateUi(self):
+        """Update all translatable text - called when language changes"""
+        # Update button texts based on tool status
+        if hasattr(self, 'launch_btn'):
+            self.launch_btn.setText(self.tr("Launch"))
+        if hasattr(self, 'install_btn'):
+            self.install_btn.setText(self.tr("Install"))
+        if hasattr(self, 'detail_btn'):
+            self.detail_btn.setText(self.tr("Details"))
+
+        # Trigger repaint to update any painted text
         self.update()

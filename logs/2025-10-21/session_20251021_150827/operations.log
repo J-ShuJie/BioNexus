@@ -1,0 +1,13 @@
+2025-10-21 15:08:35,715 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:08:36,495 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
+2025-10-21 15:08:37,478 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:08:37,488 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-21 15:08:40,656 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:08:40,661 - BioNexus.operations - INFO - 视图切换: settings → all-tools - 成功
+2025-10-21 15:08:41,595 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:08:41,600 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-21 15:08:48,030 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:08:48,040 - BioNexus.operations - INFO - 视图切换: settings → all-tools - 成功
+2025-10-21 15:08:49,810 - BioNexus.operations - INFO - 用户操作: 查看工具详情 - {"工具名": "HISAT2"}
+2025-10-21 15:08:51,883 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
+2025-10-21 15:08:51,951 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

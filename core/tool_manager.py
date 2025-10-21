@@ -14,6 +14,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, QThread
 from data.models import Tool, ToolStatus, DownloadTask, DownloadStatus
 from data.config import ConfigManager
 from .tool_registry import ToolRegistry
+from utils.tool_localization import get_localized_tool_description
 
 
 class InstallWorker(QThread):
@@ -273,6 +274,22 @@ class ToolManager(QObject):
             self.error_occurred.emit(tool_name, error_msg)
             return False
     
+    def _with_localized_description(self, tool_data: Dict[str, Any]) -> Dict[str, Any]:
+        """返回带本地化简介的工具数据副本，不修改原始数据文件。
+
+        - 优先使用内置本地化（YAML/内嵌 i18n 字段）
+        - 将结果写入 `display_description` 字段，同时覆盖 `description` 供旧代码使用
+        - 原始用户数据不被修改
+        """
+        td = dict(tool_data or {})
+        try:
+            desc = get_localized_tool_description(td)
+        except Exception:
+            desc = td.get('description', '')
+        td['display_description'] = desc
+        td['description'] = desc
+        return td
+
     def get_all_tools_data(self) -> List[Dict[str, Any]]:
         """
         获取所有工具数据，供UI层使用
@@ -281,7 +298,7 @@ class ToolManager(QObject):
         Returns:
             工具数据列表
         """
-        return self.registry.get_all_tools()
+        return [self._with_localized_description(t) for t in self.registry.get_all_tools()]
     
     def get_tool_info(self, tool_name: str) -> Optional[Dict[str, Any]]:
         """
@@ -295,7 +312,7 @@ class ToolManager(QObject):
         """
         tool_instance = self.registry.get_tool(tool_name)
         if tool_instance:
-            return tool_instance.to_dict()
+            return self._with_localized_description(tool_instance.to_dict())
         return None
     
     def check_tool_dependencies(self, tool_name: str) -> Dict[str, bool]:

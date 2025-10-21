@@ -326,7 +326,7 @@ class ModernDownloadItem(QWidget):
         info_layout.addLayout(name_row_layout)
         
         # 状态文本
-        self.status_label = QLabel("准备中...")
+        self.status_label = QLabel(self.tr("Preparing..."))
         self.status_label.setStyleSheet("""
             font-size: 12px;
             color: #6b7280;
@@ -582,7 +582,7 @@ class EmptyStateWidget(QWidget):
         layout.addWidget(icon_label)
         
         # 空状态文字
-        title_label = QLabel("暂无下载任务")
+        title_label = QLabel(self.tr("No download tasks"))
         title_label.setAlignment(Qt.AlignCenter)
         title_label.setStyleSheet("""
             font-size: 16px;
@@ -592,7 +592,7 @@ class EmptyStateWidget(QWidget):
         """)
         layout.addWidget(title_label)
         
-        desc_label = QLabel("开始安装工具时会显示下载进度")
+        desc_label = QLabel(self.tr("Download progress will appear when installing tools"))
         desc_label.setAlignment(Qt.AlignCenter)
         desc_label.setStyleSheet("""
             font-size: 14px;
@@ -727,7 +727,7 @@ class ModernDownloadCard(QWidget):
         title_layout.setContentsMargins(0, 0, 0, 0)
         title_layout.setSpacing(2)
         
-        title = QLabel("下载管理器")
+        title = QLabel(self.tr("Download Manager"))
         title.setStyleSheet("""
             font-size: 16px;
             font-weight: 600;
@@ -736,7 +736,7 @@ class ModernDownloadCard(QWidget):
         title_layout.addWidget(title)
         
         # 状态计数
-        self.status_label = QLabel("暂无下载任务")
+        self.status_label = QLabel(self.tr("No download tasks"))
         self.status_label.setStyleSheet("""
             font-size: 12px;
             color: #6b7280;
@@ -828,7 +828,7 @@ class ModernDownloadCard(QWidget):
         layout.setContentsMargins(20, 12, 20, 12)
         
         # 总体统计信息
-        self.stats_label = QLabel("总计：0 个任务")
+        self.stats_label = QLabel(self.tr("Total: 0 tasks"))
         self.stats_label.setStyleSheet("""
             font-size: 12px;
             color: #6b7280;
@@ -838,7 +838,7 @@ class ModernDownloadCard(QWidget):
         layout.addStretch()
         
         # 清空按钮
-        clear_btn = QPushButton("清空已完成")
+        clear_btn = QPushButton(self.tr("Clear Completed"))
         clear_btn.setStyleSheet("""
             QPushButton {
                 background-color: #f3f4f6;
@@ -988,19 +988,19 @@ class ModernDownloadCard(QWidget):
                     if item.is_failed)
         
         if total == 0:
-            self.status_label.setText("暂无下载任务")
-            self.stats_label.setText("总计：0 个任务")
+            self.status_label.setText(self.tr("No download tasks"))
+            self.stats_label.setText(self.tr("Total: 0 tasks"))
         else:
             status_parts = []
             if active > 0:
-                status_parts.append(f"{active} 个下载中")
+                status_parts.append(self.tr("{0} in progress").format(active))
             if completed > 0:
-                status_parts.append(f"{completed} 个已完成")
+                status_parts.append(self.tr("{0} completed").format(completed))
             if failed > 0:
-                status_parts.append(f"{failed} 个失败")
+                status_parts.append(self.tr("{0} failed").format(failed))
             
-            self.status_label.setText(" • ".join(status_parts) if status_parts else "所有任务已完成")
-            self.stats_label.setText(f"总计：{total} 个任务")
+            self.status_label.setText(" • ".join(status_parts) if status_parts else self.tr("All tasks completed"))
+            self.stats_label.setText(self.tr("Total: {0} tasks").format(total))
     
     def _on_close_clicked(self):
         """关闭卡片"""

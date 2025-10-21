@@ -42,7 +42,7 @@ class ToolUpdateDialog(QDialog):
         self.logger = get_logger()
         
         # 对话框配置
-        self.setWindowTitle("工具更新通知")
+        self.setWindowTitle(self.tr("Tool Update Notification"))
         self.setModal(True)
         self.setMinimumSize(600, 400)
         self.resize(800, 600)
@@ -87,7 +87,7 @@ class ToolUpdateDialog(QDialog):
         layout = QVBoxLayout(frame)
         
         # 主标题
-        title_label = QLabel("🔧 发现工具更新")
+        title_label = QLabel(self.tr("🔧 Tool updates found"))
         title_font = QFont()
         title_font.setPointSize(16)
         title_font.setBold(True)
@@ -112,11 +112,11 @@ class ToolUpdateDialog(QDialog):
         # 左侧：批量操作
         left_layout = QHBoxLayout()
         
-        select_all_btn = QPushButton("全选")
+        select_all_btn = QPushButton(self.tr("Select All"))
         select_all_btn.clicked.connect(self._select_all_updates)
         left_layout.addWidget(select_all_btn)
         
-        deselect_all_btn = QPushButton("全不选")
+        deselect_all_btn = QPushButton(self.tr("Deselect All"))
         deselect_all_btn.clicked.connect(self._deselect_all_updates)
         left_layout.addWidget(deselect_all_btn)
         
@@ -127,7 +127,7 @@ class ToolUpdateDialog(QDialog):
         right_layout = QHBoxLayout()
         
         # 更新按钮
-        self.update_btn = QPushButton("立即更新选中项")
+        self.update_btn = QPushButton(self.tr("Update Selected Now"))
         self.update_btn.setStyleSheet("""
             QPushButton {
                 background-color: #4CAF50;
@@ -148,12 +148,12 @@ class ToolUpdateDialog(QDialog):
         right_layout.addWidget(self.update_btn)
         
         # 稍后按钮
-        later_btn = QPushButton("稍后提醒")
+        later_btn = QPushButton(self.tr("Remind Me Later"))
         later_btn.clicked.connect(self.reject)
         right_layout.addWidget(later_btn)
         
         # 关闭按钮
-        close_btn = QPushButton("关闭")
+        close_btn = QPushButton(self.tr("Close"))
         close_btn.clicked.connect(self.reject)
         right_layout.addWidget(close_btn)
         
@@ -224,7 +224,7 @@ class ToolUpdateDialog(QDialog):
             'optional': '⚪ 可选更新'
         }
         
-        priority_label = QLabel(priority_text.get(priority, '⚪ 可选更新'))
+        priority_label = QLabel(priority_text.get(priority, self.tr('⚪ Optional')))
         priority_label.setStyleSheet(f"color: {priority_colors.get(priority, '#6c757d')}; font-weight: bold;")
         header_layout.addWidget(priority_label)
         
@@ -240,7 +240,7 @@ class ToolUpdateDialog(QDialog):
         
         # 文件大小
         size = update.get('size', '未知')
-        size_label = QLabel(f"大小: {size}")
+        size_label = QLabel(self.tr("Size: {0}").format(size))
         size_label.setStyleSheet("color: #6c757d;")
         version_layout.addWidget(size_label)
         
@@ -250,7 +250,7 @@ class ToolUpdateDialog(QDialog):
         # 更新说明（如果有）
         changelog = update.get('changelog', '').strip()
         if changelog:
-            changelog_label = QLabel("更新说明:")
+            changelog_label = QLabel(self.tr("Changelog:"))
             changelog_label.setStyleSheet("font-weight: bold; margin-left: 20px; margin-top: 5px;")
             layout.addWidget(changelog_label)
             
@@ -266,7 +266,7 @@ class ToolUpdateDialog(QDialog):
         
         # "不再提示"选项（仅手动模式显示）
         if self.is_manual:
-            never_remind_cb = QCheckBox("不再提示此版本更新")
+            never_remind_cb = QCheckBox(self.tr("Do not remind again for this version"))
             never_remind_cb.setObjectName(f"never_remind_{index}")
             never_remind_cb.setStyleSheet("margin-left: 20px; color: #6c757d;")
             actions_layout.addWidget(never_remind_cb)
@@ -274,7 +274,7 @@ class ToolUpdateDialog(QDialog):
         actions_layout.addStretch()
         
         # 跳过按钮
-        skip_btn = QPushButton("跳过此工具")
+        skip_btn = QPushButton(self.tr("Skip this tool"))
         skip_btn.setStyleSheet("color: #dc3545; background: none; border: 1px solid #dc3545; padding: 4px 8px;")
         skip_btn.clicked.connect(lambda checked, idx=index: self._skip_update(idx))
         actions_layout.addWidget(skip_btn)

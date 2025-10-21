@@ -1,0 +1,10 @@
+2025-10-20 09:08:46,483 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 09:08:46,676 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
+2025-10-20 09:08:47,939 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 09:08:47,942 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-20 09:08:51,476 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 09:08:51,479 - BioNexus.operations - INFO - 视图切换: settings → my-tools - 成功
+2025-10-20 09:08:52,607 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 09:08:52,610 - BioNexus.operations - INFO - 视图切换: my-tools → all-tools - 成功
+2025-10-20 09:08:54,160 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
+2025-10-20 09:08:54,196 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

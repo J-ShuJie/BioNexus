@@ -456,7 +456,7 @@ def test_smart_paint_label():
     
     app = QApplication(sys.argv)
     window = QWidget()
-    window.setWindowTitle("SmartPaintLabel测试 - Windows优化版")
+    window.setWindowTitle("SmartPaintLabel Test - Windows Optimized")
     layout = QVBoxLayout(window)
     
     # 测试不同场景

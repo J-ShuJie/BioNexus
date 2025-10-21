@@ -1,0 +1,732 @@
+DeletionConfirmationDialog:
+  确认删除工具: Löschung bestätigen
+  将删除以下 {0} 个工具：: 'Die folgenden {0} Tools werden gelöscht:'
+  正在计算节省空间...: Speicherersparnis wird berechnet...
+  🔗 依赖环境处理: 🔗 Abhängigkeiten verwalten
+  取消: Abbrechen
+  确认删除: Löschen bestätigen
+  确定要删除工具 '{0}' 吗？: Sind Sie sicher, dass Sie das Tool "{0}" löschen möchten?
+  此操作不可撤销: Dieser Vorgang kann nicht rückgängig gemacht werden
+  删除: Löschen
+  💡 It is recommended to clean up these environments to free up more space.: 💡 Es wird empfohlen, diese Umgebungen zu bereinigen, um mehr Speicherplatz freizugeben.
+  ? "After deleting these tools, the following runtime environments will no longer be used by other tools:\n\n    "
+  : "Nach dem Löschen dieser Tools werden die folgenden Laufzeitumgebungen von keinen anderen Tools mehr verwendet:\n\n    "
+  Also clean up runtime environments that are no longer needed: Nicht mehr benötigte Laufzeitumgebungen ebenfalls bereinigen
+  Are you sure you want to delete tool '{0}'?: Möchten Sie das Tool '{0}' wirklich löschen?
+  Calculating space savings...: Berechne Speicherplatzersparnis...
+  Cancel: Abbrechen
+  Confirm Deletion: Löschung bestätigen
+  Confirm Tool Deletion: Tool-Löschung bestätigen
+  Delete: Löschen
+  Error: Fehler
+  Final Confirmation: Endgültige Bestätigung
+  I confirm the deletion of the above tools, this operation cannot be undone: Ich bestätige die Löschung der oben genannten Tools. Dieser Vorgang kann nicht rückgängig gemacht werden
+  'Operation failed: {0}': 'Vorgang fehlgeschlagen: {0}'
+  'The following {0} tools will be deleted:': 'Die folgenden {0} Tools werden gelöscht:'
+  This operation cannot be undone: Dieser Vorgang kann nicht rückgängig gemacht werden
+  ? 'You are about to delete {0} tools.
+
+
+    This is a batch operation, are you sure you want to continue?'
+  : 'Sie sind dabei, {0} Tools zu löschen.
+
+
+    Dies ist ein Stapelvorgang. Möchten Sie wirklich fortfahren?'
+  ⚠️ Analysis failed, please check system status: ⚠️ Analyse fehlgeschlagen. Bitte überprüfen Sie den Systemstatus
+  '💾 Space Saved: Tools {0} + Environments {1} = Total {2}': '💾 Freigegebener Speicher: Tools {0} + Umgebungen {1} = Gesamt {2}'
+  '💾 Space Saved: {0}': '💾 Freigegebener Speicher: {0}'
+  🔗 Dependency Environment Handling: 🔗 Verwaltung von Abhängigkeitsumgebungen
+DownloadItem:
+  (Manual): (Manuell)
+  Clear: Leeren
+  Complete: Abgeschlossen
+  Download: Herunterladen
+  Download Status: Download-Status
+  Extract: Entpacken
+  Install: Installieren
+  No download tasks: Keine Download-Aufgaben
+  Preparing to download...: Download wird vorbereitet...
+  Success: Erfolgreich
+  Update Check: Update-Prüfung
+  Verify: Überprüfen
+  '{0} Update': '{0}-Update'
+  ✅ Installation Complete: ✅ Installation abgeschlossen
+  ✅ Updated from v{0} to v{1}: ✅ Von v{0} auf v{1} aktualisiert
+  ❌ Failed to update from v{0} to v{1}: ❌ Aktualisierung von v{0} auf v{1} fehlgeschlagen
+  ❌ {0}: ❌ {0}
+  🔍 All tools are up to date: 🔍 Alle Tools sind auf dem neuesten Stand
+  🔍 Found {0} tool updates: 🔍 {0} Tool-Updates gefunden
+FilterPanel:
+  Apply: Anwenden
+  Available: Verfügbar
+  Filter Tools: Tools filtern
+  Genomics: Genomik
+  Installation Status: Installationsstatus
+  Installed: Installiert
+  Phylogenetics: Phylogenetik
+  Quality Control: Qualitätskontrolle
+  Reset: Zurücksetzen
+  Selected: Ausgewählt
+  Sequence Analysis: Sequenzanalyse
+  Tool Type: Tool-Typ
+  Unselected: Nicht ausgewählt
+  Update Available: Update verfügbar
+  Visualization: Visualisierung
+MainWindow:
+  ? 'Are you sure you want to uninstall {0}?
+
+
+
+    This will delete the tool files and related configurations, and this operation cannot be undone.'
+  : 'Möchten Sie {0} wirklich deinstallieren?
+
+
+
+    Dies wird die Tool-Dateien und zugehörigen Konfigurationen löschen. Dieser Vorgang kann nicht rückgängig gemacht werden.'
+  BioNexus Launcher: BioNexus Launcher
+  Cannot launch {0}: '{0} kann nicht gestartet werden'
+  Cannot start the installation process for {0}: Installationsprozess für {0} kann nicht gestartet werden
+  Cannot uninstall {0}, please check if the tool is currently in use: '{0} kann nicht deinstalliert werden. Bitte prüfen Sie, ob das Tool derzeit verwendet wird'
+  Check for Updates: Nach Updates suchen
+  Confirm Uninstall: Deinstallation bestätigen
+  ? "Description: {0}\n\n    "
+  : "Beschreibung: {0}\n\n    "
+  ? "Disk Usage: {0}\n\n    "
+  : "Speicherbelegung: {0}\n\n    "
+  ? "Executable: {0}\n\n    "
+  : "Ausführbare Datei: {0}\n\n    "
+  Installation Failed: Installation fehlgeschlagen
+  ? "Installation Source: {0}\n\n    "
+  : "Installationsquelle: {0}\n\n    "
+  Launch Failed: Start fehlgeschlagen
+  Preparing to install...: Installation wird vorbereitet...
+  Preparing to uninstall...: Deinstallation wird vorbereitet...
+  Preparing to update...: Update wird vorbereitet...
+  ? "Tool Name: {0}\n\n    "
+  : "Tool-Name: {0}\n\n    "
+  Uninstall Complete: Deinstallation abgeschlossen
+  Uninstall Failed: Deinstallation fehlgeschlagen
+  Uninstall Successful: Deinstallation erfolgreich
+  Update Complete: Update abgeschlossen
+  Update Failed: Update fehlgeschlagen
+  ? "Usage time: {0} hours {1} minutes\n\n    "
+  : "Nutzungszeit: {0} Stunden {1} Minuten\n\n    "
+  ? "Version: {0}\n\n    "
+  : "Version: {0}\n\n    "
+  '{0} (Uninstall)': '{0} (Deinstallieren)'
+  '{0} Details': '{0} Details'
+  '{0} Error': '{0} Fehler'
+  '{0} Update': '{0} Update'
+  '{0} has been successfully uninstalled': '{0} wurde erfolgreich deinstalliert'
+ModernSidebar:
+  All Tools: Alle Tools
+  My Tools: Meine Tools
+  Search bioinformatics tools...: Bioinformatik-Tools durchsuchen...
+  Settings: Einstellungen
+  🕒 Recently Used: 🕒 Zuletzt verwendet
+ModernToolbar:
+  ← Back: ← Zurück
+PathMigrationDialog:
+  'Auto-update to: {0}': 'Automatisch aktualisieren auf: {0}'
+  Conda Environment Path: Conda-Umgebungspfad
+  Confirm: Bestätigen
+  'Continue using: {0}': 'Weiterhin verwenden: {0}'
+  Default Installation Directory: Standard-Installationsverzeichnis
+  Keep original path (absolute path): Ursprünglichen Pfad beibehalten (absoluter Pfad)
+  Path Migration Confirmation: Bestätigung der Pfadmigration
+  Recommended: Empfohlen
+  Software location change detected: Änderung des Software-Standorts erkannt
+  Use new default path (recommended): Neuen Standardpfad verwenden (empfohlen)
+  ? 'You previously set a custom path for <b>{0}</b>, but the software location has changed.
+
+
+
+    Please choose how to handle this path:'
+  : 'Sie haben zuvor einen benutzerdefinierten Pfad für <b>{0}</b> festgelegt, aber der Software-Standort hat sich geändert.
+
+
+
+    Bitte wählen Sie, wie dieser Pfad behandelt werden soll:'
+  ? '💡 Tip: Selecting "Use new default path" allows the software path to update automatically with versions, avoiding manual adjustments with each upgrade.'
+  : '💡 Tipp: Wenn Sie "Neuen Standardpfad verwenden" wählen, wird der Software-Pfad automatisch mit den Versionen aktualisiert, sodass manuelle Anpassungen bei jedem Upgrade vermieden werden.'
+SmartTextWidget:
+  Apply Filter: Filter anwenden
+  Available: Verfügbar
+  Evolutionary Analysis: Evolutionsanalyse
+  Filter Tools: Tools filtern
+  Gene Annotation: Genannotation
+  Genomics: Genomik
+  Installation Status: Installationsstatus
+  Installed: Installiert
+  Reset: Zurücksetzen
+  Sequence Alignment: Sequenz-Alignment
+  Sequence Analysis: Sequenzanalyse
+  Structural Analysis: Strukturanalyse
+  Tool Category: Tool-Kategorie
+  Update Required: Update erforderlich
+StorageAnalysisThread:
+  Scanning installed tools...: Installierte Tools werden gescannt...
+  Calculating tool sizes...: Tool-Größen werden berechnet...
+  Analyzing storage usage...: Speichernutzung wird analysiert...
+  Analysis Complete: Analyse abgeschlossen
+  Tool Name: Tool-Name
+  Size: Größe
+  Path: Pfad
+  Dependencies: Abhängigkeiten
+  None: Keine
+  Loading...: Wird geladen...
+  Refresh: Aktualisieren
+  Select All: Alle auswählen
+  Delete: Löschen
+  Cancel: Abbrechen
+  Failed to update overview information: Aktualisierung der Übersichtsinformationen fehlgeschlagen
+  'Remaining: {0} | Tools using: {1}/{2}': 'Verfügbar: {0} | Tools verwenden: {1}/{2}'
+SettingsPanel:
+  "General Settings": "Allgemeine Einstellungen"
+  "Auto-check for updates": "Updates automatisch prüfen"
+  "Automatically check for software and tool updates in the background": "Software- und Tool-Updates im Hintergrund automatisch prüfen"
+  "Check tool status on startup": "Toolstatus beim Start prüfen"
+  "Automatically check the status of all installed tools at startup": "Status aller installierten Tools beim Start automatisch prüfen"
+  "Show detailed installation logs": "Detaillierte Installationsprotokolle anzeigen"
+  "Display detailed technical log information during installation": "Während der Installation detaillierte technische Protokollinformationen anzeigen"
+  "Language Settings": "Spracheinstellungen"
+  "Simplified Chinese": "Chinesisch (vereinfacht)"
+  "Interface Language": "Anzeigesprache"
+  "Select the display language of the application": "Anzeigesprache der Anwendung auswählen"
+  "Environment Settings": "Umgebungs­einstellungen"
+  "Default Installation Directory": "Standard-Installationsverzeichnis"
+  "Set the default installation location for all tools": "Standardinstallationspfad für alle Tools festlegen"
+  "Conda Environment Path": "Conda-Umgebungspfad"
+  "Specify Conda installation path for Python-based bioinformatics tools": "Conda-Installationspfad für Python‑basierte Bioinformatik‑Tools festlegen"
+  "Browse...": "Durchsuchen..."
+  "Reset to Default": "Auf Standard zurücksetzen"
+  "Select {0}": "{0} auswählen"
+  "Confirm Restoration": "Wiederherstellung bestätigen"
+  "Restoration Successful": "Wiederherstellung erfolgreich"
+  "Advanced Options": "Erweiterte Optionen"
+  "Use mirror sources to accelerate downloads": "Spiegelquellen zur Beschleunigung der Downloads verwenden"
+  "Enable China mainland mirror sources to significantly improve download speed": "Festland‑China Spiegelquellen aktivieren, um die Downloadgeschwindigkeit deutlich zu verbessern"
+  "Keep installation package cache": "Installationspaket‑Cache behalten"
+  "Keep downloaded installation packages to save time on repeated downloads": "Heruntergeladene Installationspakete behalten, um erneute Downloads zu vermeiden"
+  "Storage Management": "Speicherverwaltung"
+  "Manage installed bioinformatics tools, view occupied space and perform batch deletion": "Installierte Bioinformatik‑Tools verwalten, belegten Speicher anzeigen und Stapellöschungen durchführen"
+  "Storage Settings": "Speicher­einstellungen"
+  "Auto-clean old logs": "Alte Protokolle automatisch bereinigen"
+  "Automatically delete log files older than 30 days to save disk space": "Protokolldateien älter als 30 Tage automatisch löschen, um Speicherplatz zu sparen"
+  "Maximum size of a single log file": "Maximale Größe einer Logdatei"
+  "Set the maximum size of a single log file, automatically rotate when exceeded": "Maximale Größe einer Logdatei festlegen, bei Überschreitung automatisch rotieren"
+  "Tool Update Settings": "Tool‑Update‑Einstellungen"
+  "Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)": "Hinweis: Diese Einstellung verwaltet nur Updates für Drittanbieter‑Bioinformatik‑Tools (z. B. FastQC, BLAST usw.)"
+  Auto Update: Automatisch aktualisieren
+  Manual Update: Manuell aktualisieren
+  Update Mode: Aktualisierungsmodus
+  "Select how to handle tool updates: automatic background update or manual confirmation": "Behandlung von Tool‑Updates wählen: automatische Hintergrundaktualisierung oder manuelle Bestätigung"
+  "Daily": "Täglich"
+  "Every 3 Days": "Alle 3 Tage"
+  "Weekly": "Wöchentlich"
+  "Every 2 Weeks": "Alle 2 Wochen"
+  "Check Frequency": "Prüfintervall"
+  "Set the time interval for automatically checking tool updates": "Zeitintervall für die automatische Updateprüfung festlegen"
+  "Show update notifications": "Update‑Benachrichtigungen anzeigen"
+  "Show desktop notifications when tool updates are found (manual mode only)": "Desktop‑Benachrichtigungen bei gefundenen Updates anzeigen (nur manueller Modus)"
+  "Check for Tool Updates Now": "Jetzt nach Tool‑Updates suchen"
+  "Manual Check for Updates": "Manuell nach Updates suchen"
+  "Immediately check if new versions are available for all installed tools": "Sofort prüfen, ob neue Versionen für alle installierten Tools verfügbar sind"
+  "Settings Updated": "Einstellungen aktualisiert"
+  "{0} has been updated to:\n{1}": "{0} wurde aktualisiert auf:\n{1}"
+  "Reset Complete": "Zurücksetzen abgeschlossen"
+  "All settings have been reset to default values!": "Alle Einstellungen wurden auf Standard zurückgesetzt!"
+  "Export Settings": "Einstellungen exportieren"
+  "Export Successful": "Export erfolgreich"
+  "Settings have been exported to:\n{0}": "Einstellungen wurden exportiert nach:\n{0}"
+  "Export Failed": "Export fehlgeschlagen"
+  "Error occurred while exporting settings:\n{0}": "Fehler beim Exportieren der Einstellungen:\n{0}"
+  "Import Settings": "Einstellungen importieren"
+  "Import Successful": "Import erfolgreich"
+  "Settings configuration has been successfully imported!": "Die Einstellungskonfiguration wurde erfolgreich importiert!"
+  "Import Failed": "Import fehlgeschlagen"
+  "Error occurred while importing settings:\n{0}": "Fehler beim Importieren der Einstellungen:\n{0}"
+  "Confirm Reset": "Zurücksetzen bestätigen"
+  "Confirm Cleanup": "Bereinigung bestätigen"
+  "Are you sure you want to clear all download cache files?\nThis will free up disk space but may require re-downloading tools.": "Möchten Sie wirklich alle Download‑Cache‑Dateien löschen?\nDies gibt Speicherplatz frei, kann aber erneute Downloads erforderlich machen."
+  "Cleanup Complete": "Bereinigung abgeschlossen"
+  "Download cache has been cleaned up!": "Download‑Cache wurde bereinigt!"
+  "Cleanup Failed": "Bereinigung fehlgeschlagen"
+  "Error occurred while clearing cache:\n{0}": "Fehler beim Bereinigen des Caches:\n{0}"
+  "No installed tools": "Keine installierten Tools"
+  "Error": "Fehler"
+  "Error occurred while processing deletion request:\n{0}": "Fehler beim Verarbeiten der Löschanforderung:\n{0}"
+  "Successfully deleted {0} tool(s)": "Erfolgreich {0} Tool(s) gelöscht"
+  ", cleaned up {0} environment(s)": ", {0} Umgebung(en) bereinigt"
+  "\n\nFailed to delete tools:": "\n\nLöschen fehlgeschlagen für folgende Tools:"
+  "Deletion Complete": "Löschung abgeschlossen"
+  "Deletion Failed": "Löschung fehlgeschlagen"
+  "No tools were successfully deleted": "Keine Tools wurden erfolgreich gelöscht"
+  "Storage Space Warning": "Speicherplatzwarnung"
+  "Language Switch": "Sprachwechsel"
+  "Translation files are not available, please check the installation": "Übersetzungsdateien sind nicht verfügbar, bitte Installation prüfen"
+  "🔄 Switching language...": "🔄 Sprache wird gewechselt..."
+  "Check for Updates": "Nach Updates suchen"
+  "Checking for tool updates...\n\nThis feature will be improved in future versions.": "Es wird nach Tool‑Updates gesucht...\n\nDiese Funktion wird in zukünftigen Versionen verbessert."
+  ? "\n\n\nFailed to delete tools:\n\n    "
+  : "\n\n\nLöschung folgender Tools fehlgeschlagen:\n\n    "
+  ', cleaned up {0} environments': ', {0} Umgebungen bereinigt'
+  Advanced Options: Erweiterte Optionen
+  All settings have been reset to default values!: Alle Einstellungen wurden auf Standardwerte zurückgesetzt!
+  ? 'Are you sure you want to clear all download cache files?
+
+
+    This will free up disk space but may require re-downloading tools.'
+  : 'Möchten Sie alle Download-Cache-Dateien wirklich löschen?
+
+
+    Dies gibt Speicherplatz frei, erfordert jedoch möglicherweise das erneute Herunterladen von Tools.'
+  Are you sure you want to reset all settings to default values?: Möchten Sie wirklich alle Einstellungen auf die Standardwerte zurücksetzen?
+  Automatic Update: Automatisches Update
+  Automatically Check for Updates: Automatisch nach Updates suchen
+  Automatically Clean Old Logs: Alte Logs automatisch bereinigen
+  Automatically check status of all installed tools on application startup: Status aller installierten Tools beim Anwendungsstart automatisch überprüfen
+  Automatically delete log files older than 30 days to save disk space: Protokolldateien, die älter als 30 Tage sind, automatisch löschen, um Speicherplatz zu sparen
+  Browse...: Durchsuchen...
+  Check Frequency: Überprüfungsintervall
+  Check for Updates: Nach Updates suchen
+  Check for tool updates now: Jetzt nach Tool-Updates suchen
+  Check tool status on startup: Tool-Status beim Start überprüfen
+  ? 'Checking for tool updates...
+
+
+
+    This feature will be improved in future versions.'
+  : 'Nach Tool-Updates wird gesucht...
+
+
+
+    Diese Funktion wird in zukünftigen Versionen verbessert.'
+  Chinese: Chinesisch
+  'Choose how to handle tool updates: automatic background updates or manual confirmation': 'Wählen Sie, wie Tool-Updates behandelt werden sollen: automatische Hintergrund-Updates oder manuelle Bestätigung'
+  Cleanup Complete: Bereinigung abgeschlossen
+  Cleanup Failed: Bereinigung fehlgeschlagen
+  Conda Environment Path: Conda-Umgebungspfad
+  Confirm Cleanup: Bereinigung bestätigen
+  Confirm Reset: Zurücksetzen bestätigen
+  Confirm Restoration: Wiederherstellung bestätigen
+  Daily: Täglich
+  Default Installation Directory: Standard-Installationsverzeichnis
+  Deletion Complete: Löschung abgeschlossen
+  Deletion Failed: Löschung fehlgeschlagen
+  Download cache has been cleared!: Download-Cache wurde geleert!
+  Enable Chinese mainland mirror sources to significantly improve download speed: Chinesische Mirror-Server aktivieren, um die Download-Geschwindigkeit deutlich zu erhöhen
+  Environment Settings: Umgebungseinstellungen
+  Error: Fehler
+  ? 'Error occurred while clearing cache:
+
+
+    {0}'
+  : 'Fehler beim Leeren des Caches aufgetreten:
+
+
+    {0}'
+  ? 'Error occurred while deleting tool:
+
+
+    {0}'
+  : 'Fehler beim Löschen des Tools aufgetreten:
+
+
+    {0}'
+  ? 'Error occurred while exporting settings:
+
+
+    {0}'
+  : 'Fehler beim Exportieren der Einstellungen aufgetreten:
+
+
+    {0}'
+  ? 'Error occurred while importing settings:
+
+
+    {0}'
+  : 'Fehler beim Importieren der Einstellungen aufgetreten:
+
+
+    {0}'
+  ? 'Error occurred while processing deletion request:
+
+
+    {0}'
+  : 'Fehler bei der Verarbeitung der Löschanfrage aufgetreten:
+
+
+    {0}'
+  Every 2 weeks: Alle 2 Wochen
+  Every 3 days: Alle 3 Tage
+  Export Failed: Export fehlgeschlagen
+  Export Settings: Einstellungen exportieren
+  Export Successful: Export erfolgreich
+  General Settings: Allgemeine Einstellungen
+  Immediately check if new versions are available for all installed tools: Sofort prüfen, ob neue Versionen für alle installierten Tools verfügbar sind
+  Import Failed: Import fehlgeschlagen
+  Import Settings: Einstellungen importieren
+  Import Successful: Import erfolgreich
+  Interface Language: Oberflächensprache
+  Keep downloaded installation packages to save re-download time: Heruntergeladene Installationspakete behalten, um erneutes Herunterladen zu vermeiden
+  Keep installation package cache: Installationspaket-Cache behalten
+  Language Settings: Spracheinstellungen
+  Language Switch: Sprachwechsel
+  Manage installed bioinformatics tools, view occupied space and perform batch deletion: Installierte Bioinformatik-Tools verwalten, belegten Speicherplatz anzeigen und Stapellöschung durchführen
+  Manual Update: Manuelles Update
+  Manually Check for Updates: Manuell nach Updates suchen
+  Maximum size per log file: Maximale Größe pro Protokolldatei
+  No installed tools: Keine installierten Tools
+  No tools were successfully deleted: Es wurden keine Tools erfolgreich gelöscht
+  'Note: This setting only manages third-party bioinformatics tool updates (such as FastQC, BLAST, etc.)': 'Hinweis: Diese Einstellung verwaltet nur Updates für Bioinformatik-Tools von Drittanbietern (wie FastQC, BLAST usw.)'
+  Reset Complete: Zurücksetzen abgeschlossen
+  Restoration Successful: Wiederherstellung erfolgreich
+  Restore to Default: Auf Standard zurücksetzen
+  Select application display language: Anzeigesprache der Anwendung auswählen
+  Select {0}: '{0} auswählen'
+  Set default installation location for all tools: Standard-Installationsort für alle Tools festlegen
+  Set maximum size for individual log files, automatically rotate when exceeded: Maximale Größe für einzelne Protokolldateien festlegen, automatische Rotation bei Überschreitung
+  Set time interval for automatic tool update checks: Zeitintervall für automatische Tool-Update-Prüfungen festlegen
+  Settings Update: Einstellungen aktualisiert
+  Settings configuration has been successfully imported!: Einstellungskonfiguration wurde erfolgreich importiert!
+  ? 'Settings have been exported to:
+
+
+    {0}'
+  : 'Einstellungen wurden exportiert nach:
+
+
+    {0}'
+  Show Detailed Installation Logs: Detaillierte Installationsprotokolle anzeigen
+  Show Update Notifications: Update-Benachrichtigungen anzeigen
+  Show desktop notification when tool updates are found (manual mode only): Desktop-Benachrichtigung anzeigen, wenn Tool-Updates gefunden werden (nur manueller Modus)
+  Show detailed technical log information during installation: Detaillierte technische Protokollinformationen während der Installation anzeigen
+  Simplified Chinese: Vereinfachtes Chinesisch
+  Specify Conda installation path for Python-based bioinformatics tools: Conda-Installationspfad für Python-basierte Bioinformatik-Tools angeben
+  Storage Management: Speicherverwaltung
+  Storage Settings: Speichereinstellungen
+  Storage Space Warning: Speicherplatzwarnung
+  Successfully deleted {0} tools: '{0} Tools erfolgreich gelöscht'
+  Tool Update Settings: Tool-Update-Einstellungen
+  Translation files unavailable, please check installation: Übersetzungsdateien nicht verfügbar, bitte Überpüfen Sie die Installation
+  Update Mode: Update-Modus
+  Use mirror sources to accelerate downloads: Mirror-Server für schnellere Downloads verwenden
+  Weekly: Wöchentlich
+  When enabled, will automatically check for software and tool updates in the background: Wenn aktiviert, wird automatisch im Hintergrund nach Software- und Tool-Updates gesucht
+  ? '{0} has been updated to:
+
+
+    {1}'
+  : '{0} wurde aktualisiert auf:
+
+
+    {1}'
+  ? 'Are you sure you want to restore <b>{0}</b> to the default path?
+
+
+
+    Default path: {1}
+
+
+
+    After restoration, relative paths will be used, and the software will automatically adapt to new versions upon upgrade.'
+  : 'Möchten Sie <b>{0}</b> wirklich auf den Standardpfad zurücksetzen?
+
+
+
+    Standardpfad: {1}
+
+
+
+    Nach der Wiederherstellung werden relative Pfade verwendet, und die Software passt sich beim Upgrade automatisch an neue Versionen an.'
+  ? '{0} has been restored to the default path.
+
+
+
+    Current path: {1}'
+  : '{0} wurde auf den Standardpfad zurückgesetzt.
+
+
+
+    Aktueller Pfad: {1}'
+  Auto-check for updates: Automatisch nach Updates suchen
+  Automatically check for software and tool updates in the background: Automatisch im Hintergrund nach Software- und Tool-Updates suchen
+  Automatically check the status of all installed tools at startup: Status aller installierten Tools beim Start automatisch überprüfen
+  Show detailed installation logs: Detaillierte Installationsprotokolle anzeigen
+  Display detailed technical log information during installation: Detaillierte technische Protokollinformationen während der Installation anzeigen
+  Select the display language of the application: Anzeigesprache der Anwendung auswählen
+  Set the default installation location for all tools: Standard-Installationsort für alle Tools festlegen
+  Reset to Default: Auf Standard zurücksetzen
+  Are you sure you want to reset <b>{0}</b> to the default path?: Möchten Sie <b>{0}</b> wirklich auf den Standardpfad zurücksetzen?
+  Reset Successful: Zurücksetzen erfolgreich
+  '{0} has been reset to the default path.': '{0} wurde auf den Standardpfad zurückgesetzt.'
+  Enable China mainland mirror sources to significantly improve download speed: Chinesische Mirror-Server aktivieren, um die Download-Geschwindigkeit deutlich zu erhöhen
+  Keep downloaded installation packages to save time on repeated downloads: Heruntergeladene Installationspakete behalten, um Zeit bei wiederholten Downloads zu sparen
+  Auto-clean old logs: Alte Logs automatisch bereinigen
+  Maximum size of a single log file: Maximale Größe einer einzelnen Protokolldatei
+  Set the maximum size of a single log file, automatically rotate when exceeded: Maximale Größe einer einzelnen Protokolldatei festlegen, automatische Rotation bei Überschreitung
+  'Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)': 'Hinweis: Diese Einstellung verwaltet nur Updates für Bioinformatik-Tools von Drittanbietern (wie FastQC, BLAST usw.)'
+  Auto Update: Automatisches Update
+  'Select how to handle tool updates: automatic background update or manual confirmation': 'Wählen Sie, wie Tool-Updates behandelt werden sollen: automatisches Hintergrund-Update oder manuelle Bestätigung'
+  Every 3 Days: Alle 3 Tage
+  Every 2 Weeks: Alle 2 Wochen
+  Set the time interval for automatically checking tool updates: Zeitintervall für automatische Tool-Update-Prüfungen festlegen
+  Show update notifications: Update-Benachrichtigungen anzeigen
+  Show desktop notifications when tool updates are found (manual mode only): Desktop-Benachrichtigungen anzeigen, wenn Tool-Updates gefunden werden (nur manueller Modus)
+  Check for Tool Updates Now: Jetzt nach Tool-Updates suchen
+  Manual Check for Updates: Manuell nach Updates suchen
+  Settings Updated: Einstellungen aktualisiert
+  '{0} has been updated to:': '{0} wurde aktualisiert auf:'
+  Japanese: Japanisch
+  Checking for tool updates...: Nach Tool-Updates wird gesucht...
+  'Settings have been exported to:': 'Einstellungen wurden exportiert nach:'
+  'An error occurred while exporting settings:': 'Fehler beim Exportieren der Einstellungen aufgetreten:'
+  'An error occurred while importing settings:': 'Fehler beim Importieren der Einstellungen aufgetreten:'
+  Are you sure you want to clean up all download cache files?: Möchten Sie alle Download-Cache-Dateien wirklich bereinigen?
+  Download cache has been cleaned up!: Download-Cache wurde bereinigt!
+  'An error occurred while cleaning up the cache:': 'Fehler beim Bereinigen des Caches aufgetreten:'
+  'An error occurred while processing the deletion request:': 'Fehler bei der Verarbeitung der Löschanfrage aufgetreten:'
+  Successfully deleted {0} tool(s): '{0} Tool(s) erfolgreich gelöscht'
+  ', cleaned up {0} environment(s)': ', {0} Umgebung(en) bereinigt'
+  'Failed to delete tools:': 'Löschung folgender Tools fehlgeschlagen:'
+  'An error occurred while deleting tools:': 'Fehler beim Löschen der Tools aufgetreten:'
+  Translation files are not available, please check the installation: Übersetzungsdateien sind nicht verfügbar, bitte überprüfen Sie die Installation
+ToolCardV3:
+  Details: Details
+  Install: Installieren
+  Launch: Starten
+  '{0}%': '{0}%'
+ToolDetailPage:
+  1 hour 15 min: 1 Stunde 15 Min.
+  1.2 hours: 1,2 Stunden
+  2.5 hours: 2,5 Stunden
+  3.8 hours: 3,8 Stunden
+  45 minutes: 45 Minuten
+  8 hours 30 min: 8 Stunden 30 Min.
+  CPU Requirements: CPU-Anforderungen
+  Data Visualization: Datenvisualisierung
+  Dependencies: Abhängigkeiten
+  Depends on database size: Abhängig von Datenbankgröße
+  Depends on reference genome size: Abhängig von Referenzgenomgröße
+  Depends on sequence count: Abhängig von Sequenzanzahl
+  Disk Usage: Speicherbelegung
+  Gene Annotation: Genannotation
+  Genome Assembly: Genom-Assemblierung
+  Genomics: Genomik
+  Input Format: Eingabeformat
+  Installation Status: Installationsstatus
+  Installed: Installiert
+  Memory Requirements: Arbeitsspeicheranforderungen
+  Minimum 2GB: Mindestens 2 GB
+  Minimum 4GB: Mindestens 4 GB
+  Minimum 8GB: Mindestens 8 GB
+  Multi-core highly recommended: Mehrkern dringend empfohlen
+  Multi-core recommended: Mehrkern empfohlen
+  Multiple formats: Mehrere Formate
+  No detailed description, will be added later: Keine detaillierte Beschreibung vorhanden, wird später hinzugefügt
+  No information available: Keine Informationen verfügbar
+  Not installed: Nicht installiert
+  Not used: Nicht verwendet
+  Output Format: Ausgabeformat
+  Phylogenetics: Phylogenetik
+  Programming Language: Programmiersprache
+  Quality Control: Qualitätskontrolle
+  RNA Sequencing: RNA-Sequenzierung
+  Sequence Alignment: Sequenz-Alignment
+  Sequence Analysis: Sequenzanalyse
+  Single core sufficient: Einzelkern ausreichend
+  Source Code: Quellcode
+  Standard C Library: Standard-C-Bibliothek
+  Standard C Library, zlib: Standard-C-Bibliothek, zlib
+  Standard C++ Library: Standard-C++-Bibliothek
+  Statistical Analysis: Statistische Analyse
+  Storage Usage: Speichernutzung
+  Tool Description: Tool-Beschreibung
+  Uninstall Tool: Tool deinstallieren
+  Unknown: Unbekannt
+  Unknown Category: Unbekannte Kategorie
+  Usage Time: Nutzungszeit
+  Used {0}: '{0} verwendet'
+  Version: Version
+  Version v{0}: Version v{0}
+  ← Back: ← Zurück
+  📥 Install Tool: 📥 Tool installieren
+  🔧 Technical Specifications: 🔧 Technische Spezifikationen
+  🚀 Launch: 🚀 Starten
+EnhancedDetailPage:
+  "Version {0}": "Version {0}"
+  "Installed": "Installiert"
+  "Not Installed": "Nicht installiert"
+  "🚀 Launch": "🚀 Starten"
+  "Uninstall": "Deinstallieren"
+  "Used {0}": "Verwendet {0}"
+  "📥 Install Tool": "📥 Tool installieren"
+  "📖 Usage Guide": "📖 Benutzerhandbuch"
+  "No usage instructions yet": "Noch keine Anweisungen"
+  "2.5 hours": "2,5 Stunden"
+  "1.2 hours": "1,2 Stunden"
+  "45 minutes": "45 Minuten"
+  "3.8 hours": "3,8 Stunden"
+  "Not Used": "Nicht verwendet"
+  "📝 Tool Overview": "📝 Werkzeugübersicht"
+  "No detailed description": "Keine detaillierte Beschreibung"
+  "🔧 Technical Specs": "🔧 Technische Daten"
+  "Programming Language": "Programmiersprache"
+  "Dependencies": "Abhängigkeiten"
+  "Input Formats": "Eingabeformate"
+  "Output Formats": "Ausgabeformate"
+  "CPU Requirements": "CPU-Anforderungen"
+  "Memory Requirements": "Speicheranforderungen"
+  "Disk Usage": "Speicherplatz"
+  "Download Sources": "Download-Quellen"
+  "Single core is fine": "Ein Kern ist ausreichend"
+  "Minimum 2GB": "Mindestens 2GB"
+  "Multiple formats": "Mehrere Formate"
+  "Multi-core recommended": "Mehrkern empfohlen"
+  "Depends on database size": "Abhängig von der Datenbankgröße"
+  "3GB or more": "3GB oder mehr"
+  "1GB or more": "1GB oder mehr"
+  "4GB or more recommended": "4GB oder mehr empfohlen"
+  "Official: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC": "Offiziell: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC"
+  "Official: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs": "Offiziell: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs"
+  "Installing {0}%": "Installiere {0}%"
+  "Installing...": "Installiere..."
+  "Uninstalling {0}%": "Deinstalliere {0}%"
+  "Uninstalling...": "Deinstalliere..."
+  "🏷️ Keywords": "🏷️ Schlagwörter"
+  "Quality Control": "Qualitätskontrolle"
+  "RNA-seq Analysis": "RNA-seq-Analyse"
+  "DNA-seq Analysis": "DNA-seq-Analyse"
+  "FASTQ Processing": "FASTQ-Verarbeitung"
+  "Sequencing QC": "Sequenzierungs-QS"
+  "High-throughput Sequencing": "Hochdurchsatz-Sequenzierung"
+  "Sequence Alignment": "Sequenzabgleich"
+  "Homology Analysis": "Homologieanalyse"
+  "Gene Annotation": "Genannotation"
+  "Protein Analysis": "Protein-Analyse"
+  "Phylogenetic Analysis": "Phylogenetische Analyse"
+  "Sequence Search": "Sequenzsuche"
+  "Genome Mapping": "Genomzuordnung"
+  "Short Read Alignment": "Kurzleseabgleich"
+  "NGS Data Processing": "NGS-Datenverarbeitung"
+  "Reference Alignment": "Referenzabgleich"
+  "BAM Processing": "BAM-Verarbeitung"
+  "SAM Processing": "SAM-Verarbeitung"
+  "Alignment Processing": "Abgleichsverarbeitung"
+  "Genomic Data Analysis": "Genomdatenanalyse"
+  "Variant Calling": "Variantenbestimmung"
+  "Genome Visualization": "Genomvisualisierung"
+  "BAM Viewer": "BAM-Viewer"
+  "VCF Viewer": "VCF-Viewer"
+  "Variant Validation": "Variantenvalidierung"
+  "Alignment Visualization": "Abgleichsvisualisierung"
+  "Annotation Viewer": "Annotationsanzeige"
+  "Interactive Browsing": "Interaktive Ansicht"
+  "Multi-track Display": "Mehrspurige Anzeige"
+  "Genome Browser": "Genombrowser"
+  "Bioinformatics": "Bioinformatik"
+  "Sequence Analysis": "Sequenzanalyse"
+  "Data Processing": "Datenverarbeitung"
+ToolCardV2:
+  Launch: Starten
+  Install: Installieren
+  Details: Details
+PathMigrationDialog:
+  路径迁移确认: Pfadmigration bestätigen
+  检测到软件位置已变更: Software-Speicherort wurde geändert
+  "您之前为 <b>{0}</b> 手动设置了路径，但软件位置已发生变更。\n\n请选择如何处理此路径：": "Sie haben zuvor einen manuellen Pfad für <b>{0}</b> festgelegt, aber der Speicherort der Software hat sich geändert.\n\nBitte wählen Sie, wie Sie mit diesem Pfad verfahren möchten:"
+  保留原路径（绝对路径）: Alten Pfad beibehalten (absoluter Pfad)
+  "继续使用: {0}": "Weiter verwenden: {0}"
+  使用新的默认路径（推荐）: Neuen Standardpfad verwenden (empfohlen)
+  "自动更新为: {0}": "Automatisch aktualisieren auf: {0}"
+  "💡 提示：选择 \"使用新的默认路径\" 可以让软件路径随版本自动更新，避免每次升级都需要手动调整。": "Tipp: Durch die Wahl von \"Neuen Standardpfad verwenden\" wird der Pfad bei neuen Versionen automatisch aktualisiert, sodass keine manuellen Anpassungen erforderlich sind."
+  确认: Bestätigen
+  推荐: Empfohlen
+  默认安装目录: Standard-Installationsverzeichnis
+  Conda环境路径: Conda-Umgebungspfad
+
+DownloadStatusPanel:
+  准备下载...: Download wird vorbereitet...
+  完成: Abgeschlossen
+  成功: Erfolgreich
+  下载: Download
+  解压: Entpacken
+  安装: Installieren
+  验证: Überprüfen
+  ✅ 安装完成: ✅ Installation abgeschlossen
+  暂无下载任务: Keine Downloads
+  下载状态: Download-Status
+  清空: Leeren
+  "❌ {0}": "❌ {0}"
+ToolCard:
+  Launch: Starten
+  Details: Details
+  Install: Installieren
+  Update: Aktualisieren
+ModernDownloadCard:
+  Preparing...: Wird vorbereitet...
+  No download tasks: Keine Downloads
+  Download progress will appear when installing tools: Der Downloadfortschritt wird beim Installieren angezeigt
+  Download Manager: Download-Manager
+  Clear Completed: Erledigte löschen
+  "Total: 0 tasks": "Gesamt: 0 Aufgaben"
+  "{0} in progress": "{0} in Bearbeitung"
+  "{0} completed": "{0} abgeschlossen"
+  "{0} failed": "{0} fehlgeschlagen"
+  "All tasks completed": "Alle Aufgaben abgeschlossen"
+  "Total: {0} tasks": "Gesamt: {0} Aufgaben"
+ToolDetailDialog:
+  🚀 启动工具: 🚀 Tool starten
+  📦 安装: 📦 Installieren
+  主要功能: Hauptfunktionen
+  📚 学术引用: 📚 Zitat
+  "暂无引用信息\n日后增添": "Noch keine Zitationsinformationen\nWird später ergänzt"
+  复制 BibTeX: BibTeX kopieren
+  🔗 相关工具: 🔗 Verwandte Tools
+  关闭: Schließen
+FilterPanel:
+  重置: Zurücksetzen
+  应用: Anwenden
+  应用筛选: Filter anwenden
+ToolDetailDialog:
+  "🚀 Launch Tool": "🚀 Tool starten"
+  "📦 Install": "📦 Installieren"
+  "Main Features": "Hauptfunktionen"
+  "📚 Citation": "📚 Zitat"
+  "No citation information yet\nTo be added later": "Noch keine Zitationsinformationen\nWird später ergänzt"
+  "Copy BibTeX": "BibTeX kopieren"
+  "🔗 Related Tools": "🔗 Verwandte Tools"
+  "Close": "Schließen"
+  "Tool Details": "Tooldetails"
+  "v{0} · Bioinformatics Tool": "v{0} · Bioinformatik-Tool"
+  "View Documentation": "Dokumentation anzeigen"
+  "Overview": "Übersicht"
+  "Technical Specs": "Technische Daten"
+  "Usage Guide": "Benutzerhandbuch"
+  "Version History": "Versionsverlauf"
+
+ModernFilterCard:
+  Reset: Zurücksetzen
+  Apply Filter: Filter anwenden
+
+ToolCardV3:
+  Launch: Starten
+  Install: Installieren
+  Details: Details
+ToolDescriptions:
+  FastQC: "Qualitätskontrolle für Hochdurchsatz‑Sequenzierungsdaten; erstellt umfassende HTML‑Berichte."
+  BLAST: "Sequenzähnlichkeitssuche in großen Datenbanken; unterstützt Nukleotid‑ und Proteinsequenzen."
+  BWA: "Schneller, genauer Short‑Read‑Aligner zur Zuordnung von Sequenzen zum Referenzgenom."
+  SAMtools: "Werkzeuge für SAM/BAM/CRAM‑Dateien: Sortieren, Indizieren, Anzeigen u. v. m."
+  HISAT2: "Sehr schneller, sensitiver Aligner für Next‑Generation‑Reads (z. B. RNA‑seq)."
+  IQ-TREE: "Effiziente phylogenetische Bauminferenz mit Modellauswahl und sehr schnellem Bootstrap."
+  IGV: "Interaktiver Genombrowser zur Visualisierung von BAM/VCF und vielen weiteren Formaten."
+ToolDescriptionsBySlug:
+  fastqc: "Qualitätskontrolle für Hochdurchsatz‑Sequenzierungsdaten; erstellt umfassende HTML‑Berichte."
+  blast: "Sequenzähnlichkeitssuche in großen Datenbanken; unterstützt Nukleotid‑ und Proteinsequenzen."
+  bwa: "Schneller, genauer Short‑Read‑Aligner zur Zuordnung von Sequenzen zum Referenzgenom."
+  samtools: "Werkzeuge für SAM/BAM/CRAM‑Dateien: Sortieren, Indizieren, Anzeigen u. v. m."
+  hisat2: "Sehr schneller, sensitiver Aligner für Next‑Generation‑Reads (z. B. RNA‑seq)."
+  iqtree: "Effiziente phylogenetische Bauminferenz mit Modellauswahl und sehr schnellem Bootstrap."
+  igv: "Interaktiver Genombrowser zur Visualisierung von BAM/VCF und vielen weiteren Formaten."

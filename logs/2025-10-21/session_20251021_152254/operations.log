@@ -1,0 +1,5 @@
+2025-10-21 15:22:59,308 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-21 15:22:59,705 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
+2025-10-21 15:23:03,170 - BioNexus.operations - INFO - 用户操作: 查看工具详情 - {"工具名": "BLAST"}
+2025-10-21 15:23:06,456 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
+2025-10-21 15:23:06,531 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

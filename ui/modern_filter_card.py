@@ -495,7 +495,7 @@ class ModernFilterCard(QWidget):
             title_row.setContentsMargins(0, 0, 0, 0)
             title_row.setSpacing(0)
             
-            main_title = SmartTextWidget("筛选工具", font_size=12, color="#111827")  # 主标题: 12px加粗
+            main_title = SmartTextWidget(self.tr("筛选工具"), font_size=12, color="#111827")  # 主标题: 12px加粗
             title_row.addWidget(main_title)
             title_row.addStretch()
             
@@ -573,7 +573,7 @@ class ModernFilterCard(QWidget):
         layout.setSpacing(12)
         
         # 🎯 区域标题 - 使用智能标题组件
-        title = SmartTitleWidget("工具分类")
+        title = SmartTitleWidget(self.tr("工具分类"))
         layout.addWidget(title)
         
         # 卡片容器 - 自适应网格布局
@@ -582,12 +582,12 @@ class ModernFilterCard(QWidget):
         
         # 分类选项卡片
         categories = [
-            ('sequence_analysis', '序列分析'),
-            ('phylogenetics', '进化分析'),
-            ('genomics', '基因组学'),
-            ('alignment', '序列比对'),
-            ('structure', '结构分析'),
-            ('annotation', '基因注释')
+            ('sequence_analysis', self.tr('序列分析')),
+            ('phylogenetics', self.tr('进化分析')),
+            ('genomics', self.tr('基因组学')),
+            ('alignment', self.tr('序列比对')),
+            ('structure', self.tr('结构分析')),
+            ('annotation', self.tr('基因注释'))
         ]
         
         for category_id, category_name in categories:
@@ -613,7 +613,7 @@ class ModernFilterCard(QWidget):
         layout.setSpacing(12)
         
         # 🎯 区域标题 - 使用智能标题组件
-        title = SmartTitleWidget("安装状态")
+        title = SmartTitleWidget(self.tr("安装状态"))
         layout.addWidget(title)
         
         # 卡片容器 - 自适应网格布局
@@ -622,9 +622,9 @@ class ModernFilterCard(QWidget):
         
         # 状态选项卡片
         statuses = [
-            ('installed', '已安装'),
-            ('available', '可安装'),
-            ('update', '需要更新')
+            ('installed', self.tr('已安装')),
+            ('available', self.tr('可安装')),
+            ('update', self.tr('需要更新'))
         ]
         
         for status_id, status_name in statuses:
@@ -654,7 +654,7 @@ class ModernFilterCard(QWidget):
         layout.setSpacing(12)
         
         # 重置按钮 - 融合式设计
-        reset_btn = QPushButton("重置")
+        reset_btn = QPushButton(self.tr("重置"))
         reset_btn.setFixedHeight(30)  # 适应小字体，降低高度
         reset_btn.setStyleSheet("""
             QPushButton {
@@ -682,7 +682,7 @@ class ModernFilterCard(QWidget):
         layout.addStretch()
         
         # 应用按钮 - 绿色主题，融合式设计
-        apply_btn = QPushButton("应用筛选")
+        apply_btn = QPushButton(self.tr("应用筛选"))
         apply_btn.setFixedHeight(30)  # 与重置按钮相同高度
         apply_btn.setStyleSheet("""
             QPushButton {

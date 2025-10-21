@@ -1,0 +1,15 @@
+[2025-10-21 13:24:55] === 严重错误 ===
+[2025-10-21 13:24:55] 类型: IndentationError
+[2025-10-21 13:24:55] 消息: expected an indented block after 'if' statement on line 98 (tool_card.py, line 100)
+[2025-10-21 13:24:55] 堆栈追踪:
+Traceback (most recent call last):
+  File "C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\main.py", line 151, in <module>
+    from ui.main_window import MainWindow
+  File "C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\ui\main_window.py", line 26, in <module>
+    from .tool_card import ToolCard
+  File "C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\ui\tool_card.py", line 100
+    self.launch_btn = QPushButton(self.tr("Launch"), self)
+    ^^^^
+IndentationError: expected an indented block after 'if' statement on line 98
+
+[2025-10-21 13:24:55] ============================================================

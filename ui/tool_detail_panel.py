@@ -22,7 +22,7 @@ class ToolDetailDialog(QDialog):
     def __init__(self, tool_data: dict, parent=None):
         super().__init__(parent)
         self.tool_data = tool_data
-        self.setWindowTitle(f"{tool_data['name']} - 工具详情")
+        self.setWindowTitle(f"{tool_data['name']} - " + self.tr("Tool Details"))
         
         # 宽度自适应，高度固定最小值
         self.setMinimumWidth(700)  # 最小宽度
@@ -145,7 +145,7 @@ class ToolDetailDialog(QDialog):
         name_label.setStyleSheet("color: #1e293b;")
         
         # 版本和更新时间
-        version_label = QLabel(f"v{self.tool_data.get('version', 'N/A')} · 生物信息学工具")
+        version_label = QLabel(self.tr("v{0} · Bioinformatics Tool").format(self.tool_data.get('version', 'N/A')))
         version_label.setStyleSheet("font-size: 12px; color: #64748b;")
         
         # 分类标签
@@ -174,7 +174,7 @@ class ToolDetailDialog(QDialog):
         
         # 主操作按钮
         if self.tool_data['status'] == 'installed':
-            main_btn = QPushButton("🚀 启动工具")
+            main_btn = QPushButton(self.tr("🚀 Launch Tool"))
             main_btn.setFixedSize(120, 40)
             main_btn.setStyleSheet("""
                 QPushButton {
@@ -191,7 +191,7 @@ class ToolDetailDialog(QDialog):
             """)
             main_btn.clicked.connect(lambda: self.launch_requested.emit(self.tool_data['name']))
         else:
-            main_btn = QPushButton("📦 安装")
+            main_btn = QPushButton(self.tr("📦 Install"))
             main_btn.setFixedSize(120, 40)
             main_btn.setStyleSheet("""
                 QPushButton {
@@ -211,7 +211,7 @@ class ToolDetailDialog(QDialog):
         # 次要按钮
         docs_btn = QPushButton("📖")
         docs_btn.setFixedSize(40, 40)
-        docs_btn.setToolTip("查看文档")
+        docs_btn.setToolTip(self.tr("View Documentation"))
         docs_btn.setStyleSheet("""
             QPushButton {
                 background-color: #f1f5f9;
@@ -327,19 +327,19 @@ class ToolDetailDialog(QDialog):
         
         # Tab 1: 功能介绍
         overview_tab = self.create_overview_tab()
-        tabs.addTab(overview_tab, "功能介绍")
+        tabs.addTab(overview_tab, self.tr("Overview"))
         
         # Tab 2: 技术规格
         tech_tab = self.create_tech_tab()
-        tabs.addTab(tech_tab, "技术规格")
+        tabs.addTab(tech_tab, self.tr("Technical Specs"))
         
         # Tab 3: 使用说明
         usage_tab = self.create_usage_tab()
-        tabs.addTab(usage_tab, "使用说明")
+        tabs.addTab(usage_tab, self.tr("Usage Guide"))
         
         # Tab 4: 版本历史
         version_tab = self.create_version_tab()
-        tabs.addTab(version_tab, "版本历史")
+        tabs.addTab(version_tab, self.tr("Version History"))
         
         return tabs
         
@@ -364,7 +364,7 @@ class ToolDetailDialog(QDialog):
         """)
         
         # 功能列表
-        features_title = QLabel("主要功能")
+        features_title = QLabel(self.tr("Main Features"))
         features_title.setStyleSheet("font-size: 14px; font-weight: bold; color: #1e293b; margin-top: 16px;")
         
         features_text = QTextEdit()
@@ -492,13 +492,13 @@ class ToolDetailDialog(QDialog):
         card_layout = QVBoxLayout(card)
         card_layout.setContentsMargins(12, 12, 12, 12)
         
-        title = QLabel("📚 学术引用")
+        title = QLabel(self.tr("📚 Citation"))
         title.setStyleSheet("font-size: 13px; font-weight: bold; color: #92400e;")
         
-        citation_text = QLabel("暂无引用信息\n日后增添")
+        citation_text = QLabel(self.tr("No citation information yet\nTo be added later"))
         citation_text.setStyleSheet("font-size: 11px; color: #78350f; margin-top: 4px;")
         
-        copy_btn = QPushButton("复制 BibTeX")
+        copy_btn = QPushButton(self.tr("Copy BibTeX"))
         copy_btn.setFixedHeight(28)
         copy_btn.setStyleSheet("""
             QPushButton {
@@ -535,7 +535,7 @@ class ToolDetailDialog(QDialog):
         card_layout = QVBoxLayout(card)
         card_layout.setContentsMargins(12, 12, 12, 12)
         
-        title = QLabel("🔗 相关工具")
+        title = QLabel(self.tr("🔗 Related Tools"))
         title.setStyleSheet("font-size: 13px; font-weight: bold; color: #1e293b;")
         card_layout.addWidget(title)
         
@@ -575,7 +575,7 @@ class ToolDetailDialog(QDialog):
         layout.setContentsMargins(30, 10, 30, 10)
         
         # 关闭按钮
-        close_btn = QPushButton("关闭")
+        close_btn = QPushButton(self.tr("Close"))
         close_btn.setFixedSize(100, 36)
         close_btn.setStyleSheet("""
             QPushButton {

@@ -305,16 +305,12 @@ class ResponsiveSettingsCard(QWidget):
                 margin: 6px 0px;
             }
             QLabel#SettingsCardTitle {
-                color: #1e293b;
+                color: #000000;
                 margin-bottom: 8px;
                 padding: 0px;
                 border: none;
-                font-weight: 600;
-                background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, 
-                                           stop: 0 #3b82f6, 
-                                           stop: 1 #1e40af);
-                -webkit-background-clip: text;
-                color: #1e40af;
+                background: transparent;
+                font-weight: bold;
             }
         """)
     

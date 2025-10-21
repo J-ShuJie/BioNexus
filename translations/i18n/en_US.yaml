@@ -1,0 +1,558 @@
+DeletionConfirmationDialog:
+  确认删除工具: Confirm Tool Deletion
+  将删除以下 {0} 个工具：: 'The following {0} tools will be deleted:'
+  正在计算节省空间...: Calculating space savings...
+  🔗 依赖环境处理: 🔗 Dependency Environment Handling
+  取消: Cancel
+  确认删除: Confirm Deletion
+  确定要删除工具 '{0}' 吗？: Are you sure you want to delete tool '{0}'?
+  此操作不可撤销: This operation cannot be undone
+  删除: Delete
+  ? '
+
+    💡 It is recommended to clean up these environments to free up more space.'
+  : '
+
+    💡 It is recommended to clean up these environments to free up more space.'
+  ? 'After deleting these tools, the following runtime environments will no longer be used by other tools:
+
+    '
+  : 'After deleting these tools, the following runtime environments will no longer be used by other tools:
+
+    '
+  Also clean up runtime environments that are no longer needed: Also clean up runtime environments that are no longer needed
+  Are you sure you want to delete tool '{0}'?: Are you sure you want to delete tool '{0}'?
+  Calculating space savings...: Calculating space savings...
+  Cancel: Cancel
+  Confirm Deletion: Confirm Deletion
+  Confirm Tool Deletion: Confirm Tool Deletion
+  Delete: Delete
+  Error: Error
+  Final Confirmation: Final Confirmation
+  I confirm the deletion of the above tools, this operation cannot be undone: I confirm the deletion of the above tools, this operation cannot be undone
+  'Operation failed: {0}': 'Operation failed: {0}'
+  'The following {0} tools will be deleted:': 'The following {0} tools will be deleted:'
+  This operation cannot be undone: This operation cannot be undone
+  ? 'You are about to delete {0} tools.
+
+    This is a batch operation, are you sure you want to continue?'
+  : 'You are about to delete {0} tools.
+
+    This is a batch operation, are you sure you want to continue?'
+  ⚠️ Analysis failed, please check system status: ⚠️ Analysis failed, please check system status
+  '💾 Space Saved: Tools {0} + Environments {1} = Total {2}': '💾 Space Saved: Tools {0} + Environments {1} = Total {2}'
+  '💾 Space Saved: {0}': '💾 Space Saved: {0}'
+  🔗 Dependency Environment Handling: 🔗 Dependency Environment Handling
+DownloadItem:
+  (Manual): (Manual)
+  Clear: Clear
+  Complete: Complete
+  Download: Download
+  Download Status: Download Status
+  Extract: Extract
+  Install: Install
+  No download tasks: No download tasks
+  Preparing to download...: Preparing to download...
+  Success: Success
+  Update Check: Update Check
+  Verify: Verify
+  '{0} Update': '{0} Update'
+  ✅ Installation Complete: ✅ Installation Complete
+  ✅ Updated from v{0} to v{1}: ✅ Updated from v{0} to v{1}
+  ❌ Failed to update from v{0} to v{1}: ❌ Failed to update from v{0} to v{1}
+  ❌ {0}: ❌ {0}
+  🔍 All tools are up to date: 🔍 All tools are up to date
+  🔍 Found {0} tool updates: 🔍 Found {0} tool updates
+FilterPanel:
+  Apply: Apply
+  Available: Available
+  Filter Tools: Filter Tools
+  Genomics: Genomics
+  Installation Status: Installation Status
+  Installed: Installed
+  Phylogenetics: Phylogenetics
+  Quality Control: Quality Control
+  Reset: Reset
+  Selected: Selected
+  Sequence Analysis: Sequence Analysis
+  Tool Type: Tool Type
+  Unselected: Unselected
+  Update Available: Update Available
+  Visualization: Visualization
+MainWindow:
+  ? 'Are you sure you want to uninstall {0}?
+
+
+    This will delete the tool files and related configurations, and this operation cannot be undone.'
+  : 'Are you sure you want to uninstall {0}?
+
+
+    This will delete the tool files and related configurations, and this operation cannot be undone.'
+  BioNexus Launcher: BioNexus Launcher
+  Cannot launch {0}: Cannot launch {0}
+  Cannot start the installation process for {0}: Cannot start the installation process for {0}
+  Cannot uninstall {0}, please check if the tool is currently in use: Cannot uninstall {0}, please check if the tool is currently in use
+  Check for Updates: Check for Updates
+  Confirm Uninstall: Confirm Uninstall
+  ? 'Description: {0}
+
+    '
+  : 'Description: {0}
+
+    '
+  ? 'Disk Usage: {0}
+
+    '
+  : 'Disk Usage: {0}
+
+    '
+  ? 'Executable: {0}
+
+    '
+  : 'Executable: {0}
+
+    '
+  Installation Failed: Installation Failed
+  ? 'Installation Source: {0}
+
+    '
+  : 'Installation Source: {0}
+
+    '
+  Launch Failed: Launch Failed
+  Preparing to install...: Preparing to install...
+  Preparing to uninstall...: Preparing to uninstall...
+  Preparing to update...: Preparing to update...
+  ? 'Tool Name: {0}
+
+    '
+  : 'Tool Name: {0}
+
+    '
+  Uninstall Complete: Uninstall Complete
+  Uninstall Failed: Uninstall Failed
+  Uninstall Successful: Uninstall Successful
+  Update Complete: Update Complete
+  Update Failed: Update Failed
+  ? 'Usage time: {0} hours {1} minutes
+
+    '
+  : 'Usage time: {0} hours {1} minutes
+
+    '
+  ? 'Version: {0}
+
+    '
+  : 'Version: {0}
+
+    '
+  '{0} (Uninstall)': '{0} (Uninstall)'
+  '{0} Details': '{0} Details'
+  '{0} Error': '{0} Error'
+  '{0} Update': '{0} Update'
+  '{0} has been successfully uninstalled': '{0} has been successfully uninstalled'
+ModernSidebar:
+  All Tools: All Tools
+  My Tools: My Tools
+  Search bioinformatics tools...: Search bioinformatics tools...
+  Settings: Settings
+  🕒 Recently Used: 🕒 Recently Used
+ModernToolbar:
+  ← Back: ← Back
+PathMigrationDialog:
+  'Auto-update to: {0}': 'Auto-update to: {0}'
+  Conda Environment Path: Conda Environment Path
+  Confirm: Confirm
+  'Continue using: {0}': 'Continue using: {0}'
+  Default Installation Directory: Default Installation Directory
+  Keep original path (absolute path): Keep original path (absolute path)
+  Path Migration Confirmation: Path Migration Confirmation
+  Recommended: Recommended
+  Software location change detected: Software location change detected
+  Use new default path (recommended): Use new default path (recommended)
+  ? 'You previously set a custom path for <b>{0}</b>, but the software location has changed.
+
+
+    Please choose how to handle this path:'
+  : 'You previously set a custom path for <b>{0}</b>, but the software location has changed.
+
+
+    Please choose how to handle this path:'
+  ? '💡 Tip: Selecting "Use new default path" allows the software path to update automatically with versions, avoiding manual adjustments with each upgrade.'
+  : '💡 Tip: Selecting "Use new default path" allows the software path to update automatically with versions, avoiding manual adjustments with each upgrade.'
+SmartTextWidget:
+  Apply Filter: Apply Filter
+  Available: Available
+  Evolutionary Analysis: Evolutionary Analysis
+  Filter Tools: Filter Tools
+  Gene Annotation: Gene Annotation
+  Genomics: Genomics
+  Installation Status: Installation Status
+  Installed: Installed
+  Reset: Reset
+  Sequence Alignment: Sequence Alignment
+  Sequence Analysis: Sequence Analysis
+  Structural Analysis: Structural Analysis
+  Tool Category: Tool Category
+  Update Required: Update Required
+StorageAnalysisThread:
+  Scanning installed tools...: Scanning installed tools...
+  Calculating tool sizes...: Calculating tool sizes...
+  Analyzing storage usage...: Analyzing storage usage...
+  Analysis Complete: Analysis Complete
+  Tool Name: Tool Name
+  Size: Size
+  Path: Path
+  Dependencies: Dependencies
+  None: None
+  Loading...: Loading...
+  Refresh: Refresh
+  Select All: Select All
+  Delete: Delete
+  Cancel: Cancel
+  Failed to update overview information: Failed to update overview information
+  'Remaining: {0} | Tools using: {1}/{2}': 'Remaining: {0} | Tools using: {1}/{2}'
+SettingsPanel:
+  ? '
+
+
+    Failed to delete tools:
+
+    '
+  : '
+
+
+    Failed to delete tools:
+
+    '
+  ', cleaned up {0} environments': ', cleaned up {0} environments'
+  Advanced Options: Advanced Options
+  All settings have been reset to default values!: All settings have been reset to default values!
+  ? 'Are you sure you want to clear all download cache files?
+
+    This will free up disk space but may require re-downloading tools.'
+  : 'Are you sure you want to clear all download cache files?
+
+    This will free up disk space but may require re-downloading tools.'
+  Are you sure you want to reset all settings to default values?: Are you sure you want to reset all settings to default values?
+  Automatic Update: Automatic Update
+  Automatically Check for Updates: Automatically Check for Updates
+  Automatically Clean Old Logs: Automatically Clean Old Logs
+  Automatically check status of all installed tools on application startup: Automatically check status of all installed tools on application startup
+  Automatically delete log files older than 30 days to save disk space: Automatically delete log files older than 30 days to save disk space
+  Browse...: Browse...
+  Check Frequency: Check Frequency
+  Check for Updates: Check for Updates
+  Check for tool updates now: Check for tool updates now
+  Check tool status on startup: Check tool status on startup
+  ? 'Checking for tool updates...
+
+
+    This feature will be improved in future versions.'
+  : 'Checking for tool updates...
+
+
+    This feature will be improved in future versions.'
+  Chinese: Chinese
+  'Choose how to handle tool updates: automatic background updates or manual confirmation': 'Choose how to handle tool updates: automatic background updates or manual confirmation'
+  Cleanup Complete: Cleanup Complete
+  Cleanup Failed: Cleanup Failed
+  Conda Environment Path: Conda Environment Path
+  Confirm Cleanup: Confirm Cleanup
+  Confirm Reset: Confirm Reset
+  Confirm Restoration: Confirm Restoration
+  Daily: Daily
+  Default Installation Directory: Default Installation Directory
+  Deletion Complete: Deletion Complete
+  Deletion Failed: Deletion Failed
+  Download cache has been cleared!: Download cache has been cleared!
+  Enable Chinese mainland mirror sources to significantly improve download speed: Enable Chinese mainland mirror sources to significantly improve download speed
+  Environment Settings: Environment Settings
+  Error: Error
+  ? 'Error occurred while clearing cache:
+
+    {0}'
+  : 'Error occurred while clearing cache:
+
+    {0}'
+  ? 'Error occurred while deleting tool:
+
+    {0}'
+  : 'Error occurred while deleting tool:
+
+    {0}'
+  ? 'Error occurred while exporting settings:
+
+    {0}'
+  : 'Error occurred while exporting settings:
+
+    {0}'
+  ? 'Error occurred while importing settings:
+
+    {0}'
+  : 'Error occurred while importing settings:
+
+    {0}'
+  ? 'Error occurred while processing deletion request:
+
+    {0}'
+  : 'Error occurred while processing deletion request:
+
+    {0}'
+  Every 2 weeks: Every 2 weeks
+  Every 3 days: Every 3 days
+  Export Failed: Export Failed
+  Export Settings: Export Settings
+  Export Successful: Export Successful
+  General Settings: General Settings
+  Immediately check if new versions are available for all installed tools: Immediately check if new versions are available for all installed tools
+  Import Failed: Import Failed
+  Import Settings: Import Settings
+  Import Successful: Import Successful
+  Interface Language: Interface Language
+  Keep downloaded installation packages to save re-download time: Keep downloaded installation packages to save re-download time
+  Keep installation package cache: Keep installation package cache
+  Language Settings: Language Settings
+  Language Switch: Language Switch
+  Manage installed bioinformatics tools, view occupied space and perform batch deletion: Manage installed bioinformatics tools, view occupied space and perform batch deletion
+  Manual Update: Manual Update
+  Manually Check for Updates: Manually Check for Updates
+  Maximum size per log file: Maximum size per log file
+  No installed tools: No installed tools
+  No tools were successfully deleted: No tools were successfully deleted
+  'Note: This setting only manages third-party bioinformatics tool updates (such as FastQC, BLAST, etc.)': 'Note: This setting only manages third-party bioinformatics tool updates (such as FastQC, BLAST, etc.)'
+  Reset Complete: Reset Complete
+  Restoration Successful: Restoration Successful
+  Restore to Default: Restore to Default
+  Select application display language: Select application display language
+  Select {0}: Select {0}
+  Set default installation location for all tools: Set default installation location for all tools
+  Set maximum size for individual log files, automatically rotate when exceeded: Set maximum size for individual log files, automatically rotate when exceeded
+  Set time interval for automatic tool update checks: Set time interval for automatic tool update checks
+  Settings Update: Settings Update
+  Settings configuration has been successfully imported!: Settings configuration has been successfully imported!
+  ? 'Settings have been exported to:
+
+    {0}'
+  : 'Settings have been exported to:
+
+    {0}'
+  Show Detailed Installation Logs: Show Detailed Installation Logs
+  Show Update Notifications: Show Update Notifications
+  Show desktop notification when tool updates are found (manual mode only): Show desktop notification when tool updates are found (manual mode only)
+  Show detailed technical log information during installation: Show detailed technical log information during installation
+  Simplified Chinese: Simplified Chinese
+  Specify Conda installation path for Python-based bioinformatics tools: Specify Conda installation path for Python-based bioinformatics tools
+  Storage Management: Storage Management
+  Storage Settings: Storage Settings
+  Storage Space Warning: Storage Space Warning
+  Successfully deleted {0} tools: Successfully deleted {0} tools
+  Tool Update Settings: Tool Update Settings
+  Translation files unavailable, please check installation: Translation files unavailable, please check installation
+  Update Mode: Update Mode
+  Use mirror sources to accelerate downloads: Use mirror sources to accelerate downloads
+  Weekly: Weekly
+  When enabled, will automatically check for software and tool updates in the background: When enabled, will automatically check for software and tool updates in the background
+  ? '{0} has been updated to:
+
+    {1}'
+  : '{0} has been updated to:
+
+    {1}'
+  ? 'Are you sure you want to restore <b>{0}</b> to the default path?
+
+
+    Default path: {1}
+
+
+    After restoration, relative paths will be used, and the software will automatically adapt to new versions upon upgrade.'
+  : 'Are you sure you want to restore <b>{0}</b> to the default path?
+
+
+    Default path: {1}
+
+
+    After restoration, relative paths will be used, and the software will automatically adapt to new versions upon upgrade.'
+  ? '{0} has been restored to the default path.
+
+
+    Current path: {1}'
+  : '{0} has been restored to the default path.
+
+
+    Current path: {1}'
+  Auto-check for updates: Auto-check for updates
+  Automatically check for software and tool updates in the background: Automatically check for software and tool updates in the background
+  Automatically check the status of all installed tools at startup: Automatically check the status of all installed tools at startup
+  Show detailed installation logs: Show detailed installation logs
+  Display detailed technical log information during installation: Display detailed technical log information during installation
+  Select the display language of the application: Select the display language of the application
+  Set the default installation location for all tools: Set the default installation location for all tools
+  Reset to Default: Reset to Default
+  Are you sure you want to reset <b>{0}</b> to the default path?: Are you sure you want to reset <b>{0}</b> to the default path?
+  Reset Successful: Reset Successful
+  '{0} has been reset to the default path.': '{0} has been reset to the default path.'
+  Enable China mainland mirror sources to significantly improve download speed: Enable China mainland mirror sources to significantly improve download speed
+  Keep downloaded installation packages to save time on repeated downloads: Keep downloaded installation packages to save time on repeated downloads
+  Auto-clean old logs: Auto-clean old logs
+  Maximum size of a single log file: Maximum size of a single log file
+  Set the maximum size of a single log file, automatically rotate when exceeded: Set the maximum size of a single log file, automatically rotate when exceeded
+  'Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)': 'Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)'
+  Auto Update: Auto Update
+  'Select how to handle tool updates: automatic background update or manual confirmation': 'Select how to handle tool updates: automatic background update or manual confirmation'
+  Every 3 Days: Every 3 Days
+  Every 2 Weeks: Every 2 Weeks
+  Set the time interval for automatically checking tool updates: Set the time interval for automatically checking tool updates
+  Show update notifications: Show update notifications
+  Show desktop notifications when tool updates are found (manual mode only): Show desktop notifications when tool updates are found (manual mode only)
+  Check for Tool Updates Now: Check for Tool Updates Now
+  Manual Check for Updates: Manual Check for Updates
+  Settings Updated: Settings Updated
+  '{0} has been updated to:': '{0} has been updated to:'
+  Japanese: Japanese
+  Checking for tool updates...: Checking for tool updates...
+  'Settings have been exported to:': 'Settings have been exported to:'
+  'An error occurred while exporting settings:': 'An error occurred while exporting settings:'
+  'An error occurred while importing settings:': 'An error occurred while importing settings:'
+  Are you sure you want to clean up all download cache files?: Are you sure you want to clean up all download cache files?
+  Download cache has been cleaned up!: Download cache has been cleaned up!
+  'An error occurred while cleaning up the cache:': 'An error occurred while cleaning up the cache:'
+  'An error occurred while processing the deletion request:': 'An error occurred while processing the deletion request:'
+  Successfully deleted {0} tool(s): Successfully deleted {0} tool(s)
+  ', cleaned up {0} environment(s)': ', cleaned up {0} environment(s)'
+  'Failed to delete tools:': 'Failed to delete tools:'
+  'An error occurred while deleting tools:': 'An error occurred while deleting tools:'
+  Translation files are not available, please check the installation: Translation files are not available, please check the installation
+ToolCardV3:
+  Details: Details
+  Install: Install
+  Launch: Launch
+  '{0}%': '{0}%'
+ToolDetailPage:
+  1 hour 15 min: 1 hour 15 min
+  1.2 hours: 1.2 hours
+  2.5 hours: 2.5 hours
+  3.8 hours: 3.8 hours
+  45 minutes: 45 minutes
+  8 hours 30 min: 8 hours 30 min
+  CPU Requirements: CPU Requirements
+  Data Visualization: Data Visualization
+  Dependencies: Dependencies
+  Depends on database size: Depends on database size
+  Depends on reference genome size: Depends on reference genome size
+  Depends on sequence count: Depends on sequence count
+  Disk Usage: Disk Usage
+  Gene Annotation: Gene Annotation
+  Genome Assembly: Genome Assembly
+  Genomics: Genomics
+  Input Format: Input Format
+  Installation Status: Installation Status
+  Installed: Installed
+  Memory Requirements: Memory Requirements
+  Minimum 2GB: Minimum 2GB
+  Minimum 4GB: Minimum 4GB
+  Minimum 8GB: Minimum 8GB
+  Multi-core highly recommended: Multi-core highly recommended
+  Multi-core recommended: Multi-core recommended
+  Multiple formats: Multiple formats
+  No detailed description, will be added later: No detailed description, will be added later
+  No information available: No information available
+  Not installed: Not installed
+  Not used: Not used
+  Output Format: Output Format
+  Phylogenetics: Phylogenetics
+  Programming Language: Programming Language
+  Quality Control: Quality Control
+  RNA Sequencing: RNA Sequencing
+  Sequence Alignment: Sequence Alignment
+  Sequence Analysis: Sequence Analysis
+  Single core sufficient: Single core sufficient
+  Source Code: Source Code
+  Standard C Library: Standard C Library
+  Standard C Library, zlib: Standard C Library, zlib
+  Standard C++ Library: Standard C++ Library
+  Statistical Analysis: Statistical Analysis
+  Storage Usage: Storage Usage
+  Tool Description: Tool Description
+  Uninstall Tool: Uninstall Tool
+  Unknown: Unknown
+  Unknown Category: Unknown Category
+  Usage Time: Usage Time
+  Used {0}: Used {0}
+  Version: Version
+  Version v{0}: Version v{0}
+  ← Back: ← Back
+  📥 Install Tool: 📥 Install Tool
+  🔧 Technical Specifications: 🔧 Technical Specifications
+  🚀 Launch: 🚀 Launch
+PathMigrationDialog:
+  路径迁移确认: Path Migration Confirmation
+  检测到软件位置已变更: Software location has changed
+  "您之前为 <b>{0}</b> 手动设置了路径，但软件位置已发生变更。\n\n请选择如何处理此路径：": "You previously set a manual path for <b>{0}</b>, but the software location has changed.\n\nPlease choose how to handle this path:"
+  保留原路径（绝对路径）: Keep original path (absolute path)
+  "继续使用: {0}": "Continue using: {0}"
+  使用新的默认路径（推荐）: Use new default path (recommended)
+  "自动更新为: {0}": "Automatically update to: {0}"
+  "💡 提示：选择 \"使用新的默认路径\" 可以让软件路径随版本自动更新，避免每次升级都需要手动调整。": "Tip: Choosing \"Use new default path\" allows the path to update automatically with versions, avoiding manual changes on each upgrade."
+  确认: Confirm
+  推荐: Recommended
+  默认安装目录: Default Installation Directory
+  Conda环境路径: Conda Environment Path
+
+DownloadStatusPanel:
+  准备下载...: Preparing download...
+  完成: Completed
+  成功: Succeeded
+  下载: Download
+  解压: Extract
+  安装: Install
+  验证: Verify
+  ✅ 安装完成: ✅ Installation completed
+  暂无下载任务: No downloads
+  下载状态: Download Status
+  清空: Clear
+  "❌ {0}": "❌ {0}"
+ModernDownloadCard:
+  Preparing...: Preparing...
+  No download tasks: No download tasks
+  Download progress will appear when installing tools: Download progress will appear when installing tools
+  Download Manager: Download Manager
+  Clear Completed: Clear Completed
+  "Total: 0 tasks": "Total: 0 tasks"
+  "{0} in progress": "{0} in progress"
+  "{0} completed": "{0} completed"
+  "{0} failed": "{0} failed"
+  "All tasks completed": "All tasks completed"
+  "Total: {0} tasks": "Total: {0} tasks"
+ToolDetailDialog:
+  🚀 启动工具: 🚀 Launch Tool
+  📦 安装: 📦 Install
+  主要功能: Main Features
+  📚 学术引用: 📚 Citation
+  "暂无引用信息\n日后增添": "No citation information yet\nTo be added later"
+  复制 BibTeX: Copy BibTeX
+  🔗 相关工具: 🔗 Related Tools
+  关闭: Close
+FilterPanel:
+  重置: Reset
+  应用: Apply
+  应用筛选: Apply Filter
+ModernFilterCard:
+  重置: Reset
+  应用筛选: Apply Filter
+ToolDescriptions:
+  FastQC: "A quality control tool for high-throughput sequencing data. Generates comprehensive HTML reports."
+  BLAST: "Sequence similarity search against large databases; supports nucleotide and protein sequences."
+  BWA: "Fast and accurate short read aligner for mapping sequences to a reference genome."
+  SAMtools: "Utilities for manipulating alignments in SAM/BAM/CRAM formats: sort, index, view, and more."
+  HISAT2: "Ultrafast and sensitive alignment program for mapping next‑generation sequencing reads (RNA‑seq)."
+  IQ-TREE: "Efficient phylogenetic tree inference with model selection and ultrafast bootstrap."
+  IGV: "Interactive Genomics Viewer for visualizing BAM/VCF and many genomics data formats."
+ToolDescriptionsBySlug:
+  fastqc: "A quality control tool for high-throughput sequencing data. Generates comprehensive HTML reports."
+  blast: "Sequence similarity search against large databases; supports nucleotide and protein sequences."
+  bwa: "Fast and accurate short read aligner for mapping sequences to a reference genome."
+  samtools: "Utilities for manipulating alignments in SAM/BAM/CRAM formats: sort, index, view, and more."
+  hisat2: "Ultrafast and sensitive alignment program for mapping next‑generation sequencing reads (RNA‑seq)."
+  iqtree: "Efficient phylogenetic tree inference with model selection and ultrafast bootstrap."
+  igv: "Interactive Genomics Viewer for visualizing BAM/VCF and many genomics data formats."

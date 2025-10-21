@@ -79,17 +79,94 @@ class UnifiedLogger:
         logger.addHandler(file_handler)
         
     def _write_log(self, log_type: str, message: str):
-        """线程安全写入日志"""
+        """线程安全写入日志（支持日志轮转）"""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
         log_entry = f"{timestamp} - BioNexus.{log_type} - {message}\n"
-        
+
         with self.lock:
             try:
-                with open(self.log_files.get(log_type, self.log_files['runtime']), 'a', encoding='utf-8') as f:
+                log_file = self.log_files.get(log_type, self.log_files['runtime'])
+
+                # 检查文件大小并轮转（如果需要）
+                self._rotate_log_if_needed(log_file)
+
+                with open(log_file, 'a', encoding='utf-8') as f:
                     f.write(log_entry)
                     f.flush()
             except Exception as e:
                 print(f"日志写入失败 ({log_type}): {e}")
+
+    def _rotate_log_if_needed(self, log_file: Path):
+        """
+        检查日志文件大小，如果超过限制则轮转
+
+        Args:
+            log_file: 日志文件路径
+        """
+        try:
+            # 从配置读取最大日志文件大小（MB）
+            max_size_mb = self._get_max_log_size()
+
+            if not log_file.exists():
+                return
+
+            # 检查文件大小
+            file_size_mb = log_file.stat().st_size / (1024 * 1024)
+
+            if file_size_mb >= max_size_mb:
+                # 轮转日志文件
+                self._rotate_log_file(log_file)
+
+        except Exception as e:
+            print(f"日志轮转检查失败: {e}")
+
+    def _get_max_log_size(self) -> int:
+        """
+        获取最大日志文件大小设置（MB）
+
+        Returns:
+            最大日志文件大小（MB），默认10MB
+        """
+        try:
+            from data.config import ConfigManager
+            config = ConfigManager()
+            return getattr(config.settings, 'max_log_size', 10)
+        except:
+            return 10  # 默认10MB
+
+    def _rotate_log_file(self, log_file: Path):
+        """
+        轮转日志文件
+        runtime.log -> runtime.log.1
+        runtime.log.1 -> runtime.log.2
+        ...保留最多5个备份
+
+        Args:
+            log_file: 日志文件路径
+        """
+        try:
+            max_backups = 5
+
+            # 删除最旧的备份
+            oldest_backup = log_file.parent / f"{log_file.name}.{max_backups}"
+            if oldest_backup.exists():
+                oldest_backup.unlink()
+
+            # 轮转现有备份
+            for i in range(max_backups - 1, 0, -1):
+                old_backup = log_file.parent / f"{log_file.name}.{i}"
+                new_backup = log_file.parent / f"{log_file.name}.{i + 1}"
+
+                if old_backup.exists():
+                    old_backup.rename(new_backup)
+
+            # 轮转当前文件
+            if log_file.exists():
+                backup_name = log_file.parent / f"{log_file.name}.1"
+                log_file.rename(backup_name)
+
+        except Exception as e:
+            print(f"日志文件轮转失败: {e}")
     
     def log_runtime(self, message: str, level: str = "INFO"):
         """记录运行时信息"""

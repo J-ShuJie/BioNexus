@@ -1,0 +1,7 @@
+{
+  "timestamp": "2025-10-20T11:40:37.589379",
+  "exception_type": "SyntaxError",
+  "exception_message": "unterminated string literal (detected at line 961) (settings_panel.py, line 961)",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.21\\main.py\", line 151, in <module>\n    from ui.main_window import MainWindow\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.21\\ui\\main_window.py\", line 35, in <module>\n    from .settings_panel import SettingsPanel\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.21\\ui\\settings_panel.py\", line 961\n    self.tr(\"{0} has been updated to:\n            ^\nSyntaxError: unterminated string literal (detected at line 961)\n",
+  "session_id": "20251020_114037"
+}

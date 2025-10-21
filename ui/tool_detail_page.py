@@ -227,7 +227,7 @@ class ToolDetailPage(QWidget):
         layout.setContentsMargins(20, 0, 20, 0)
         
         # 返回按钮
-        back_btn = QPushButton("← 返回")
+        back_btn = QPushButton(self.tr("← Back"))
         back_btn.setFixedSize(80, 32)
         back_btn.setStyleSheet("""
             QPushButton {
@@ -337,7 +337,7 @@ class ToolDetailPage(QWidget):
         name_label.setStyleSheet("color: #0f172a;")
         
         # 版本信息（2025设计优化：移除冗余分类显示）
-        meta_label = QLabel(f"版本 v{self.tool_data.get('version', 'N/A')}")
+        meta_label = QLabel(self.tr("Version v{0}").format(self.tool_data.get('version', 'N/A')))
         meta_label.setStyleSheet("color: #6366f1; font-size: 12px; font-weight: 500;")
         
         # ✅ 已删除重复的简短描述 - 详情页面下方已有完整的工具介绍区域
@@ -377,7 +377,7 @@ class ToolDetailPage(QWidget):
             
             # 🎮 Steam风格：按钮下方显示使用时长
             # v1.2.6 FIX: 优化时间统计样式，使其更紧凑且不会截断
-            usage_time_label = QLabel(f"已使用 {self._get_usage_time_display()}")
+            usage_time_label = QLabel(self.tr("Used {0}").format(self._get_usage_time_display()))
             usage_time_label.setFixedHeight(24)  # 固定高度避免布局问题
             usage_time_label.setStyleSheet("""
                 color: #6B7280;
@@ -443,7 +443,7 @@ class ToolDetailPage(QWidget):
             uninstall_width = 36
         
         # 启动按钮（主要功能）
-        launch_btn = QPushButton("🚀 启动")
+        launch_btn = QPushButton(self.tr("🚀 Launch"))
         launch_btn.setFixedSize(launch_width, button_height)
         launch_btn.setStyleSheet(f"""
             QPushButton {{
@@ -490,7 +490,7 @@ class ToolDetailPage(QWidget):
                     stop:0 #b91c1c, stop:1 #991b1b);
             }}
         """)
-        uninstall_btn.setToolTip("卸载工具")
+        uninstall_btn.setToolTip(self.tr("卸载工具"))
         uninstall_btn.clicked.connect(lambda: self.uninstall_requested.emit(self.tool_data['name']))
         
         # 添加组件
@@ -515,8 +515,8 @@ class ToolDetailPage(QWidget):
         创建增强版安装按钮
         v1.2.4: 渐变背景、hover动画、现代化设计
         """
-        install_btn = QPushButton("📥 安装工具")
-        
+        install_btn = QPushButton(self.tr("📥 Install Tool"))
+
         # 尺寸设置
         # v1.2.6 FIX: 与启动按钮保持一致的高度
         if getattr(self, 'layout_mode', 'full') == "compact":
@@ -624,28 +624,28 @@ class ToolDetailPage(QWidget):
         # v1.2.4: 增强版配置，包含图标和渐变配色
         stats_data = [
             {
-                "label": "安装状态", 
-                "value": "已安装" if self.tool_data['status'] == 'installed' else "未安装", 
+                "label": self.tr("安装状态"),
+                "value": self.tr("已安装") if self.tool_data['status'] == 'installed' else self.tr("未安装"),
                 "icon": "✅" if self.tool_data['status'] == 'installed' else "⏳",
                 "color": "#10b981" if self.tool_data['status'] == 'installed' else "#f59e0b",
                 "gradient": "qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #10b981, stop:1 #059669)" if self.tool_data['status'] == 'installed' else "qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #f59e0b, stop:1 #d97706)"
             },
             {
-                "label": "磁盘占用", 
+                "label": self.tr("磁盘占用"),
                 "value": self.tool_data.get('disk_usage', 'N/A'),
                 "icon": "💾",
                 "color": "#475569",
                 "gradient": "qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #64748b, stop:1 #475569)"
             },
             {
-                "label": "版本", 
+                "label": self.tr("版本"),
                 "value": self.tool_data.get('version', 'N/A'),
                 "icon": "🏷️",
                 "color": "#2563eb",
                 "gradient": "qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3b82f6, stop:1 #2563eb)"
             },
             {
-                "label": "使用时间", 
+                "label": self.tr("使用时间"),
                 "value": self._get_usage_time_display(),
                 "icon": "⏱️",
                 "color": "#059669",
@@ -770,94 +770,94 @@ class ToolDetailPage(QWidget):
         将内部分类代码转换为用户友好的显示名称
         """
         category_map = {
-            "quality": "质量控制",
-            "sequence": "序列分析", 
-            "rnaseq": "RNA测序",
-            "genomics": "基因组学",
-            "phylogeny": "系统发育",
-            "alignment": "序列比对",
-            "assembly": "基因组组装",
-            "annotation": "基因注释",
-            "visualization": "数据可视化",
-            "statistics": "统计分析"
+            "quality": self.tr("质量控制"),
+            "sequence": self.tr("序列分析"),
+            "rnaseq": self.tr("RNA测序"),
+            "genomics": self.tr("基因组学"),
+            "phylogeny": self.tr("系统发育"),
+            "alignment": self.tr("序列比对"),
+            "assembly": self.tr("基因组组装"),
+            "annotation": self.tr("基因注释"),
+            "visualization": self.tr("数据可视化"),
+            "statistics": self.tr("统计分析")
         }
-        
+
         category_code = self.tool_data.get('category', 'unknown')
-        return category_map.get(category_code, '未知分类')
+        return category_map.get(category_code, self.tr('未知分类'))
     
     def _get_tech_specs(self):
         """获取当前工具的技术规格数据"""
         tool_specs = {
             "FastQC": [
-                ("编程语言", "Java"),
-                ("依赖环境", "Java 8+"),
-                ("输入格式", "FASTQ, SAM, BAM"),
-                ("输出格式", "HTML, ZIP"),
-                ("CPU要求", "单核即可"),
-                ("内存要求", "最小2GB"),
-                ("存储占用", "85MB"),
-                ("源代码", "github.com/s-andrews/FastQC")
+                (self.tr("编程语言"), "Java"),
+                (self.tr("依赖环境"), "Java 8+"),
+                (self.tr("输入格式"), "FASTQ, SAM, BAM"),
+                (self.tr("输出格式"), "HTML, ZIP"),
+                (self.tr("CPU要求"), self.tr("单核即可")),
+                (self.tr("内存要求"), self.tr("最小2GB")),
+                (self.tr("存储占用"), "85MB"),
+                (self.tr("源代码"), "github.com/s-andrews/FastQC")
             ],
             "BLAST": [
-                ("编程语言", "C++"),
-                ("依赖环境", "标准C++库"),
-                ("输入格式", "FASTA"),
-                ("输出格式", "多种格式"),
-                ("CPU要求", "多核推荐"),
-                ("内存要求", "取决于数据库大小"),
-                ("存储占用", "245MB"),
-                ("源代码", "ncbi.nlm.nih.gov/blast")
+                (self.tr("编程语言"), "C++"),
+                (self.tr("依赖环境"), self.tr("标准C++库")),
+                (self.tr("输入格式"), "FASTA"),
+                (self.tr("输出格式"), self.tr("多种格式")),
+                (self.tr("CPU要求"), self.tr("多核推荐")),
+                (self.tr("内存要求"), self.tr("取决于数据库大小")),
+                (self.tr("存储占用"), "245MB"),
+                (self.tr("源代码"), "ncbi.nlm.nih.gov/blast")
             ],
             "BWA": [
-                ("编程语言", "C"),
-                ("依赖环境", "标准C库"),
-                ("输入格式", "FASTA, FASTQ"),
-                ("输出格式", "SAM"),
-                ("CPU要求", "多核强烈推荐"),
-                ("内存要求", "取决于参考基因组大小"),
-                ("存储占用", "15MB"),
-                ("源代码", "github.com/lh3/bwa")
+                (self.tr("编程语言"), "C"),
+                (self.tr("依赖环境"), self.tr("标准C库")),
+                (self.tr("输入格式"), "FASTA, FASTQ"),
+                (self.tr("输出格式"), "SAM"),
+                (self.tr("CPU要求"), self.tr("多核强烈推荐")),
+                (self.tr("内存要求"), self.tr("取决于参考基因组大小")),
+                (self.tr("存储占用"), "15MB"),
+                (self.tr("源代码"), "github.com/lh3/bwa")
             ],
             "SAMtools": [
-                ("编程语言", "C"),
-                ("依赖环境", "标准C库, zlib"),
-                ("输入格式", "SAM, BAM, CRAM"),
-                ("输出格式", "SAM, BAM, CRAM"),
-                ("CPU要求", "多核推荐"),
-                ("内存要求", "最小4GB"),
-                ("存储占用", "32MB"),
-                ("源代码", "github.com/samtools/samtools")
+                (self.tr("编程语言"), "C"),
+                (self.tr("依赖环境"), self.tr("标准C库, zlib")),
+                (self.tr("输入格式"), "SAM, BAM, CRAM"),
+                (self.tr("输出格式"), "SAM, BAM, CRAM"),
+                (self.tr("CPU要求"), self.tr("多核推荐")),
+                (self.tr("内存要求"), self.tr("最小4GB")),
+                (self.tr("存储占用"), "32MB"),
+                (self.tr("源代码"), "github.com/samtools/samtools")
             ],
             "HISAT2": [
-                ("编程语言", "C++"),
-                ("依赖环境", "标准C++库"),
-                ("输入格式", "FASTA, FASTQ"),
-                ("输出格式", "SAM"),
-                ("CPU要求", "多核强烈推荐"),
-                ("内存要求", "最小8GB"),
-                ("存储占用", "128MB"),
-                ("源代码", "github.com/DaehwanKimLab/hisat2")
+                (self.tr("编程语言"), "C++"),
+                (self.tr("依赖环境"), self.tr("标准C++库")),
+                (self.tr("输入格式"), "FASTA, FASTQ"),
+                (self.tr("输出格式"), "SAM"),
+                (self.tr("CPU要求"), self.tr("多核强烈推荐")),
+                (self.tr("内存要求"), self.tr("最小8GB")),
+                (self.tr("存储占用"), "128MB"),
+                (self.tr("源代码"), "github.com/DaehwanKimLab/hisat2")
             ],
             "IQ-TREE": [
-                ("编程语言", "C++"),
-                ("依赖环境", "标准C++库"),
-                ("输入格式", "Phylip, Nexus, FASTA"),
-                ("输出格式", "Newick, PDF"),
-                ("CPU要求", "多核强烈推荐"),
-                ("内存要求", "取决于序列数量"),
-                ("存储占用", "78MB"),
-                ("源代码", "github.com/iqtree/iqtree2")
+                (self.tr("编程语言"), "C++"),
+                (self.tr("依赖环境"), self.tr("标准C++库")),
+                (self.tr("输入格式"), "Phylip, Nexus, FASTA"),
+                (self.tr("输出格式"), "Newick, PDF"),
+                (self.tr("CPU要求"), self.tr("多核强烈推荐")),
+                (self.tr("内存要求"), self.tr("取决于序列数量")),
+                (self.tr("存储占用"), "78MB"),
+                (self.tr("源代码"), "github.com/iqtree/iqtree2")
             ]
         }
         
         default_specs = [
-            ("编程语言", "暂无信息"),
-            ("依赖环境", "暂无信息"),
-            ("输入格式", "暂无信息"),
-            ("输出格式", "暂无信息"),
-            ("CPU要求", "多核推荐"),
-            ("内存要求", "最小4GB"),
-            ("存储占用", "未知")
+            (self.tr("编程语言"), self.tr("暂无信息")),
+            (self.tr("依赖环境"), self.tr("暂无信息")),
+            (self.tr("输入格式"), self.tr("暂无信息")),
+            (self.tr("输出格式"), self.tr("暂无信息")),
+            (self.tr("CPU要求"), self.tr("多核推荐")),
+            (self.tr("内存要求"), self.tr("最小4GB")),
+            (self.tr("存储占用"), self.tr("未知"))
         ]
         
         return tool_specs.get(self.tool_data['name'], default_specs)
@@ -865,17 +865,17 @@ class ToolDetailPage(QWidget):
     def _get_usage_time_display(self):
         """获取工具使用时间的显示文本"""
         tool_name = self.tool_data['name']
-        
+
         mock_usage_times = {
-            "FastQC": "2.5小时",
-            "BLAST": "1.2小时", 
-            "BWA": "45分钟",
-            "SAMtools": "3.8小时",
-            "HISAT2": "1小时15分",
-            "IQ-TREE": "8小时30分"
+            "FastQC": self.tr("2.5小时"),
+            "BLAST": self.tr("1.2小时"),
+            "BWA": self.tr("45分钟"),
+            "SAMtools": self.tr("3.8小时"),
+            "HISAT2": self.tr("1小时15分"),
+            "IQ-TREE": self.tr("8小时30分")
         }
-        
-        return mock_usage_times.get(tool_name, "未使用")
+
+        return mock_usage_times.get(tool_name, self.tr("未使用"))
 
     def create_description_section(self):
         """创建工具详细介绍区域 - 使用AutoResizingTextEdit实现高度自适应"""
@@ -903,8 +903,8 @@ class ToolDetailPage(QWidget):
         layout.setSpacing(12)
         
         # 标题 - 🔥 使用SmartPaintLabel V2，完全兼容原有样式！
-        title_label = create_smart_label_v2("工具介绍")
-        
+        title_label = create_smart_label_v2(self.tr("工具介绍"))
+
         # 🎯 关键：2025优化字体大小
         title_font = QFont()
         title_font.setPointSize(14)  # 16px → 14px
@@ -914,7 +914,7 @@ class ToolDetailPage(QWidget):
         
         # 🔥 NEW: 使用AutoResizingTextEdit，字体固定，高度自适应！
         description = AutoResizingTextEdit()
-        description.setPlainText(self.tool_data.get('description', '暂无详细介绍，日后增添'))
+        description.setPlainText(self.tool_data.get('description', self.tr('暂无详细介绍，日后增添')))
         description.setReadOnly(True)
         description.setMinimumLines(3)  # 最少显示3行
         
@@ -1003,8 +1003,8 @@ class ToolDetailPage(QWidget):
         layout.setSpacing(8)  # 更紧凑的行间距
         
         # 技术规格标题 - 🔥 使用SmartPaintLabel V2，完全兼容原有样式！
-        title_label = create_smart_label_v2("🔧 技术规格")
-        
+        title_label = create_smart_label_v2(self.tr("🔧 技术规格"))
+
         # 🎯 关键：2025优化字体大小
         title_font = QFont()
         title_font.setPointSize(14)  # 16px → 14px
@@ -1069,7 +1069,7 @@ class ToolDetailPage(QWidget):
         row_layout.setSpacing(0)  # 手动控制间距
         
         # 规格标签，根据布局模式调整宽度
-        label_widget = QLabel(f"{label}：")  # 中文冒号符合中文排版习惯
+        label_widget = QLabel(f"{label}:")
         
         # v1.2.6: 更紧凑的标签宽度设置
         if hasattr(self, 'layout_mode'):

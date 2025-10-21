@@ -715,7 +715,7 @@ def test_smart_paint_v2():
     
     app = QApplication(sys.argv)
     window = QWidget()
-    window.setWindowTitle("SmartPaintLabel 2.0 兼容性测试")
+    window.setWindowTitle("SmartPaintLabel 2.0 Compatibility Test")
     layout = QVBoxLayout(window)
     
     # 测试各种样式

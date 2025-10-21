@@ -1,0 +1,119 @@
+2025-10-18 01:37:53,054 - BioNexus.runtime - INFO - === BioNexus 1.1.12 启动 ===
+2025-10-18 01:37:53,055 - BioNexus.runtime - INFO - 会话ID: 20251018_013753
+2025-10-18 01:37:53,055 - BioNexus.runtime - INFO - 日志目录: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.17\logs\2025-10-18\session_20251018_013753
+2025-10-18 01:37:53,055 - BioNexus.runtime - INFO - BioNexus版本: 1.2.13
+2025-10-18 01:37:53,056 - BioNexus.startup - INFO - 开始启动主应用程序
+2025-10-18 01:37:53,165 - BioNexus.startup - INFO - PyQt5应用程序初始化成功
+2025-10-18 01:37:53,165 - BioNexus.startup - INFO - 启动阶段 - PyQt5应用程序: 成功 - 初始化成功
+2025-10-18 01:37:53,166 - BioNexus.runtime - INFO - 版本: 1.2.13
+2025-10-18 01:37:53,166 - BioNexus.runtime - INFO - Python版本: 3.13.2
+2025-10-18 01:37:53,166 - BioNexus.runtime - INFO - PyQt5版本: 已加载
+2025-10-18 01:37:53,166 - BioNexus.runtime - INFO - 工作目录: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.17
+2025-10-18 01:37:53,167 - BioNexus.runtime - INFO - 应用启动完成
+2025-10-18 01:37:53,174 - BioNexus - INFO - 日志系统初始化完成
+2025-10-18 01:37:53,174 - BioNexus - INFO - 日志文件: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.17\logs\bionexus_20251018.log
+2025-10-18 01:37:53,182 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: auto_update = True
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: language = zh_CN
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'manual', 'check_frequency': 1, 'show_notification': True, 'last_check': None}
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: default_install_dir = C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.2\installed_tools
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: conda_env_path = C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.2\envs_cache
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-18 01:37:53,182 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-18 01:37:53,182 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-18 01:37:53,183 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-18 01:37:53,183 - root - INFO - 初始化收藏列表: []
+2025-10-18 01:37:53,185 - core.tool_registry - INFO - 已注册工具: BLAST
+2025-10-18 01:37:53,185 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:53,187 - core.tool_registry - INFO - 已注册工具: BWA
+2025-10-18 01:37:53,187 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,731 - BioNexus.runtime - INFO - FastQC工具初始化完成: installed_tools\FastQC
+2025-10-18 01:37:54,732 - BioNexus.runtime - INFO - 开始验证FastQC安装: installed_tools\FastQC
+2025-10-18 01:37:54,732 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - installed_tools\FastQC
+2025-10-18 01:37:54,734 - core.tool_registry - INFO - 已注册工具: FastQC
+2025-10-18 01:37:54,774 - core.tool_registry - INFO - 已注册工具: HISAT2
+2025-10-18 01:37:54,774 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,782 - BioNexus.runtime - INFO - IGV工具初始化完成: installed_tools\IGV
+2025-10-18 01:37:54,783 - BioNexus.runtime - INFO - 开始验证IGV安装: installed_tools\IGV
+2025-10-18 01:37:54,783 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - installed_tools\IGV
+2025-10-18 01:37:54,784 - core.tool_registry - INFO - 已注册工具: IGV
+2025-10-18 01:37:54,786 - core.tool_registry - INFO - 已注册工具: IQ-TREE
+2025-10-18 01:37:54,786 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,786 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,788 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,788 - core.tool_registry - INFO - 已注册工具: SAMtools
+2025-10-18 01:37:54,799 - utils.launcher_utils - INFO - BioNexus v1.2.13 launcher started
+2025-10-18 01:37:54,804 - BioNexus.startup - INFO - BioNexus 1.2.13 启动 - 会话ID: 20251018_013754
+2025-10-18 01:37:54,804 - BioNexus.startup - INFO - 启动阶段 - 日志系统初始化: 成功 - 全面日志系统已启动
+2025-10-18 01:37:54,804 - BioNexus - INFO - 日志系统初始化完成
+2025-10-18 01:37:54,804 - BioNexus - INFO - 日志文件: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.17\logs\bionexus_20251018.log
+2025-10-18 01:37:54,804 - BioNexus.startup - INFO - BioNexus 1.2.13 启动初始化
+2025-10-18 01:37:54,805 - BioNexus.startup - INFO - 启动阶段 - 基础日志系统: 成功 - 标准logging已配置
+2025-10-18 01:37:54,805 - BioNexus.startup - INFO - 错误处理器初始化完成
+2025-10-18 01:37:54,805 - BioNexus.startup - INFO - 启动阶段 - 错误处理器: 成功 - 全局异常捕获已设置
+2025-10-18 01:37:54,806 - BioNexus.performance - INFO - 性能 - 基础日志系统初始化: 1.41ms
+2025-10-18 01:37:54,806 - BioNexus.startup - INFO - 模块导入 - ui.main_window.MainWindow: 成功
+2025-10-18 01:37:54,806 - BioNexus.startup - INFO - 模块导入 - data.config.ConfigManager: 成功
+2025-10-18 01:37:54,806 - BioNexus.startup - INFO - 模块导入 - utils.helpers.check_system_requirements: 成功
+2025-10-18 01:37:54,807 - BioNexus.startup - INFO - 模块导入 - utils.unified_logger: 成功
+2025-10-18 01:37:54,807 - BioNexus.performance - INFO - 性能 - 主要模块导入: 0.88ms
+2025-10-18 01:37:54,807 - BioNexus.startup - INFO - 启动阶段 - 所有模块导入: 成功 - 核心模块导入完成
+2025-10-18 01:37:54,826 - core.tool_registry - INFO - 已注册工具: BLAST
+2025-10-18 01:37:54,826 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,826 - core.tool_registry - INFO - 已注册工具: BWA
+2025-10-18 01:37:54,826 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,826 - BioNexus.runtime - INFO - FastQC工具初始化完成: installed_tools\FastQC
+2025-10-18 01:37:54,826 - BioNexus.runtime - INFO - 开始验证FastQC安装: installed_tools\FastQC
+2025-10-18 01:37:54,827 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - installed_tools\FastQC
+2025-10-18 01:37:54,828 - core.tool_registry - INFO - 已注册工具: FastQC
+2025-10-18 01:37:54,828 - core.tool_registry - INFO - 已注册工具: HISAT2
+2025-10-18 01:37:54,828 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,828 - BioNexus.runtime - INFO - IGV工具初始化完成: installed_tools\IGV
+2025-10-18 01:37:54,828 - BioNexus.runtime - INFO - 开始验证IGV安装: installed_tools\IGV
+2025-10-18 01:37:54,829 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - installed_tools\IGV
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: IGV
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: IQ-TREE
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-18 01:37:54,830 - core.tool_registry - INFO - 已注册工具: SAMtools
+2025-10-18 01:37:54,832 - BioNexus.runtime - INFO - 工具更新定时检查已设置：每1天
+2025-10-18 01:37:54,832 - BioNexus.runtime - INFO - 工具更新服务初始化完成
+2025-10-18 01:37:54,833 - BioNexus.runtime - INFO - 工具更新控制器初始化完成
+2025-10-18 01:37:55,604 - BioNexus.runtime - INFO - FastQC版本信息已异步更新: 0.12.1
+2025-10-18 01:37:55,614 - BioNexus.runtime - INFO - FastQC版本信息已异步更新: 0.12.1
+2025-10-18 01:37:55,672 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:55,678 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:55,680 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:55,680 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:55,684 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-18 01:37:56,337 - BioNexus.runtime - INFO - 开始验证FastQC安装: installed_tools\FastQC
+2025-10-18 01:37:56,338 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - installed_tools\FastQC
+2025-10-18 01:37:56,339 - BioNexus.runtime - INFO - 开始验证IGV安装: installed_tools\IGV
+2025-10-18 01:37:56,339 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - installed_tools\IGV
+2025-10-18 01:37:56,353 - BioNexus.runtime - INFO - 性能: 应用筛选条件 用时 0.000s
+2025-10-18 01:37:56,354 - BioNexus.runtime - INFO - 性能: 更新工具显示 用时 0.016s
+2025-10-18 01:37:56,356 - BioNexus.runtime - INFO - 开始验证FastQC安装: installed_tools\FastQC
+2025-10-18 01:37:56,357 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - installed_tools\FastQC
+2025-10-18 01:37:56,357 - BioNexus.runtime - INFO - 开始验证IGV安装: installed_tools\IGV
+2025-10-18 01:37:56,358 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - installed_tools\IGV
+2025-10-18 01:37:56,369 - BioNexus.runtime - INFO - 性能: 应用筛选条件 用时 0.000s
+2025-10-18 01:37:56,369 - BioNexus.runtime - INFO - 性能: 更新工具显示 用时 0.014s
+2025-10-18 01:37:56,371 - BioNexus.runtime - INFO - 性能: 视图切换 用时 0.016s
+2025-10-18 01:37:56,371 - BioNexus.runtime - INFO - 开始检查工具更新 (手动: False)
+2025-10-18 01:37:56,372 - BioNexus.runtime - INFO - 开始验证FastQC安装: installed_tools\FastQC
+2025-10-18 01:37:56,416 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - installed_tools\FastQC
+2025-10-18 01:37:56,416 - BioNexus.runtime - INFO - 开始验证IGV安装: installed_tools\IGV
+2025-10-18 01:37:56,529 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - installed_tools\IGV
+2025-10-18 01:37:56,608 - BioNexus.runtime - INFO - 没有已安装的工具需要检查更新
+2025-10-18 01:37:56,673 - BioNexus.runtime - INFO - 工具更新检查完成: 发现0个更新
+2025-10-18 01:37:56,726 - ui.storage_manager_widget - INFO - 存储分析完成，发现 0 个已安装工具
+2025-10-18 01:40:47,456 - core.tool_manager - INFO - ToolManager cleanup completed
+2025-10-18 01:40:47,474 - BioNexus.runtime - INFO - === 应用关闭 ===
+2025-10-18 01:40:47,475 - BioNexus.runtime - INFO - 运行时长: 174.42s
+2025-10-18 01:40:47,475 - BioNexus.runtime - INFO - 会话统计: {"start_time": "2025-10-18T01:37:53.054260", "operations_count": 3, "errors_count": 2, "installations": 0, "network_requests": 2, "end_time": "2025-10-18T01:40:47.474864", "runtime_seconds": 174.420604}
+2025-10-18 01:40:47,475 - BioNexus.runtime - INFO - 会话日志已保存到: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.17\logs\2025-10-18\session_20251018_013753
+2025-10-18 01:40:47,476 - core.tool_manager - INFO - ToolManager cleanup completed

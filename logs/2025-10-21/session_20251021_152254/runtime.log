@@ -1,0 +1,1703 @@
+2025-10-21 15:22:54,021 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,021 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,021 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,023 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,023 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,024 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,024 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,024 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,024 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,024 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,033 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,034 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,034 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,034 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,034 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,034 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,034 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,035 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,035 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,035 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,036 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,038 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,038 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,038 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,039 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,019 - BioNexus.runtime - INFO - === BioNexus 1.1.12 启动 ===
+2025-10-21 15:22:54,042 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,042 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,042 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,043 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,043 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,044 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,044 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,044 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,045 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,045 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,045 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,045 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,045 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,045 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,045 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,046 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,047 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,047 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,047 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,048 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,041 - BioNexus.runtime - INFO - 会话ID: 20251021_152254
+2025-10-21 15:22:54,050 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,050 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,050 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,051 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,052 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,052 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,052 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,052 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,052 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,053 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,053 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,053 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,053 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,053 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,054 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,054 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,054 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,054 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,054 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,054 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,056 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,056 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,057 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,057 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,057 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,049 - BioNexus.runtime - INFO - 日志目录: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\logs\2025-10-21\session_20251021_152254
+2025-10-21 15:22:54,060 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,060 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,061 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,061 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,062 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,062 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,062 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,062 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,062 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,062 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,062 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,062 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,063 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,063 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,063 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,063 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,063 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,063 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,063 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,063 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,064 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,065 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,065 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,066 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,066 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,059 - BioNexus.runtime - INFO - BioNexus版本: 1.2.13
+2025-10-21 15:22:54,089 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,089 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,089 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,090 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,090 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,091 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,091 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,091 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,091 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,092 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,092 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,092 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,092 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,092 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,092 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,093 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,094 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,094 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,094 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,094 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,094 - BioNexus.startup - INFO - 开始启动主应用程序
+2025-10-21 15:22:54,142 - BioNexus.startup - WARNING - QComboBox滚轮过滤器安装失败: No module named 'utils.qt_wheel_guard'
+2025-10-21 15:22:54,142 - BioNexus.startup - INFO - PyQt5应用程序初始化成功
+2025-10-21 15:22:54,143 - BioNexus.startup - INFO - 启动阶段 - PyQt5应用程序: 成功 - 初始化成功
+2025-10-21 15:22:54,144 - BioNexus.startup - WARNING - 翻译系统初始化失败: type object 'TranslationManager' has no attribute 'instance', 将使用默认语言
+2025-10-21 15:22:54,145 - BioNexus.startup - INFO - 启动阶段 - 翻译系统: 失败 - 初始化失败: type object 'TranslationManager' has no attribute 'instance', 使用默认语言
+2025-10-21 15:22:54,146 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,146 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,147 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,147 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,148 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,148 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,148 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,148 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,148 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,149 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,149 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,149 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,149 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,150 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,150 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,150 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,150 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,150 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,150 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,150 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,152 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,152 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,153 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,153 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,153 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,145 - BioNexus.runtime - INFO - 版本: 1.2.13
+2025-10-21 15:22:54,155 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,155 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,155 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,156 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,156 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,157 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,157 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,157 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,157 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,157 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,157 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,158 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,158 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,158 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,158 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,158 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,158 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,158 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,159 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,159 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,160 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,161 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,161 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,161 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,162 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,154 - BioNexus.runtime - INFO - Python版本: 3.13.2
+2025-10-21 15:22:54,165 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,165 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,165 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,167 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,167 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,168 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,168 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,168 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,169 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,169 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,169 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,169 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,169 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,169 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,169 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,170 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,171 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,171 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,171 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,171 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,164 - BioNexus.runtime - INFO - PyQt5版本: 已加载
+2025-10-21 15:22:54,173 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,174 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,174 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,175 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,175 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,175 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,175 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,175 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,175 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,175 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,175 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,175 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,176 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,176 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,176 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,176 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,176 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,176 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,176 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,176 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,177 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,178 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,178 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,178 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,179 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,173 - BioNexus.runtime - INFO - 工作目录: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23
+2025-10-21 15:22:54,181 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,181 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,181 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,183 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,183 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,183 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,183 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,183 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,183 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,183 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,183 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,184 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,184 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,184 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,184 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,184 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,184 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,184 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,185 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,185 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,186 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,187 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,187 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,187 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,187 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,180 - BioNexus.runtime - INFO - 应用启动完成
+2025-10-21 15:22:54,193 - BioNexus - INFO - 日志系统初始化完成
+2025-10-21 15:22:54,194 - BioNexus - INFO - 日志文件: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\logs\bionexus_20251021.log
+2025-10-21 15:22:54,198 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:54,198 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,198 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,199 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:54,199 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:54,200 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,200 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,200 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:54,200 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:54,200 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:54,200 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:54,200 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:54,201 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:54,201 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:54,201 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:54,201 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:54,201 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:54,201 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:54,202 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:54,202 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:54,203 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:54,204 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:54,204 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:54,204 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:54,205 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:54,209 - core.tool_registry - INFO - 已注册工具: BLAST
+2025-10-21 15:22:54,210 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:54,212 - core.tool_registry - INFO - 已注册工具: BWA
+2025-10-21 15:22:54,212 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:56,673 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,673 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,673 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,674 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,674 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,674 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,674 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,674 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,674 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,674 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,675 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,675 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,675 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,675 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,675 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,676 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,676 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,676 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,676 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,672 - BioNexus.runtime - INFO - FastQC工具初始化完成: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:56,677 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,677 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,677 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,677 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,678 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,678 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,678 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,678 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,678 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,678 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,678 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,679 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,679 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,679 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,679 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,679 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,677 - BioNexus.runtime - INFO - 开始验证FastQC安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:56,680 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,681 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,681 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,681 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,681 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,681 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,681 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,681 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,681 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,681 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,681 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,682 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,682 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,682 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,682 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,682 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,683 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,683 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,683 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,683 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,680 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:56,685 - core.tool_registry - INFO - 已注册工具: FastQC
+2025-10-21 15:22:56,818 - core.tool_registry - INFO - 已注册工具: HISAT2
+2025-10-21 15:22:56,818 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:56,825 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,826 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,826 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,827 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,828 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,828 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,829 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,829 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,829 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,830 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,830 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,830 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,830 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,831 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,831 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,831 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,831 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,831 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,832 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,832 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,834 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,836 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,836 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,836 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,836 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,824 - BioNexus.runtime - INFO - IGV工具初始化完成: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:56,839 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,840 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,840 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,841 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,842 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,842 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,842 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,842 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,842 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,842 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,843 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,843 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,843 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,844 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,844 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,844 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,845 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,845 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,845 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,845 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,847 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,849 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,850 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,850 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,850 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,838 - BioNexus.runtime - INFO - 开始验证IGV安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:56,856 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:56,857 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,857 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,859 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:56,859 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:56,860 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,860 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,860 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:56,861 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:56,861 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:56,862 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:56,862 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:56,863 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:56,863 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:56,863 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:56,864 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:56,864 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:56,864 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:56,864 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:56,864 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:56,867 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:56,869 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:56,869 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:56,870 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:56,870 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:56,855 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:56,875 - core.tool_registry - INFO - 已注册工具: IGV
+2025-10-21 15:22:56,879 - core.tool_registry - INFO - 已注册工具: IQ-TREE
+2025-10-21 15:22:56,880 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:56,880 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:56,884 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:56,884 - core.tool_registry - INFO - 已注册工具: SAMtools
+2025-10-21 15:22:56,899 - utils.launcher_utils - INFO - BioNexus v1.2.13 launcher started
+2025-10-21 15:22:56,937 - BioNexus.startup - INFO - BioNexus 1.2.13 启动 - 会话ID: 20251021_152256
+2025-10-21 15:22:56,939 - BioNexus.startup - INFO - 启动阶段 - 日志系统初始化: 成功 - 全面日志系统已启动
+2025-10-21 15:22:56,942 - BioNexus - INFO - 日志系统初始化完成
+2025-10-21 15:22:56,942 - BioNexus - INFO - 日志文件: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\logs\bionexus_20251021.log
+2025-10-21 15:22:56,943 - BioNexus.startup - INFO - BioNexus 1.2.13 启动初始化
+2025-10-21 15:22:56,944 - BioNexus.startup - INFO - 启动阶段 - 基础日志系统: 成功 - 标准logging已配置
+2025-10-21 15:22:56,945 - BioNexus.startup - INFO - 错误处理器初始化完成
+2025-10-21 15:22:56,947 - BioNexus.startup - INFO - 启动阶段 - 错误处理器: 成功 - 全局异常捕获已设置
+2025-10-21 15:22:56,965 - BioNexus.performance - INFO - 性能 - 基础日志系统初始化: 23.09ms
+2025-10-21 15:22:56,967 - BioNexus.startup - INFO - 模块导入 - ui.main_window.MainWindow: 成功
+2025-10-21 15:22:56,969 - BioNexus.startup - INFO - 模块导入 - data.config.ConfigManager: 成功
+2025-10-21 15:22:56,971 - BioNexus.startup - INFO - 模块导入 - utils.helpers.check_system_requirements: 成功
+2025-10-21 15:22:56,973 - BioNexus.startup - INFO - 模块导入 - utils.unified_logger: 成功
+2025-10-21 15:22:56,975 - BioNexus.startup - INFO - 模块导入 - utils.translator.TranslationManager: 成功
+2025-10-21 15:22:56,977 - BioNexus.performance - INFO - 性能 - 主要模块导入: 9.99ms
+2025-10-21 15:22:56,978 - BioNexus.startup - INFO - 启动阶段 - 所有模块导入: 成功 - 核心模块导入完成
+2025-10-21 15:22:57,017 - core.tool_registry - INFO - 已注册工具: BLAST
+2025-10-21 15:22:57,018 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,018 - core.tool_registry - INFO - 已注册工具: BWA
+2025-10-21 15:22:57,018 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,020 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,020 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,020 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,021 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,022 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,022 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,022 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,022 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,022 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,022 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,023 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,023 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,023 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,023 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,023 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,023 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,024 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,024 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,024 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,024 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,025 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,027 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,027 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,027 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,027 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,019 - BioNexus.runtime - INFO - FastQC工具初始化完成: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:57,030 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,030 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,031 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,032 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,032 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,032 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,032 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,032 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,032 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,033 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,033 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,033 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,033 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,034 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,034 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,034 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,034 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,034 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,034 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,035 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,036 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,037 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,037 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,038 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,038 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,029 - BioNexus.runtime - INFO - 开始验证FastQC安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:57,041 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,041 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,041 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,042 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,043 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,043 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,043 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,043 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,043 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,044 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,044 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,044 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,044 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,044 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,044 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,044 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,045 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,045 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,045 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,045 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,047 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,048 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,048 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,048 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,048 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,040 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:57,052 - core.tool_registry - INFO - 已注册工具: FastQC
+2025-10-21 15:22:57,052 - core.tool_registry - INFO - 已注册工具: HISAT2
+2025-10-21 15:22:57,053 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,055 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,055 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,055 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,057 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,058 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,058 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,059 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,059 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,059 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,059 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,059 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,059 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,060 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,060 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,060 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,060 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,060 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,060 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,061 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,061 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,062 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,064 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,064 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,064 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,064 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,054 - BioNexus.runtime - INFO - IGV工具初始化完成: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:57,067 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,067 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,068 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,070 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,070 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,070 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,070 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,070 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,071 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,071 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,071 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,071 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,071 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,071 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,072 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,072 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,072 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,072 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,072 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,072 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,074 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,076 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,076 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,077 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,077 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,066 - BioNexus.runtime - INFO - 开始验证IGV安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:57,082 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,082 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,083 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,084 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,085 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,085 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,085 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,086 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,086 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,086 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,087 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,087 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,087 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,088 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,088 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,088 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,088 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,089 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,090 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,090 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,092 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,094 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,094 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,095 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,095 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,081 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:57,099 - core.tool_registry - INFO - 已注册工具: IGV
+2025-10-21 15:22:57,100 - core.tool_registry - INFO - 已注册工具: IQ-TREE
+2025-10-21 15:22:57,102 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,103 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,104 - core.tool_registry - INFO - 已注册工具: PlaceholderTool
+2025-10-21 15:22:57,104 - core.tool_registry - INFO - 已注册工具: SAMtools
+2025-10-21 15:22:57,105 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,107 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,107 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,109 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,109 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,109 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,110 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,110 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,110 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,111 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,111 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,111 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,111 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,112 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,112 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,113 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,114 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,115 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,115 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,115 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,118 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,120 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,120 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,120 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,121 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,126 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,127 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,127 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,129 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,129 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,130 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,130 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,130 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,130 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,131 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,131 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,131 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,132 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,132 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,132 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,132 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,133 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,133 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,134 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,134 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,136 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,138 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,138 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,138 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,139 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,144 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,145 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,145 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,146 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,147 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,147 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,147 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,147 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,148 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,148 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,148 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,149 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,149 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,150 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,150 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,150 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,150 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,150 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,151 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,151 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,153 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,156 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,157 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,157 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,157 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,107 - BioNexus.runtime - INFO - 工具更新定时检查已设置：每1天
+2025-10-21 15:22:57,163 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,163 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,163 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,164 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,165 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,165 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,165 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,165 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,165 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,165 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,166 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,166 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,166 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,166 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,167 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,167 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,167 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,167 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,168 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,168 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,170 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,171 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,172 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,172 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,172 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,176 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,177 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,177 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,178 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,178 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,179 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,179 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,179 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,179 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,180 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,180 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,180 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,180 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,181 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,181 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,181 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,181 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,181 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,181 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,182 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,183 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,185 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,185 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,185 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,185 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,124 - BioNexus.runtime - INFO - FastQC版本信息已异步更新: 0.12.1
+2025-10-21 15:22:57,188 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,188 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,189 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,190 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,190 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,191 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,191 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,191 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,191 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,192 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,192 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,192 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,193 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,193 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,193 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,193 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,193 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,194 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,194 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,194 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,196 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,198 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,198 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,198 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,198 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,160 - BioNexus.runtime - INFO - 工具更新服务初始化完成
+2025-10-21 15:22:57,203 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,204 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,204 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,205 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,205 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,206 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,206 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,206 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,206 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,207 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,207 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,207 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,208 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,208 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,208 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,208 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,208 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,209 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,209 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,209 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,210 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,212 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,212 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,212 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,213 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,217 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,217 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,217 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,219 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,219 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,219 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,219 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,219 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,219 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,220 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,220 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,220 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,220 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,220 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,220 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,221 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,221 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,222 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,222 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,222 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,223 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,225 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,225 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,225 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,225 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,175 - BioNexus.runtime - INFO - FastQC版本信息已异步更新: 0.12.1
+2025-10-21 15:22:57,228 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:57,228 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,229 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,230 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:57,230 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:57,230 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,230 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,231 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:57,231 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:57,231 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:57,231 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:57,231 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:57,232 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:57,232 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:57,232 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:57,232 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:57,232 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:57,232 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:57,233 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:57,233 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:57,235 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:57,236 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:57,236 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:57,236 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:57,236 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:57,203 - BioNexus.runtime - INFO - 工具更新控制器初始化完成
+2025-10-21 15:22:57,412 - BioNexus.Translation - INFO - Creating global TranslationManager instance
+2025-10-21 15:22:57,412 - BioNexus.Translation - DEBUG - TranslationManager.__init__ called
+2025-10-21 15:22:57,413 - BioNexus.Translation - DEBUG - super().__init__() completed
+2025-10-21 15:22:57,532 - BioNexus.i18n - INFO - Loaded zh_CN: 432 translations from zh_CN.yaml
+2025-10-21 15:22:57,620 - BioNexus.i18n - INFO - Loaded en_US: 360 translations from en_US.yaml
+2025-10-21 15:22:57,798 - BioNexus.i18n - INFO - Loaded de_DE: 449 translations from de_DE.yaml
+2025-10-21 15:22:57,799 - BioNexus.i18n - INFO - i18n system initialized with 3 languages
+2025-10-21 15:22:57,799 - BioNexus.Translation - INFO - TranslationManager initialized successfully
+2025-10-21 15:22:57,799 - BioNexus.Translation - INFO - Global TranslationManager instance created
+2025-10-21 15:22:58,433 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,436 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,438 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,439 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,440 - BioNexus.SettingsPanel - INFO - _on_language_changed CALLED, index=1
+2025-10-21 15:22:58,440 - BioNexus.SettingsPanel - DEBUG - Got language_combo: <ui.settings_panel.NoWheelComboBox object at 0x00000200CBAE5910>
+2025-10-21 15:22:58,440 - BioNexus.SettingsPanel - INFO - Selected language code: en_US
+2025-10-21 15:22:58,440 - BioNexus.SettingsPanel - DEBUG - Updating config: language=en_US
+2025-10-21 15:22:58,442 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,442 - BioNexus.SettingsPanel - DEBUG - Config updated
+2025-10-21 15:22:58,442 - BioNexus.SettingsPanel - DEBUG - Got translator instance
+2025-10-21 15:22:58,442 - BioNexus.SettingsPanel - INFO - Calling translator.switch_language(en_US)
+2025-10-21 15:22:58,442 - BioNexus.Translation - INFO - switch_language called, locale=en_US
+2025-10-21 15:22:58,442 - BioNexus.Translation - INFO - ============================================================
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - START load_language
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - Requested locale: en_US
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - Current locale: zh_CN
+2025-10-21 15:22:58,443 - BioNexus.i18n - INFO - Language switched: zh_CN -> en_US
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - SUCCESS: Language switched: zh_CN -> en_US
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - Preparing to emit languageChanged signal, locale=en_US
+2025-10-21 15:22:58,443 - BioNexus.Translation - INFO - languageChanged signal has 2 receiver(s)
+2025-10-21 15:22:58,444 - BioNexus.Translation - INFO - Emitting languageChanged signal NOW...
+2025-10-21 15:22:58,444 - BioNexus.Translation - INFO - SUCCESS: languageChanged signal emitted
+2025-10-21 15:22:58,444 - BioNexus.Translation - INFO - ============================================================
+2025-10-21 15:22:58,444 - BioNexus.Translation - INFO - switch_language returned: True
+2025-10-21 15:22:58,444 - BioNexus.SettingsPanel - INFO - translator.switch_language returned: True
+2025-10-21 15:22:58,444 - BioNexus.SettingsPanel - INFO - SUCCESS: Language switched to: en_US
+2025-10-21 15:22:58,446 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,448 - root - INFO - 设置已成功保存到 C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:58,448 - BioNexus.SettingsPanel - INFO - Connecting to translation system...
+2025-10-21 15:22:58,448 - BioNexus.SettingsPanel - DEBUG - Got translator instance
+2025-10-21 15:22:58,448 - BioNexus.SettingsPanel - INFO - SUCCESS: Connected languageChanged signal to retranslateUi slot
+2025-10-21 15:22:59,251 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,251 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,251 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,252 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,252 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,253 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,253 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,253 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,253 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,253 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,254 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,254 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,254 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,254 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,254 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,254 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,255 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,255 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,255 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,255 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,256 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,258 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,258 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,258 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,258 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,250 - BioNexus.runtime - INFO - 开始验证FastQC安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,261 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,261 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,261 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,262 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,262 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,262 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,262 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,262 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,262 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,262 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,262 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,262 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,263 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,263 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,263 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,263 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,263 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,263 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,263 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,263 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,264 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,265 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,265 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,265 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,265 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,260 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,268 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,268 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,268 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,269 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,270 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,270 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,270 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,270 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,270 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,270 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,270 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,270 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,271 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,271 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,271 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,271 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,271 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,271 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,271 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,271 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,272 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,273 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,273 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,273 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,273 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,267 - BioNexus.runtime - INFO - 开始验证IGV安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,275 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,275 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,275 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,276 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,276 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,276 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,276 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,277 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,277 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,277 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,277 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,277 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,278 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,278 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,278 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,278 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,278 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,279 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,279 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,279 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,280 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,281 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,281 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,281 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,282 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,275 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,295 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,295 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,295 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,296 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,296 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,296 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,296 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,297 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,297 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,297 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,298 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,298 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,298 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,299 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,300 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,300 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,300 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,300 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,294 - BioNexus.runtime - INFO - 性能: 应用筛选条件 用时 0.000s
+2025-10-21 15:22:59,302 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,302 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,302 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,302 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,302 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,303 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,303 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,303 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,303 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,304 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,304 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,304 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,304 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,304 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,304 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,305 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,306 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,306 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,306 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,307 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,301 - BioNexus.runtime - INFO - 性能: 更新工具显示 用时 0.051s
+2025-10-21 15:22:59,309 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,309 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,309 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,310 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,310 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,310 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,310 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,310 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,310 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,311 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,311 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,311 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,311 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,312 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,312 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,312 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,312 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,313 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,314 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,314 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,314 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,315 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,315 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,315 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,316 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,316 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,316 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,316 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,316 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,316 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,317 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,317 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,317 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,317 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,317 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,317 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,318 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,318 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,319 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,320 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,320 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,320 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,320 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,314 - BioNexus.runtime - INFO - 开始验证FastQC安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,321 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,321 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,321 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,322 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,322 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,322 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,322 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,322 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,322 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,323 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,323 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,323 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,323 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,323 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,323 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,324 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,324 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,324 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,324 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,321 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,325 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,325 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,325 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,326 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,326 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,326 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,326 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,326 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,326 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,326 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,326 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,326 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,327 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,327 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,327 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,327 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,327 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,327 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,327 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,327 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,327 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,328 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,328 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,328 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,328 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,325 - BioNexus.runtime - INFO - 开始验证IGV安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,329 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,329 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,329 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,330 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,330 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,330 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,330 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,330 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,330 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,330 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,330 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,330 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,331 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,331 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,331 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,331 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,331 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,331 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,331 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,331 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,332 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,332 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,332 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,332 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,332 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,329 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,341 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,342 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,342 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,342 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,342 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,342 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,343 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,343 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,343 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,343 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,344 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,344 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,344 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,345 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,345 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,345 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,345 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,341 - BioNexus.runtime - INFO - 性能: 应用筛选条件 用时 0.000s
+2025-10-21 15:22:59,346 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,346 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,346 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,347 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,347 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,347 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,347 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,347 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,347 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,347 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,347 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,347 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,348 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,348 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,348 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,348 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,348 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,348 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,348 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,348 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,349 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,349 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,349 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,349 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,349 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,346 - BioNexus.runtime - INFO - 性能: 更新工具显示 用时 0.032s
+2025-10-21 15:22:59,351 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,351 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,351 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,352 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,352 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,352 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,353 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,353 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,353 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,353 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,353 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,353 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,354 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,354 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,354 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,354 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,354 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,354 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,354 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,354 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,355 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,356 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,356 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,356 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,356 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,350 - BioNexus.runtime - INFO - 性能: 视图切换 用时 0.043s
+2025-10-21 15:22:59,358 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,358 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,358 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,359 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,359 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,359 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,359 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,359 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,359 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,360 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,360 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,360 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,360 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,360 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,360 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,360 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,361 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,361 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,361 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,361 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,357 - BioNexus.runtime - INFO - 开始检查工具更新 (手动: False)
+2025-10-21 15:22:59,385 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,385 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,385 - BioNexus.MainWindow - INFO - Connecting to translation system...
+2025-10-21 15:22:59,386 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,386 - BioNexus.MainWindow - DEBUG - Got translator instance
+2025-10-21 15:22:59,386 - BioNexus.MainWindow - INFO - SUCCESS: Connected languageChanged signal to retranslateUi slot
+2025-10-21 15:22:59,386 - BioNexus.MainWindow - INFO - MainWindow initialization completed - UI ready for language switching
+2025-10-21 15:22:59,448 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,480 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,502 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,519 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,584 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,591 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,592 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,592 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,592 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,593 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,593 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,593 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,595 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,595 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,595 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,596 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,596 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,601 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,604 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,604 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,607 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,607 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,362 - BioNexus.runtime - INFO - 开始验证FastQC安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,630 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,630 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,630 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,642 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,643 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,643 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,645 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,645 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,652 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,652 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,652 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,653 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,653 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,653 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,653 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,654 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,654 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,660 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,660 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,661 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,662 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,668 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,668 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,669 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,669 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,628 - BioNexus.runtime - INFO - FastQC验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\FastQC
+2025-10-21 15:22:59,678 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,679 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,679 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,683 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,683 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,683 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,684 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,684 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,684 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,686 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,705 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,705 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,706 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,706 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,706 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,706 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,706 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,707 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,707 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,707 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,708 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,709 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,709 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,709 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,710 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,677 - BioNexus.runtime - INFO - 开始验证IGV安装: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,712 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,712 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,712 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,713 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,714 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,714 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,714 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,714 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,714 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,714 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,714 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,715 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,715 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,715 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,715 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,715 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,715 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,715 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,716 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,716 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,717 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,719 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,719 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,720 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,720 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,723 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,723 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,724 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,724 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,724 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,725 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,726 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,726 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,727 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,727 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,727 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,728 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,728 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,728 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,729 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,729 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,730 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,730 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,730 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,731 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,731 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,732 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,732 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,732 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,733 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,733 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,734 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,734 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,734 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,735 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,735 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,736 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,736 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,736 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,737 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,737 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,737 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,738 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,738 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,739 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,740 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,741 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,742 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,742 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,743 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,743 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,743 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,744 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,744 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,745 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,711 - BioNexus.runtime - INFO - IGV验证失败: 安装目录不存在 - C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\installed_tools\IGV
+2025-10-21 15:22:59,748 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,749 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,749 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,751 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,751 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,751 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,751 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,752 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,752 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,752 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,753 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,753 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,753 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,753 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,754 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,754 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,754 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,755 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,755 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,755 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,757 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,759 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,759 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,759 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,759 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,747 - BioNexus.runtime - INFO - 没有已安装的工具需要检查更新
+2025-10-21 15:22:59,930 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:22:59,930 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,930 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,931 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:22:59,931 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:22:59,931 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,931 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,931 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:22:59,932 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:22:59,932 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:22:59,933 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:22:59,933 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:22:59,933 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:22:59,933 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:22:59,933 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:22:59,934 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:22:59,935 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:22:59,935 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:22:59,935 - root - INFO -   default_install_dir = ''
+2025-10-21 15:22:59,935 - root - INFO -   conda_env_path = ''
+2025-10-21 15:22:59,929 - BioNexus.runtime - INFO - 工具更新检查完成: 发现0个更新
+2025-10-21 15:23:00,146 - ui.storage_manager_widget - INFO - 存储分析完成，发现 0 个已安装工具
+2025-10-21 15:23:00,245 - ui.main_window - INFO - 开始检查所有已安装工具状态...
+2025-10-21 15:23:00,246 - ui.main_window - INFO - 没有已安装的工具需要检查
+2025-10-21 15:23:02,940 - BioNexus.EnhancedDetail.BLAST - INFO - [收藏按钮] 设置为未收藏状态（灰色）: BLAST
+2025-10-21 15:23:02,940 - BioNexus.EnhancedDetail.BLAST - INFO - [收藏按钮] 更新显示状态完成: BLAST -> 未收藏
+2025-10-21 15:23:03,170 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:03,171 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:03,171 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:03,171 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:03,172 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:03,172 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:03,172 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:03,172 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:03,172 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:03,173 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:03,173 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:03,173 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:03,173 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:03,173 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:03,174 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:03,174 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:03,175 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:03,175 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:03,175 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,456 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,457 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,457 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,457 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,457 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,457 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,457 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,457 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,457 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,457 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,457 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,458 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,458 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,458 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,458 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,459 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,459 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,459 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,459 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,459 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,460 - core.tool_manager - INFO - ToolManager cleanup completed
+2025-10-21 15:23:06,507 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,507 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,507 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,508 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,508 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,508 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,508 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,508 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,509 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,509 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,509 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,510 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,511 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,511 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,511 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,512 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,512 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,506 - BioNexus.runtime - INFO - === 应用关闭 ===
+2025-10-21 15:23:06,513 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,513 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,514 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,514 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,514 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,515 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,515 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,515 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,516 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,516 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,516 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,516 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,516 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,516 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,516 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,517 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,518 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,518 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,518 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,518 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,513 - BioNexus.runtime - INFO - 运行时长: 12.49s
+2025-10-21 15:23:06,520 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,520 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,521 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,521 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,521 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,521 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,522 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,522 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,522 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,523 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,523 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,523 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,523 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,523 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,524 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,524 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,525 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,525 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,525 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,520 - BioNexus.runtime - INFO - 会话统计: {"start_time": "2025-10-21T15:22:54.018617", "operations_count": 4, "errors_count": 2, "installations": 0, "network_requests": 2, "end_time": "2025-10-21T15:23:06.505977", "runtime_seconds": 12.48736}
+2025-10-21 15:23:06,526 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,526 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,526 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,527 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,527 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,527 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,527 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,527 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,528 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,528 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,528 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,529 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,529 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,529 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,530 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,530 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,530 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,530 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,530 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,526 - BioNexus.runtime - INFO - 会话日志已保存到: C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.23\logs\2025-10-21\session_20251021_152254
+2025-10-21 15:23:06,532 - root - INFO - [ConfigManager] Settings对象创建后:
+2025-10-21 15:23:06,532 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,532 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,533 - root - INFO - 加载配置文件: C:\Users\15052\.bionexus\config.json
+2025-10-21 15:23:06,533 - root - INFO - [ConfigManager] JSON文件内容:
+2025-10-21 15:23:06,533 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,533 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,533 - root - DEBUG - 加载设置: auto_update = True
+2025-10-21 15:23:06,533 - root - DEBUG - 加载设置: check_tool_status_on_startup = True
+2025-10-21 15:23:06,533 - root - DEBUG - 加载设置: show_detailed_install_log = True
+2025-10-21 15:23:06,533 - root - DEBUG - 加载设置: language = en_US
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: tool_update = {'update_mode': 'auto', 'check_frequency': 1, 'show_notification': True, 'last_check': None, 'skipped_versions': {}, 'silent_versions': {}, 'auto_update_time': '02:00'}
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: default_install_dir = 
+2025-10-21 15:23:06,534 - root - INFO - [ConfigManager] 设置 default_install_dir = ''
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: conda_env_path = 
+2025-10-21 15:23:06,534 - root - INFO - [ConfigManager] 设置 conda_env_path = ''
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: use_mirror_source = False
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: keep_install_cache = False
+2025-10-21 15:23:06,534 - root - DEBUG - 加载设置: favorite_tools = []
+2025-10-21 15:23:06,534 - root - INFO - 加载收藏列表: 0 个工具
+2025-10-21 15:23:06,536 - root - INFO - 工具数据已从 C:\Users\15052\.bionexus\tools.json 加载成功
+2025-10-21 15:23:06,536 - root - INFO - 初始化收藏列表: []
+2025-10-21 15:23:06,537 - root - INFO - [ConfigManager] load_all_configs()执行后:
+2025-10-21 15:23:06,537 - root - INFO -   default_install_dir = ''
+2025-10-21 15:23:06,537 - root - INFO -   conda_env_path = ''
+2025-10-21 15:23:06,538 - core.tool_manager - INFO - ToolManager cleanup completed

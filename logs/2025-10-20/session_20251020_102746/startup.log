@@ -1,0 +1,40 @@
+2025-10-20 10:27:46,826 - INFO - BioNexus 1.2.13 启动 - 会话ID: 20251020_102746
+[2025-10-20 10:27:46] 启动阶段 - 日志系统初始化: 成功 - 全面日志系统已启动
+2025-10-20 10:27:46,828 - INFO - 启动阶段 - 日志系统初始化: 成功 - 全面日志系统已启动
+2025-10-20 10:27:46,834 - INFO - BioNexus 1.2.13 启动初始化
+[2025-10-20 10:27:46] 启动阶段 - 基础日志系统: 成功 - 标准logging已配置
+2025-10-20 10:27:46,834 - INFO - 启动阶段 - 基础日志系统: 成功 - 标准logging已配置
+2025-10-20 10:27:46,835 - INFO - 错误处理器初始化完成
+[2025-10-20 10:27:46] 启动阶段 - 错误处理器: 成功 - 全局异常捕获已设置
+2025-10-20 10:27:46,836 - INFO - 启动阶段 - 错误处理器: 成功 - 全局异常捕获已设置
+[2025-10-20 10:27:46] 模块导入 - ui.main_window.MainWindow: 成功
+2025-10-20 10:27:46,987 - INFO - 模块导入 - ui.main_window.MainWindow: 成功
+[2025-10-20 10:27:46] 模块导入 - data.config.ConfigManager: 成功
+2025-10-20 10:27:46,988 - INFO - 模块导入 - data.config.ConfigManager: 成功
+[2025-10-20 10:27:46] 模块导入 - utils.helpers.check_system_requirements: 成功
+2025-10-20 10:27:46,989 - INFO - 模块导入 - utils.helpers.check_system_requirements: 成功
+[2025-10-20 10:27:46] 模块导入 - utils.unified_logger: 成功
+2025-10-20 10:27:46,990 - INFO - 模块导入 - utils.unified_logger: 成功
+[2025-10-20 10:27:47] 模块导入 - utils.translator.TranslationManager: 成功
+2025-10-20 10:27:47,046 - INFO - 模块导入 - utils.translator.TranslationManager: 成功
+[2025-10-20 10:27:47] 启动阶段 - 所有模块导入: 成功 - 核心模块导入完成
+2025-10-20 10:27:47,048 - INFO - 启动阶段 - 所有模块导入: 成功 - 核心模块导入完成
+2025-10-20 10:27:47,097 - INFO - 开始启动主应用程序
+2025-10-20 10:27:47,119 - INFO - PyQt5应用程序初始化成功
+[2025-10-20 10:27:47] 启动阶段 - PyQt5应用程序: 成功 - 初始化成功
+2025-10-20 10:27:47,120 - INFO - 启动阶段 - PyQt5应用程序: 成功 - 初始化成功
+2025-10-20 10:27:47,121 - WARNING - 翻译系统初始化失败: type object 'TranslationManager' has no attribute 'instance', 将使用默认语言
+[2025-10-20 10:27:47] 启动阶段 - 翻译系统: 失败 - 初始化失败: type object 'TranslationManager' has no attribute 'instance', 使用默认语言
+2025-10-20 10:27:47,121 - INFO - 启动阶段 - 翻译系统: 失败 - 初始化失败: type object 'TranslationManager' has no attribute 'instance', 使用默认语言
+2025-10-20 10:27:51,182 - INFO - BioNexus 1.2.13 启动 - 会话ID: 20251020_102751
+2025-10-20 10:27:51,183 - INFO - 启动阶段 - 日志系统初始化: 成功 - 全面日志系统已启动
+2025-10-20 10:27:51,185 - INFO - BioNexus 1.2.13 启动初始化
+2025-10-20 10:27:51,187 - INFO - 启动阶段 - 基础日志系统: 成功 - 标准logging已配置
+2025-10-20 10:27:51,188 - INFO - 错误处理器初始化完成
+2025-10-20 10:27:51,189 - INFO - 启动阶段 - 错误处理器: 成功 - 全局异常捕获已设置
+2025-10-20 10:27:51,194 - INFO - 模块导入 - ui.main_window.MainWindow: 成功
+2025-10-20 10:27:51,195 - INFO - 模块导入 - data.config.ConfigManager: 成功
+2025-10-20 10:27:51,196 - INFO - 模块导入 - utils.helpers.check_system_requirements: 成功
+2025-10-20 10:27:51,198 - INFO - 模块导入 - utils.unified_logger: 成功
+2025-10-20 10:27:51,199 - INFO - 模块导入 - utils.translator.TranslationManager: 成功
+2025-10-20 10:27:51,202 - INFO - 启动阶段 - 所有模块导入: 成功 - 核心模块导入完成

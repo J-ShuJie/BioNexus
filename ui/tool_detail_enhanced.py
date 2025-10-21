@@ -41,6 +41,13 @@ class EnhancedDetailPage(QWidget):
         self.favorite_btn = None  # 收藏按钮引用
         
         self.init_ui()
+
+        # Connect to global language change to support runtime localization
+        try:
+            from utils.translator import get_translator
+            get_translator().languageChanged.connect(self.retranslateUi)
+        except Exception:
+            pass
         
     def init_ui(self):
         """初始化UI"""
@@ -117,6 +124,35 @@ class EnhancedDetailPage(QWidget):
         
         scroll.setWidget(content)
         main_layout.addWidget(scroll)
+
+    def retranslateUi(self, locale: str = None):
+        """Retranslate all UI text on runtime language change.
+        Rebuilds the content and preserves scroll position.
+        """
+        try:
+            from PyQt5.QtWidgets import QScrollArea
+            vpos = 0
+            old_scroll = None
+            try:
+                old_scroll = next(iter(self.findChildren(QScrollArea)), None)
+                if old_scroll:
+                    vpos = old_scroll.verticalScrollBar().value()
+            except Exception:
+                pass
+
+            self.update_ui()
+
+            try:
+                new_scroll = next(iter(self.findChildren(QScrollArea)), None)
+                if new_scroll:
+                    new_scroll.verticalScrollBar().setValue(vpos)
+            except Exception:
+                pass
+        except Exception as e:
+            try:
+                self.logger.error(f"retranslateUi failed: {e}")
+            except Exception:
+                pass
     
     def create_header_card(self):
         """创建头部信息卡片"""
@@ -200,14 +236,14 @@ class EnhancedDetailPage(QWidget):
         meta_layout.setSpacing(12)
         
         # 版本信息
-        version_label = QLabel(f"版本 {self.tool_data.get('version', 'N/A')}")
+        version_label = QLabel(self.tr("Version {0}").format(self.tool_data.get('version', 'N/A')))
         version_label.setStyleSheet("""
             font-size: 13px;
             color: #7f8c8d;
         """)
         
         # 状态标签
-        status = "已安装" if self.tool_data['status'] == 'installed' else "未安装"
+        status = self.tr("Installed") if self.tool_data['status'] == 'installed' else self.tr("Not Installed")
         status_label = QLabel(status)
         status_label.setStyleSheet(f"""
             font-size: 12px;
@@ -245,7 +281,7 @@ class EnhancedDetailPage(QWidget):
             button_layout.setSpacing(10)
             
             # 启动按钮
-            self.launch_btn = QPushButton("🚀 启动")
+            self.launch_btn = QPushButton(self.tr("🚀 Launch"))
             self.launch_btn.setFixedSize(80, 32)
             self.launch_btn.setStyleSheet("""
                 QPushButton {
@@ -269,7 +305,7 @@ class EnhancedDetailPage(QWidget):
             self.launch_btn.clicked.connect(lambda: self.launch_requested.emit(self.tool_data['name']))
             
             # 卸载按钮
-            self.uninstall_btn = QPushButton("卸载")
+            self.uninstall_btn = QPushButton(self.tr("Uninstall"))
             self.uninstall_btn.setFixedSize(80, 32)
             self.uninstall_btn.setStyleSheet("""
                 QPushButton {
@@ -302,7 +338,7 @@ class EnhancedDetailPage(QWidget):
             
             # 使用时间信息（移到按钮下方）
             usage_time = self._get_usage_time()
-            time_label = QLabel(f"已使用 {usage_time}")
+            time_label = QLabel(self.tr("Used {0}").format(usage_time))
             time_label.setStyleSheet("""
                 font-size: 11px;
                 color: #95a5a6;
@@ -312,7 +348,7 @@ class EnhancedDetailPage(QWidget):
             right_layout.addWidget(time_label)
         else:
             # 安装按钮（简洁居中）
-            self.install_btn = QPushButton("📥 安装工具")
+            self.install_btn = QPushButton(self.tr("📥 Install Tool"))
             self.install_btn.setFixedSize(120, 36)
             self.install_btn.setStyleSheet("""
                 QPushButton {
@@ -368,7 +404,7 @@ class EnhancedDetailPage(QWidget):
         layout.setSpacing(12)
         
         # 标题
-        title = QLabel("📝 工具介绍")
+        title = QLabel(self.tr("📝 Tool Overview"))
         title.setStyleSheet("""
             font-size: 16px;
             font-weight: bold;
@@ -376,7 +412,12 @@ class EnhancedDetailPage(QWidget):
         """)
         
         # 使用 QLabel 而不是 QTextEdit，支持自动换行和高度自适应
-        description = QLabel(self.tool_data.get('description', '暂无详细介绍'))
+        try:
+            from utils.tool_localization import get_localized_tool_description
+            desc_text = get_localized_tool_description(self.tool_data)
+        except Exception:
+            desc_text = self.tool_data.get('description', self.tr('No detailed description'))
+        description = QLabel(desc_text)
         description.setWordWrap(True)  # 自动换行
         description.setStyleSheet("""
             QLabel {
@@ -415,7 +456,7 @@ class EnhancedDetailPage(QWidget):
         layout.setSpacing(12)
         
         # 标题
-        title = QLabel("🔧 技术规格")
+        title = QLabel(self.tr("🔧 Technical Specs"))
         title.setStyleSheet("""
             font-size: 16px;
             font-weight: bold;
@@ -432,7 +473,7 @@ class EnhancedDetailPage(QWidget):
         specs_data = self._get_tech_specs()
         for i, (label, value) in enumerate(specs_data):
             # 标签
-            label_widget = QLabel(f"{label}：")
+            label_widget = QLabel(f"{label}:")
             label_widget.setStyleSheet("""
                 font-size: 12px;
                 color: #7f8c8d;
@@ -480,7 +521,7 @@ class EnhancedDetailPage(QWidget):
         layout.setSpacing(12)
         
         # 标题
-        title = QLabel("📖 使用说明")
+        title = QLabel(self.tr("📖 Usage Guide"))
         title.setStyleSheet("""
             font-size: 16px;
             font-weight: bold;
@@ -488,7 +529,7 @@ class EnhancedDetailPage(QWidget):
         """)
         
         # 使用说明内容
-        usage_text = self.tool_data.get('usage', '暂无使用说明')
+        usage_text = self.tool_data.get('usage', self.tr('No usage instructions yet'))
         usage = QLabel(usage_text)
         usage.setWordWrap(True)
         usage.setStyleSheet("""
@@ -513,77 +554,77 @@ class EnhancedDetailPage(QWidget):
     def _get_usage_time(self):
         """获取使用时间"""
         mock_times = {
-            "FastQC": "2.5小时",
-            "BLAST": "1.2小时",
-            "BWA": "45分钟",
-            "SAMtools": "3.8小时"
+            "FastQC": self.tr("2.5 hours"),
+            "BLAST": self.tr("1.2 hours"),
+            "BWA": self.tr("45 minutes"),
+            "SAMtools": self.tr("3.8 hours")
         }
-        return mock_times.get(self.tool_data['name'], "未使用")
+        return mock_times.get(self.tool_data['name'], self.tr("Not Used"))
     
     def _get_tech_specs(self):
         """获取技术规格"""
         tool_specs = {
             "FastQC": [
-                ("编程语言", "Java"),
-                ("依赖环境", "Java 8+"),
-                ("输入格式", "FASTQ, SAM, BAM"),
-                ("输出格式", "HTML, ZIP"),
-                ("CPU要求", "单核即可"),
-                ("内存要求", "最小2GB"),
-                ("存储占用", "85MB"),
-                ("下载源", "官方: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC")
+                (self.tr("Programming Language"), "Java"),
+                (self.tr("Dependencies"), "Java 8+"),
+                (self.tr("Input Formats"), "FASTQ, SAM, BAM"),
+                (self.tr("Output Formats"), "HTML, ZIP"),
+                (self.tr("CPU Requirements"), self.tr("Single core is fine")),
+                (self.tr("Memory Requirements"), self.tr("Minimum 2GB")),
+                (self.tr("Disk Usage"), "85MB"),
+                (self.tr("Download Sources"), self.tr("Official: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC"))
             ],
             "BLAST": [
-                ("编程语言", "C++"),
-                ("依赖环境", "标准C++库"),
-                ("输入格式", "FASTA"),
-                ("输出格式", "多种格式"),
-                ("CPU要求", "多核推荐"),
-                ("内存要求", "取决于数据库大小"),
-                ("存储占用", "245MB"),
-                ("下载源", "官方: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs")
+                (self.tr("Programming Language"), "C++"),
+                (self.tr("Dependencies"), self.tr("Standard C++ Library")),
+                (self.tr("Input Formats"), "FASTA"),
+                (self.tr("Output Formats"), self.tr("Multiple formats")),
+                (self.tr("CPU Requirements"), self.tr("Multi-core recommended")),
+                (self.tr("Memory Requirements"), self.tr("Depends on database size")),
+                (self.tr("Disk Usage"), "245MB"),
+                (self.tr("Download Sources"), self.tr("Official: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs"))
             ],
             "BWA": [
-                ("编程语言", "C"),
-                ("依赖环境", "标准C库"),
-                ("输入格式", "FASTQ, FASTA"),
-                ("输出格式", "SAM, BAM"),
-                ("CPU要求", "多核推荐"),
-                ("内存要求", "3GB以上"),
-                ("存储占用", "10MB"),
-                ("下载源", "https://github.com/lh3/bwa/releases")
+                (self.tr("Programming Language"), "C"),
+                (self.tr("Dependencies"), self.tr("Standard C Library")),
+                (self.tr("Input Formats"), "FASTQ, FASTA"),
+                (self.tr("Output Formats"), "SAM, BAM"),
+                (self.tr("CPU Requirements"), self.tr("Multi-core recommended")),
+                (self.tr("Memory Requirements"), self.tr("3GB or more")),
+                (self.tr("Disk Usage"), "10MB"),
+                (self.tr("Download Sources"), "https://github.com/lh3/bwa/releases")
             ],
             "SAMtools": [
-                ("编程语言", "C"),
-                ("依赖环境", "HTSlib"),
-                ("输入格式", "SAM, BAM, CRAM"),
-                ("输出格式", "SAM, BAM, CRAM"),
-                ("CPU要求", "单核即可"),
-                ("内存要求", "1GB以上"),
-                ("存储占用", "15MB"),
-                ("下载源", "https://github.com/samtools/samtools/releases")
+                (self.tr("Programming Language"), "C"),
+                (self.tr("Dependencies"), "HTSlib"),
+                (self.tr("Input Formats"), "SAM, BAM, CRAM"),
+                (self.tr("Output Formats"), "SAM, BAM, CRAM"),
+                (self.tr("CPU Requirements"), self.tr("Single core is fine")),
+                (self.tr("Memory Requirements"), self.tr("1GB or more")),
+                (self.tr("Disk Usage"), "15MB"),
+                (self.tr("Download Sources"), "https://github.com/samtools/samtools/releases")
             ],
             "IGV": [
-                ("编程语言", "Java"),
-                ("依赖环境", "Java 11+"),
-                ("输入格式", "BAM, VCF, BED, GFF, BigWig等"),
-                ("输出格式", "PNG, SVG, PDF截图"),
-                ("CPU要求", "多核推荐"),
-                ("内存要求", "4GB以上推荐"),
-                ("存储占用", "350MB"),
-                ("下载源", "https://data.broadinstitute.org/igv/projects/downloads/")
+                (self.tr("Programming Language"), "Java"),
+                (self.tr("Dependencies"), "Java 11+"),
+                (self.tr("Input Formats"), "BAM, VCF, BED, GFF, BigWig"),
+                (self.tr("Output Formats"), "PNG, SVG, PDF"),
+                (self.tr("CPU Requirements"), self.tr("Multi-core recommended")),
+                (self.tr("Memory Requirements"), self.tr("4GB or more recommended")),
+                (self.tr("Disk Usage"), "350MB"),
+                (self.tr("Download Sources"), "https://data.broadinstitute.org/igv/projects/downloads/")
             ]
         }
         
         default_specs = [
-            ("编程语言", "暂无信息"),
-            ("依赖环境", "暂无信息"),
-            ("输入格式", "暂无信息"),
-            ("输出格式", "暂无信息"),
-            ("CPU要求", "暂无信息"),
-            ("内存要求", "暂无信息"),
-            ("存储占用", "暂无信息"),
-            ("下载源", "暂无信息")
+            (self.tr("Programming Language"), self.tr("N/A")),
+            (self.tr("Dependencies"), self.tr("N/A")),
+            (self.tr("Input Formats"), self.tr("N/A")),
+            (self.tr("Output Formats"), self.tr("N/A")),
+            (self.tr("CPU Requirements"), self.tr("N/A")),
+            (self.tr("Memory Requirements"), self.tr("N/A")),
+            (self.tr("Disk Usage"), self.tr("N/A")),
+            (self.tr("Download Sources"), self.tr("N/A"))
         ]
         
         return tool_specs.get(self.tool_data['name'], default_specs)
@@ -592,30 +633,30 @@ class EnhancedDetailPage(QWidget):
         """获取工具的筛选关键词/标签"""
         tool_keywords = {
             "FastQC": [
-                "质量控制", "RNA序列分析", "DNA序列分析", 
-                "FASTQ处理", "测序质量评估", "高通量测序"
+                self.tr("Quality Control"), self.tr("RNA-seq Analysis"), self.tr("DNA-seq Analysis"), 
+                self.tr("FASTQ Processing"), self.tr("Sequencing QC"), self.tr("High-throughput Sequencing")
             ],
             "BLAST": [
-                "序列比对", "同源性分析", "基因注释",
-                "蛋白质分析", "进化分析", "序列搜索"
+                self.tr("Sequence Alignment"), self.tr("Homology Analysis"), self.tr("Gene Annotation"),
+                self.tr("Protein Analysis"), self.tr("Phylogenetic Analysis"), self.tr("Sequence Search")
             ],
             "BWA": [
-                "序列比对", "基因组映射", "短序列比对",
-                "NGS数据处理", "参考基因组比对"
+                self.tr("Sequence Alignment"), self.tr("Genome Mapping"), self.tr("Short Read Alignment"),
+                self.tr("NGS Data Processing"), self.tr("Reference Alignment")
             ],
             "SAMtools": [
-                "BAM文件处理", "SAM文件处理", "序列比对结果处理",
-                "基因组数据分析", "变异检测"
+                self.tr("BAM Processing"), self.tr("SAM Processing"), self.tr("Alignment Processing"),
+                self.tr("Genomic Data Analysis"), self.tr("Variant Calling")
             ],
             "IGV": [
-                "基因组可视化", "BAM查看器", "VCF查看器",
-                "变异验证", "序列比对可视化", "注释查看",
-                "交互式浏览", "多轨道显示", "基因组浏览器"
+                self.tr("Genome Visualization"), self.tr("BAM Viewer"), self.tr("VCF Viewer"),
+                self.tr("Variant Validation"), self.tr("Alignment Visualization"), self.tr("Annotation Viewer"),
+                self.tr("Interactive Browsing"), self.tr("Multi-track Display"), self.tr("Genome Browser")
             ]
         }
         
         default_keywords = [
-            "生物信息学", "序列分析", "数据处理"
+            self.tr("Bioinformatics"), self.tr("Sequence Analysis"), self.tr("Data Processing")
         ]
         
         return tool_keywords.get(self.tool_data['name'], default_keywords)
@@ -639,7 +680,7 @@ class EnhancedDetailPage(QWidget):
         layout.setSpacing(12)
         
         # 标题
-        title = QLabel("🏷️ 关键词标签")
+        title = QLabel(self.tr("🏷️ Keywords"))
         title.setStyleSheet("""
             font-size: 16px;
             font-weight: bold;
@@ -741,33 +782,33 @@ class EnhancedDetailPage(QWidget):
                 # 安装中 - 更新安装按钮
                 self.install_btn.setEnabled(False)
                 if progress >= 0:
-                    self.install_btn.setText(f"安装中 {progress}%")
+                    self.install_btn.setText(self.tr("Installing {0}%").format(progress))
                 elif status_text:
                     # 限制状态文本长度以适应按钮
                     short_text = status_text[:8] + "..." if len(status_text) > 8 else status_text
                     self.install_btn.setText(short_text)
                 else:
-                    self.install_btn.setText("安装中...")
+                    self.install_btn.setText(self.tr("Installing..."))
                 self.logger.info(f"[详情页面进度-2] 更新安装按钮文本: {self.install_btn.text()}")
                 
             elif not is_installing and self.uninstall_btn:
                 # 卸载中 - 更新卸载按钮
                 self.uninstall_btn.setEnabled(False)
                 if progress >= 0:
-                    self.uninstall_btn.setText(f"卸载中 {progress}%")
+                    self.uninstall_btn.setText(self.tr("Uninstalling {0}%").format(progress))
                 elif status_text:
                     # 限制状态文本长度以适应按钮
                     short_text = status_text[:6] + ".." if len(status_text) > 6 else status_text
                     self.uninstall_btn.setText(short_text)
                 else:
-                    self.uninstall_btn.setText("卸载中...")
+                    self.uninstall_btn.setText(self.tr("Uninstalling..."))
                 self.logger.info(f"[详情页面进度-2] 更新卸载按钮文本: {self.uninstall_btn.text()}")
                 
             elif not is_installing:
                 # 完成安装/卸载 - 恢复按钮状态
                 if self.install_btn:
                     try:
-                        self.install_btn.setText("📥 安装工具")
+                        self.install_btn.setText(self.tr("📥 Install Tool"))
                         self.install_btn.setEnabled(True)
                         self.logger.info(f"[详情页面进度-3] 恢复安装按钮状态")
                     except RuntimeError as e:
@@ -775,7 +816,7 @@ class EnhancedDetailPage(QWidget):
                         
                 if self.uninstall_btn:
                     try:
-                        self.uninstall_btn.setText("卸载")
+                        self.uninstall_btn.setText(self.tr("Uninstall"))
                         self.uninstall_btn.setEnabled(True)
                         self.logger.info(f"[详情页面进度-3] 恢复卸载按钮状态")
                     except RuntimeError as e:

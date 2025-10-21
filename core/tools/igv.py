@@ -19,6 +19,7 @@ from urllib.error import URLError, HTTPError
 from .base import ToolInterface
 from ..downloader import SmartDownloader
 from utils.unified_logger import get_logger
+from utils.path_resolver import get_path_resolver
 
 
 class IGV(ToolInterface):
@@ -42,9 +43,10 @@ class IGV(ToolInterface):
         """初始化IGV工具"""
         self.logger = logging.getLogger(__name__)
         self.unified_logger = get_logger()
-        
-        # 安装路径配置
-        self.install_base = Path("installed_tools")
+
+        # 安装路径配置 - 从配置读取
+        path_resolver = get_path_resolver()
+        self.install_base = path_resolver.get_install_dir()
         self.install_dir = self.install_base / "IGV"
         self.temp_dir = Path("temp")
         

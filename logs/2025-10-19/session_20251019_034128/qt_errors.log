@@ -1,0 +1,15 @@
+[2025-10-19 03:41:28] [2025-10-19 03:41:28] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:28] [2025-10-19 03:41:28] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:28] [2025-10-19 03:41:28] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:28] [2025-10-19 03:41:28] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:28] [2025-10-19 03:41:28] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] DEBUG: Unknown property box-shadow
+[2025-10-19 03:41:29] [2025-10-19 03:41:29] WARNING: DirectWrite: CreateFontFaceFromHDC() failed (指示输入文件 (例如字体文件) 中的错误。) for QFontDef(Family="", pointsize=12, pixelsize=16, styleHint=5, weight=50, stretch=100, hintingPreference=0) LOGFONT("MS Sans Serif", lfWidth=0, lfHeight=-16) dpi=144

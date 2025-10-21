@@ -1,0 +1,7 @@
+{
+  "timestamp": "2025-10-21T13:24:55.456361",
+  "exception_type": "IndentationError",
+  "exception_message": "expected an indented block after 'if' statement on line 98 (tool_card.py, line 100)",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.23\\main.py\", line 151, in <module>\n    from ui.main_window import MainWindow\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.23\\ui\\main_window.py\", line 26, in <module>\n    from .tool_card import ToolCard\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.23\\ui\\tool_card.py\", line 100\n    self.launch_btn = QPushButton(self.tr(\"Launch\"), self)\n    ^^^^\nIndentationError: expected an indented block after 'if' statement on line 98\n",
+  "session_id": "20251021_132455"
+}

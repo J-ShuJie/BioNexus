@@ -1,0 +1,12 @@
+[2025-10-19 03:18:33] === 严重错误 ===
+[2025-10-19 03:18:33] 类型: SyntaxError
+[2025-10-19 03:18:33] 消息: expected 'except' or 'finally' block (main_window.py, line 1702)
+[2025-10-19 03:18:33] 堆栈追踪:
+Traceback (most recent call last):
+  File "C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.19\main.py", line 151, in <module>
+    from ui.main_window import MainWindow
+  File "C:\Users\15052\Desktop\BioNexus\BioNexus_1.2.19\ui\main_window.py", line 1702
+    def check_all_tools_status(self):
+SyntaxError: expected 'except' or 'finally' block
+
+[2025-10-19 03:18:33] ============================================================

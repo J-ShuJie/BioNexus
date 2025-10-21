@@ -9,13 +9,17 @@
 ✅ 替代方案: 使用 smart_text_module.py 中的智能文本组件
 📋 原因: QLabel/QText 存在文字截断、字体渲染、DPI适配等问题
 """
+import logging
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, 
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
     QStackedWidget, QScrollArea, QFrame, QPushButton,
     QLabel, QGridLayout, QMessageBox, QApplication
 )
 from PyQt5.QtCore import Qt, pyqtSignal, QTimer
 from PyQt5.QtGui import QFont, QIcon
+
+# 获取logger
+logger = logging.getLogger('BioNexus.MainWindow')
 
 from .modern_sidebar import ModernSidebar
 from .modern_toolbar import ModernToolbar
@@ -35,7 +39,8 @@ from core.tool_manager import ToolManager
 from data.config import ConfigManager
 from data.models import AppState
 from utils.unified_logger import get_logger, performance_monitor, operation_logger
-from envs.manager import EnvironmentManager
+from utils.path_resolver import PathResolver
+# EnvironmentManager 延迟加载，不是启动必需的
 
 
 # TitleBar类已移除，使用系统原生标题栏
@@ -55,11 +60,15 @@ class MainWindow(QMainWindow):
         
         # 初始化组件
         self.config_manager = ConfigManager()
+
+        # 设置路径解析器的配置管理器（让所有工具都能读取路径配置）
+        PathResolver.set_config_manager(self.config_manager)
+
         self.tool_manager = ToolManager(self.config_manager)
         self.app_state = self.config_manager.app_state
-        
-        # 初始化环境管理器
-        self.env_manager = EnvironmentManager()
+
+        # 环境管理器延迟加载（按需初始化，不是启动必需的）
+        self.env_manager = None
         
         # 初始化新的工具更新系统（仅管理第三方工具，不包括BioNexus本体）
         from core.updater.tool_update_controller import ToolUpdateController
@@ -85,13 +94,36 @@ class MainWindow(QMainWindow):
         self.current_search = ""
         self.current_categories = []
         self.current_statuses = []
-        
+
+        # Initialization completion flag - prevent retranslateUi before UI is ready
+        self._ui_fully_initialized = False
+
         self.init_ui()
         self.setup_connections()
         self.load_styles()
         self.load_initial_data()
         self._set_window_icon()
-    
+
+        # 检测并处理路径迁移
+        self._check_and_handle_path_migration()
+
+        # Connect translation manager language change signal
+        try:
+            logger.info("Connecting to translation system...")
+            from utils.translator import get_translator
+            translator = get_translator()
+            logger.debug("Got translator instance")
+            translator.languageChanged.connect(self.retranslateUi)
+            logger.info("SUCCESS: Connected languageChanged signal to retranslateUi slot")
+        except Exception as e:
+            logger.error(f"FAILED: Unable to connect translation system: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+
+        # Mark UI as fully initialized - retranslateUi can now safely run
+        self._ui_fully_initialized = True
+        logger.info("MainWindow initialization completed - UI ready for language switching")
+
     def _calculate_window_size(self):
         """
         计算智能窗口大小
@@ -866,9 +898,9 @@ class MainWindow(QMainWindow):
         
         # 🎯 更新下载卡片：标记卸载任务完成
         if self.modern_download_card:
-            display_name = f"{tool_name} (卸载)"
+            display_name = self.tr("{0} (卸载)").format(tool_name)
             # 使用100%进度和完成状态
-            self.modern_download_card.add_or_update_download(display_name, 100, "卸载完成")
+            self.modern_download_card.add_or_update_download(display_name, 100, self.tr("卸载完成"))
         
         # 更新下载按钮状态
         self._update_download_button_state()
@@ -1012,7 +1044,7 @@ class MainWindow(QMainWindow):
         # 🎯 更新现代化下载卡片（现在预创建了，始终存在）
         if self.modern_download_card:
             # 为卸载任务添加特殊标记，让下载卡片能正确显示状态
-            display_name = f"{tool_name} (卸载)" if is_uninstall else tool_name
+            display_name = self.tr("{0} (卸载)").format(tool_name) if is_uninstall else tool_name
             print(f"【下载状态链路-P5】✅ 更新下载卡片: {display_name} - {progress}% - {status_text}")
             logger.info(f"【下载状态链路-P5】✅ 更新下载卡片: {display_name} - {progress}% - {status_text}")
             try:
@@ -1039,7 +1071,7 @@ class MainWindow(QMainWindow):
         if self.monitor:
             self.monitor.log_tool_operation(tool_name, "错误", False, error_message)
         
-        QMessageBox.critical(self, f"{tool_name} 错误", error_message)
+        QMessageBox.critical(self, self.tr("{0} 错误").format(tool_name), error_message)
         
         # 重置安装状态
         card = self.tools_grid.get_card_by_name(tool_name)
@@ -1142,7 +1174,7 @@ class MainWindow(QMainWindow):
             msg = f"【下载状态链路-5】❌ 安装失败，显示警告对话框: {tool_name}"
             print(msg)
             logger.error(msg)
-            QMessageBox.warning(self, "安装失败", f"无法启动 {tool_name} 的安装过程")
+            QMessageBox.warning(self, self.tr("安装失败"), self.tr("无法启动 {0} 的安装过程").format(tool_name))
         else:
             msg = f"【下载状态链路-6】✅ 安装请求成功提交，等待 installation_progress 信号: {tool_name}"
             print(msg)
@@ -1155,7 +1187,7 @@ class MainWindow(QMainWindow):
                 print(f"[安装开始-详情页面] 设置详情页面初始安装状态: {tool_name}")
                 logger.info(f"[安装开始-详情页面] 设置详情页面初始安装状态: {tool_name}")
                 if hasattr(self.current_detail_page, 'set_installing_state'):
-                    self.current_detail_page.set_installing_state(True, 0, "准备安装...")
+                    self.current_detail_page.set_installing_state(True, 0, self.tr("准备安装..."))
     
     def _on_launch_tool(self, tool_name: str):
         """处理工具启动请求"""
@@ -1164,7 +1196,7 @@ class MainWindow(QMainWindow):
         
         success = self.tool_manager.launch_tool(tool_name)
         if not success:
-            QMessageBox.warning(self, "启动失败", f"无法启动 {tool_name}")
+            QMessageBox.warning(self, self.tr("启动失败"), self.tr("无法启动 {0}").format(tool_name))
     
     def _on_uninstall_tool(self, tool_name: str):
         """处理工具卸载请求（从详情页面或工具卡片触发）"""
@@ -1197,9 +1229,9 @@ class MainWindow(QMainWindow):
         print(f"【下载状态链路-U3】显示卸载确认对话框: {tool_name}")
         logger.info(f"【下载状态链路-U3】显示卸载确认对话框: {tool_name}")
         reply = QMessageBox.question(
-            self, 
-            "确认卸载", 
-            f"您确定要卸载 {tool_name} 吗？\n\n卸载后将删除工具文件和相关配置，此操作不可撤销。",
+            self,
+            self.tr("确认卸载"),
+            self.tr("您确定要卸载 {0} 吗？\n\n卸载后将删除工具文件和相关配置，此操作不可撤销。").format(tool_name),
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No
         )
@@ -1212,7 +1244,7 @@ class MainWindow(QMainWindow):
             if card:
                 print(f"【下载状态链路-U5】✅ 找到工具卡片，设置卸载进度: {tool_name}")
                 logger.info(f"【下载状态链路-U5】✅ 找到工具卡片，设置卸载进度: {tool_name}")
-                card.set_installing_state(True, 0, "准备卸载...")
+                card.set_installing_state(True, 0, self.tr("准备卸载..."))
             else:
                 print(f"【下载状态链路-U5】❌ 警告：未找到工具卡片: {tool_name}")
                 logger.warning(f"【下载状态链路-U5】❌ 警告：未找到工具卡片: {tool_name}")
@@ -1224,7 +1256,7 @@ class MainWindow(QMainWindow):
                 print(f"【下载状态链路-U6】设置详情页面初始卸载状态: {tool_name}")
                 logger.info(f"【下载状态链路-U6】设置详情页面初始卸载状态: {tool_name}")
                 if hasattr(self.current_detail_page, 'set_installing_state'):
-                    self.current_detail_page.set_installing_state(True, 0, "准备卸载...")
+                    self.current_detail_page.set_installing_state(True, 0, self.tr("准备卸载..."))
             
             # 执行卸载
             print(f"[日志-U5] 开始调用 tool_manager.uninstall_tool: {tool_name}")
@@ -1233,7 +1265,7 @@ class MainWindow(QMainWindow):
             
             if success:
                 print(f"[日志-U7] 卸载成功，显示成功对话框: {tool_name}")
-                QMessageBox.information(self, "卸载成功", f"{tool_name} 已成功卸载")
+                QMessageBox.information(self, self.tr("卸载成功"), self.tr("{0} 已成功卸载").format(tool_name))
                 # 注释：移除自动跳转，让用户可以选择何时返回
                 # if hasattr(self, 'current_detail_page') and self.current_detail_page:
                 #     print(f"[日志-U8] 当前在详情页面，返回主界面: {tool_name}")
@@ -1253,7 +1285,7 @@ class MainWindow(QMainWindow):
                     if hasattr(self.current_detail_page, 'set_installing_state'):
                         self.current_detail_page.set_installing_state(False)
                 
-                QMessageBox.warning(self, "卸载失败", f"无法卸载 {tool_name}，请检查工具是否正在使用中")
+                QMessageBox.warning(self, self.tr("卸载失败"), self.tr("无法卸载 {0}，请检查工具是否正在使用中").format(tool_name))
         else:
             print(f"[日志-U11] 用户取消了卸载操作: {tool_name}")
     
@@ -1265,24 +1297,29 @@ class MainWindow(QMainWindow):
         tool_data = self.tool_manager.get_tool_info(tool_name)
         if tool_data:
             # 构建详情信息
-            details_text = f"工具名称: {tool_data['name']}\n"
-            details_text += f"版本: {tool_data['version']}\n"
-            details_text += f"描述: {tool_data['description']}\n"
-            details_text += f"安装来源: {tool_data['install_source']}\n"
-            
+            details_text = self.tr("工具名称: {0}\n").format(tool_data['name'])
+            details_text += self.tr("版本: {0}\n").format(tool_data['version'])
+            try:
+                from utils.tool_localization import get_localized_tool_description
+                desc_text = get_localized_tool_description(tool_data)
+            except Exception:
+                desc_text = tool_data.get('description', '')
+            details_text += self.tr("Description: {0}\n").format(desc_text)
+            details_text += self.tr("安装来源: {0}\n").format(tool_data['install_source'])
+
             if tool_data.get('executable_path'):
-                details_text += f"可执行文件: {tool_data['executable_path']}\n"
-            
+                details_text += self.tr("可执行文件: {0}\n").format(tool_data['executable_path'])
+
             if tool_data.get('disk_usage'):
-                details_text += f"磁盘占用: {tool_data['disk_usage']}\n"
-            
+                details_text += self.tr("磁盘占用: {0}\n").format(tool_data['disk_usage'])
+
             if tool_data.get('total_runtime', 0) > 0:
                 runtime = tool_data['total_runtime']
                 hours = runtime // 3600
                 minutes = (runtime % 3600) // 60
-                details_text += f"使用时长: {hours}小时{minutes}分钟\n"
-            
-            QMessageBox.information(self, f"{tool_name} 详情", details_text)
+                details_text += self.tr("使用时长: {0}小时{1}分钟\n").format(hours, minutes)
+
+            QMessageBox.information(self, self.tr("{0} 详情").format(tool_name), details_text)
     
     def _on_tool_favorite_toggled(self, tool_name: str, is_favorite: bool):
         """
@@ -1474,17 +1511,17 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'download_status_panel'):
             if status == "更新中":
                 self.download_status_panel.add_or_update_download(
-                    f"{tool_name} 更新", 0, "准备更新..."
+                    self.tr("{0} 更新").format(tool_name), 0, self.tr("准备更新...")
                 )
             elif status == "更新成功":
                 self.download_status_panel.add_or_update_download(
-                    f"{tool_name} 更新", 100, "更新完成"
+                    self.tr("{0} 更新").format(tool_name), 100, self.tr("更新完成")
                 )
                 # 刷新工具显示
                 self._update_tools_display()
             elif status == "更新失败":
                 self.download_status_panel.add_or_update_download(
-                    f"{tool_name} 更新", -1, "更新失败"
+                    self.tr("{0} 更新").format(tool_name), -1, self.tr("更新失败")
                 )
         
         # 重置更新按钮状态（如果是手动触发）
@@ -1500,7 +1537,7 @@ class MainWindow(QMainWindow):
         """重置更新按钮状态"""
         self.update_btn.setText("⬇")
         self.update_btn.setEnabled(True)
-        self.update_btn.setToolTip("检查更新")
+        self.update_btn.setToolTip(self.tr("检查更新"))
     
     # 注意：旧的统一更新对话框方法已被移除
     # 新的工具更新系统通过 tool_update_controller 处理所有更新逻辑
@@ -1695,3 +1732,219 @@ class MainWindow(QMainWindow):
                     print(f"【ICON】使用备用图标: {fallback_path}")
                 except Exception as e:
                     print(f"【ICON ERROR】备用图标也失败: {e}")
+
+    def check_all_tools_status(self):
+        """
+        检查所有已安装工具的状态
+        在启动时调用（如果设置启用）
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        logger.info("开始检查所有已安装工具状态...")
+
+        # 获取所有已安装的工具
+        installed_tools = self.config_manager.get_tools_by_status('installed')
+
+        if not installed_tools:
+            logger.info("没有已安装的工具需要检查")
+            return
+
+        logger.info(f"找到 {len(installed_tools)} 个已安装工具，开始验证...")
+
+        # 记录检查结果
+        check_results = {
+            'valid': [],      # 状态正常的工具
+            'invalid': [],    # 状态异常的工具
+            'errors': []      # 检查出错的工具
+        }
+
+        for tool_data in installed_tools:
+            tool_name = tool_data.get('name')
+
+            try:
+                # 获取工具实例
+                tool_instance = self.tool_manager.get_tool(tool_name)
+
+                if not tool_instance:
+                    logger.warning(f"无法获取工具实例: {tool_name}")
+                    check_results['errors'].append(tool_name)
+                    continue
+
+                # 验证安装状态
+                is_valid = tool_instance.verify_installation()
+
+                if is_valid:
+                    logger.info(f"✓ {tool_name} - 状态正常")
+                    check_results['valid'].append(tool_name)
+                else:
+                    logger.warning(f"✗ {tool_name} - 状态异常（安装文件可能已损坏或移动）")
+                    check_results['invalid'].append(tool_name)
+
+                    # 更新工具状态为 available
+                    self.config_manager.update_tool_status(tool_name, 'available')
+
+                    # 刷新UI中的工具卡片
+                    if tool_name in self.tool_cards:
+                        card = self.tool_cards[tool_name]
+                        card.set_available_state()
+
+            except Exception as e:
+                logger.error(f"检查 {tool_name} 状态时出错: {e}")
+                check_results['errors'].append(tool_name)
+
+        # 记录检查摘要
+        logger.info("=" * 50)
+        logger.info(f"工具状态检查完成:")
+        logger.info(f"  - 正常: {len(check_results['valid'])} 个")
+        logger.info(f"  - 异常: {len(check_results['invalid'])} 个")
+        logger.info(f"  - 错误: {len(check_results['errors'])} 个")
+
+        if check_results['invalid']:
+            logger.warning(f"发现异常工具: {', '.join(check_results['invalid'])}")
+
+        logger.info("=" * 50)
+
+        # 如果有异常工具，显示通知（可选）
+        if check_results['invalid']:
+            invalid_count = len(check_results['invalid'])
+            logger.info(f"检测到 {invalid_count} 个工具状态异常，已自动更新状态")
+
+    def _check_and_handle_path_migration(self):
+        """
+        检测并处理路径迁移
+        当软件位置变更且用户有手动设置的绝对路径时，提示用户选择处理方式
+        """
+        import logging
+        from pathlib import Path
+        from PyQt5.QtCore import QTimer
+
+        logger = logging.getLogger(__name__)
+
+        # 需要检查的路径设置
+        path_settings = ['default_install_dir', 'conda_env_path']
+
+        for setting_name in path_settings:
+            saved_path = getattr(self.config_manager.settings, setting_name, "")
+
+            # 空路径跳过（使用默认值）
+            if not saved_path:
+                continue
+
+            saved_path_obj = Path(saved_path)
+
+            # 相对路径跳过（已经是理想状态）
+            if not saved_path_obj.is_absolute():
+                continue
+
+            # 是绝对路径，检查是否指向旧版本
+            current_dir = Path.cwd()
+            current_dir_str = str(current_dir).replace('\\', '/')
+
+            # 检查路径是否不在当前软件目录下
+            try:
+                saved_path_obj.relative_to(current_dir)
+                # 能计算相对路径，说明在当前目录下，继续检查
+            except ValueError:
+                # 不在当前目录下，这是真正的外部路径，不处理
+                logger.info(f"{setting_name} 指向外部路径，保持不变: {saved_path}")
+                continue
+
+            # 在当前目录下，但使用了绝对路径（可能是旧版本遗留）
+            # 检查路径中是否包含旧版本号
+            if 'BioNexus_' in saved_path and current_dir_str not in saved_path:
+                # 发现路径迁移情况
+                logger.info(f"检测到路径迁移: {setting_name} = {saved_path}")
+
+                # 计算新的默认路径
+                from utils.path_resolver import get_path_resolver
+                path_resolver = get_path_resolver()
+
+                if setting_name == 'default_install_dir':
+                    new_path = str(path_resolver.get_install_dir())
+                elif setting_name == 'conda_env_path':
+                    new_path = str(path_resolver.get_env_cache_dir())
+                else:
+                    continue
+
+                # 延迟显示对话框，确保主窗口已完全显示
+                def show_migration_dialog():
+                    from ui.path_migration_dialog import PathMigrationDialog
+
+                    dialog = PathMigrationDialog(saved_path, new_path, setting_name, self)
+                    if dialog.exec_() == PathMigrationDialog.Accepted:
+                        choice = dialog.get_user_choice()
+
+                        if choice == 'migrate':
+                            # 用户选择迁移到新路径
+                            logger.info(f"用户选择迁移路径: {setting_name} -> {new_path}")
+
+                            # 转换为相对路径保存
+                            try:
+                                relative_path = Path(new_path).relative_to(current_dir)
+                                path_to_save = str(relative_path)
+                            except ValueError:
+                                path_to_save = new_path
+
+                            setattr(self.config_manager.settings, setting_name, path_to_save)
+                            self.config_manager.save_settings()
+
+                            logger.info(f"路径已更新并保存: {path_to_save}")
+                        else:
+                            # 用户选择保留原路径
+                            logger.info(f"用户选择保留原路径: {setting_name} = {saved_path}")
+
+                # 延迟500ms显示对话框
+                QTimer.singleShot(500, show_migration_dialog)
+
+    def retranslateUi(self, locale: str = None):
+        """
+        Retranslate UI text - Real-time language switching
+        Recreates key UI components to apply new translations
+        """
+        logger.info("=" * 60)
+        logger.info("retranslateUi CALLED")
+        logger.info(f"Locale parameter: {locale}")
+
+        if not getattr(self, '_ui_fully_initialized', False):
+            logger.warning("SKIPPED: retranslateUi called before UI fully initialized")
+            return
+
+        logger.info("UI is fully initialized, proceeding with retranslation...")
+
+        try:
+            from utils.translator import tr
+
+            # 1. Update window title
+            self.setWindowTitle(tr("BioNexus Launcher"))
+            logger.debug("Window title updated")
+
+            # 2. Update sidebar (call its retranslateUi, don't recreate)
+            if hasattr(self, 'sidebar') and self.sidebar:
+                if hasattr(self.sidebar, 'retranslateUi'):
+                    self.sidebar.retranslateUi()
+                    logger.debug("Sidebar retranslated")
+
+            # 3. Update toolbar
+            if hasattr(self, 'toolbar') and self.toolbar:
+                if hasattr(self.toolbar, 'retranslateUi'):
+                    self.toolbar.retranslateUi()
+                    logger.debug("Toolbar retranslated")
+
+            # 4. Update tool cards (they auto-connect to languageChanged signal)
+            # Tool cards will update themselves automatically, but refresh display to ensure
+            self._update_tools_display()
+            logger.debug("Tool cards display refreshed")
+
+            # 5. Force UI update
+            self.update()
+            from PyQt5.QtWidgets import QApplication
+            QApplication.processEvents()
+
+            logger.info("SUCCESS: UI retranslation completed")
+            logger.info("=" * 60)
+
+        except Exception as e:
+            logger.error(f"EXCEPTION in retranslateUi: {e}")
+            import traceback
+            logger.error(traceback.format_exc())

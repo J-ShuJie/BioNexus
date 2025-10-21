@@ -1,0 +1,700 @@
+DeletionConfirmationDialog:
+  ? '
+
+    💡 It is recommended to clean up these environments to free up more space.'
+  : '
+
+    💡 建议同时清理这些环境以释放更多空间。'
+  ? 'After deleting these tools, the following runtime environments will no longer be used by other tools:
+
+    '
+  : '删除这些工具后，以下运行环境将不再被其他工具使用：
+
+    '
+  Also clean up runtime environments that are no longer needed: 同时清理不再需要的运行环境
+  Are you sure you want to delete tool '{0}'?: 确定要删除工具 '{0}' 吗？
+  Calculating space savings...: 正在计算节省空间...
+  Cancel: 取消
+  Confirm Deletion: 确认删除
+  Confirm Tool Deletion: 确认删除工具
+  Delete: 删除
+  Error: 错误
+  Final Confirmation: 最终确认
+  I confirm the deletion of the above tools, this operation cannot be undone: 我确认删除上述工具，此操作不可撤销
+  'Operation failed: {0}': '操作失败: {0}'
+  'The following {0} tools will be deleted:': 将删除以下 {0} 个工具：
+  This operation cannot be undone: 此操作不可撤销
+  ? 'You are about to delete {0} tools.
+
+    This is a batch operation, are you sure you want to continue?'
+  : '您即将删除 {0} 个工具。
+
+    这是一个批量操作，确定继续吗？'
+  ⚠️ Analysis failed, please check system status: ⚠️ 分析失败，请检查系统状态
+  '💾 Space Saved: Tools {0} + Environments {1} = Total {2}': '💾 节省空间: 工具 {0} + 环境 {1} = 总计 {2}'
+  '💾 Space Saved: {0}': '💾 节省空间: {0}'
+  🔗 Dependency Environment Handling: 🔗 依赖环境处理
+DownloadItem:
+  (Manual): (手动)
+  Clear: 清空
+  Complete: 完成
+  Download: 下载
+  Download Status: 下载状态
+  Extract: 解压
+  Install: 安装
+  No download tasks: 暂无下载任务
+  Preparing to download...: 准备下载...
+  Success: 成功
+  Update Check: 更新检查
+  Verify: 验证
+  '{0} Update': '{0} 更新'
+  ✅ Installation Complete: ✅ 安装完成
+  ✅ Updated from v{0} to v{1}: ✅ 从 v{0} 更新到 v{1}
+  ❌ Failed to update from v{0} to v{1}: ❌ 从 v{0} 更新到 v{1} 失败
+  ❌ {0}: ❌ {0}
+  🔍 All tools are up to date: 🔍 所有工具都是最新版本
+  🔍 Found {0} tool updates: 🔍 发现 {0} 个工具更新
+FilterPanel:
+  Apply: 应用
+  Available: 可安装
+  Filter Tools: 筛选工具
+  Genomics: 基因组学
+  Installation Status: 安装状态
+  Installed: 已安装
+  Phylogenetics: 系统发育
+  Quality Control: 质量控制
+  Reset: 重置
+  Selected: 选中
+  Sequence Analysis: 序列分析
+  Tool Type: 工具类型
+  Unselected: 未选中
+  Update Available: 需更新
+  Visualization: 可视化
+MainWindow:
+  ? 'Are you sure you want to uninstall {0}?
+
+
+    This will delete the tool files and related configurations, and this operation cannot be undone.'
+  : '您确定要卸载 {0} 吗？
+
+
+    卸载后将删除工具文件和相关配置，此操作不可撤销。'
+  BioNexus Launcher: BioNexus Launcher
+  Cannot launch {0}: 无法启动 {0}
+  Cannot start the installation process for {0}: 无法启动 {0} 的安装过程
+  Cannot uninstall {0}, please check if the tool is currently in use: 无法卸载 {0}，请检查工具是否正在使用中
+  Check for Updates: 检查更新
+  Confirm Uninstall: 确认卸载
+  ? 'Description: {0}
+
+    '
+  : '描述: {0}
+
+    '
+  ? 'Disk Usage: {0}
+
+    '
+  : '磁盘占用: {0}
+
+    '
+  ? 'Executable: {0}
+
+    '
+  : '可执行文件: {0}
+
+    '
+  Installation Failed: 安装失败
+  ? 'Installation Source: {0}
+
+    '
+  : '安装来源: {0}
+
+    '
+  Launch Failed: 启动失败
+  Preparing to install...: 准备安装...
+  Preparing to uninstall...: 准备卸载...
+  Preparing to update...: 准备更新...
+  ? 'Tool Name: {0}
+
+    '
+  : '工具名称: {0}
+
+    '
+  Uninstall Complete: 卸载完成
+  Uninstall Failed: 卸载失败
+  Uninstall Successful: 卸载成功
+  Update Complete: 更新完成
+  Update Failed: 更新失败
+  ? 'Usage time: {0} hours {1} minutes
+
+    '
+  : '使用时长: {0}小时{1}分钟
+
+    '
+  ? 'Version: {0}
+
+    '
+  : '版本: {0}
+
+    '
+  '{0} (Uninstall)': '{0} (卸载)'
+  '{0} Details': '{0} 详情'
+  '{0} Error': '{0} 错误'
+  '{0} Update': '{0} 更新'
+  '{0} has been successfully uninstalled': '{0} 已成功卸载'
+ModernSidebar:
+  All Tools: 全部工具
+  My Tools: 我的工具
+  Search bioinformatics tools...: 搜索生物信息学工具...
+  Settings: 设置
+  🕒 Recently Used: 🕒 最近使用
+ModernToolbar:
+  ← Back: ← 返回
+PathMigrationDialog:
+  'Auto-update to: {0}': '自动更新为: {0}'
+  Conda Environment Path: Conda环境路径
+  Confirm: 确认
+  'Continue using: {0}': '继续使用: {0}'
+  Default Installation Directory: 默认安装目录
+  Keep original path (absolute path): 保留原路径（绝对路径）
+  Path Migration Confirmation: 路径迁移确认
+  Recommended: 推荐
+  Software location change detected: 检测到软件位置已变更
+  Use new default path (recommended): 使用新的默认路径（推荐）
+  ? 'You previously set a custom path for <b>{0}</b>, but the software location has changed.
+
+
+    Please choose how to handle this path:'
+  : '您之前为 <b>{0}</b> 手动设置了路径，但软件位置已发生变更。
+
+
+    请选择如何处理此路径：'
+  ? '💡 Tip: Selecting "Use new default path" allows the software path to update automatically with versions, avoiding manual adjustments with each upgrade.'
+  : 💡 提示：选择 "使用新的默认路径" 可以让软件路径随版本自动更新，避免每次升级都需要手动调整。
+SmartTextWidget:
+  Apply Filter: 应用筛选
+  Available: 可安装
+  Evolutionary Analysis: 进化分析
+  Filter Tools: 筛选工具
+  Gene Annotation: 基因注释
+  Genomics: 基因组学
+  Installation Status: 安装状态
+  Installed: 已安装
+  Reset: 重置
+  Sequence Alignment: 序列比对
+  Sequence Analysis: 序列分析
+  Structural Analysis: 结构分析
+  Tool Category: 工具分类
+  Update Required: 需要更新
+StorageAnalysisThread:
+  Scanning installed tools...: 正在扫描已安装工具...
+  Calculating tool sizes...: 正在计算工具大小...
+  Analyzing storage usage...: 正在分析存储使用情况...
+  Analysis Complete: 分析完成
+  Tool Name: 工具名称
+  Size: 大小
+  Path: 路径
+  Dependencies: 依赖环境
+  None: 无
+  Loading...: 加载中...
+  Refresh: 刷新
+  Select All: 全选
+  Delete: 删除
+  Cancel: 取消
+  Failed to update overview information: 概览信息更新失败
+  'Remaining: {0} | Tools using: {1}/{2}': '剩余: {0} | 工具占用: {1}/{2}'
+SettingsPanel:
+  General Settings: 常规设置
+  Auto-check for updates: 自动检查更新
+  Automatically check for software and tool updates in the background: 在后台自动检查软件和工具更新
+  Check tool status on startup: 启动时检查工具状态
+  Automatically check the status of all installed tools at startup: 启动时自动检查所有已安装工具状态
+  Show detailed installation logs: 显示详细安装日志
+  Display detailed technical log information during installation: 安装过程中显示详细技术日志信息
+  Language Settings: 语言设置
+  Simplified Chinese: 简体中文
+  Interface Language: 界面语言
+  Select the display language of the application: 选择应用程序的显示语言
+  Environment Settings: 环境设置
+  Default Installation Directory: 默认安装目录
+  Set the default installation location for all tools: 设置所有工具的默认安装位置
+  Conda Environment Path: Conda 环境路径
+  Specify Conda installation path for Python-based bioinformatics tools: 指定基于 Python 的生物信息学工具的 Conda 安装路径
+  Browse...: 浏览...
+  Reset to Default: 恢复默认
+  Select {0}: 选择 {0}
+  Confirm Restoration: 确认还原
+  Restoration Successful: 还原成功
+  Advanced Options: 高级选项
+  Use mirror sources to accelerate downloads: 使用镜像源加速下载
+  Enable China mainland mirror sources to significantly improve download speed: 启用中国大陆镜像源，显著提升下载速度
+  Keep installation package cache: 保留安装包缓存
+  Keep downloaded installation packages to save time on repeated downloads: 保留已下载的安装包，以节省重复下载时间
+  Storage Management: 存储管理
+  Manage installed bioinformatics tools, view occupied space and perform batch deletion: 管理已安装的生物信息学工具、查看占用空间并执行批量删除
+  Storage Settings: 存储设置
+  Auto-clean old logs: 自动清理旧日志
+  Automatically delete log files older than 30 days to save disk space: 自动删除超过 30 天的日志文件以节省磁盘空间
+  Maximum size of a single log file: 单个日志文件的最大大小
+  Set the maximum size of a single log file, automatically rotate when exceeded: 设置单个日志文件的最大大小，超出时自动轮转
+  Tool Update Settings: 工具更新设置
+  "Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)": "注意：此设置仅管理第三方生物信息学工具（如 FastQC、BLAST 等）的更新"
+  Auto Update: 自动更新
+  Manual Update: 手动更新
+  Update Mode: 更新模式
+  "Select how to handle tool updates: automatic background update or manual confirmation": "选择如何处理工具更新：自动后台更新或手动确认"
+  Daily: 每天
+  Every 3 Days: 每 3 天
+  Weekly: 每周
+  Every 2 Weeks: 每 2 周
+  Check Frequency: 检查频率
+  Set the time interval for automatically checking tool updates: 设置自动检查工具更新的时间间隔
+  Show update notifications: 显示更新通知
+  Show desktop notifications when tool updates are found (manual mode only): 发现工具更新时显示桌面通知（仅限手动模式）
+  Check for Tool Updates Now: 立即检查工具更新
+  Manual Check for Updates: 手动检查更新
+  Immediately check if new versions are available for all installed tools: 立即检查所有已安装工具是否有新版本
+  Settings Updated: 设置已更新
+  "{0} has been updated to:\n{1}": "{0} 已更新为：\n{1}"
+  Reset Complete: 重置完成
+  All settings have been reset to default values!: 所有设置已重置为默认值！
+  Export Settings: 导出设置
+  Export Successful: 导出成功
+  "Settings have been exported to:\n{0}": "设置已导出到：\n{0}"
+  Export Failed: 导出失败
+  "Error occurred while exporting settings:\n{0}": "导出设置时发生错误：\n{0}"
+  Import Settings: 导入设置
+  Import Successful: 导入成功
+  Settings configuration has been successfully imported!: 设置配置已成功导入！
+  Import Failed: 导入失败
+  "Error occurred while importing settings:\n{0}": "导入设置时发生错误：\n{0}"
+  Confirm Reset: 确认重置
+  Confirm Cleanup: 确认清理
+  "Are you sure you want to clear all download cache files?\nThis will free up disk space but may require re-downloading tools.": "确定清理所有下载缓存文件吗？\n这将释放磁盘空间，但可能需要重新下载工具。"
+  Cleanup Complete: 清理完成
+  Download cache has been cleaned up!: 下载缓存已清理完成！
+  Cleanup Failed: 清理失败
+  "Error occurred while clearing cache:\n{0}": "清理缓存时发生错误：\n{0}"
+  No installed tools: 没有已安装的工具
+  Error: 错误
+  "Error occurred while processing deletion request:\n{0}": "处理删除请求时发生错误：\n{0}"
+  "Successfully deleted {0} tool(s)": "成功删除 {0} 个工具"
+  ", cleaned up {0} environment(s)": "，清理了 {0} 个环境"
+  "\n\nFailed to delete tools:": "\n\n删除失败的工具："
+  Deletion Complete: 删除完成
+  Deletion Failed: 删除失败
+  No tools were successfully deleted: 没有工具被成功删除
+  Storage Space Warning: 存储空间警告
+  Language Switch: 语言切换
+  🔄 Switching language...: 🔄 语言切换中...
+  Translation files are not available, please check the installation: 翻译文件不可用，请检查安装
+  "Check for Updates": "检查更新"
+  "Checking for tool updates...\n\nThis feature will be improved in future versions.": "正在检查工具更新...\n\n此功能将在后续版本中完善。"
+  ? '
+
+
+    Failed to delete tools:
+
+    '
+  : '
+
+
+    删除失败的工具:
+
+    '
+  ', cleaned up {0} environments': ，清理了 {0} 个环境
+  Advanced Options: 高级选项
+  All settings have been reset to default values!: 所有设置已重置为默认值！
+  ? 'Are you sure you want to clear all download cache files?
+
+    This will free up disk space but may require re-downloading tools.'
+  : '确定要清理所有下载缓存文件吗？
+
+    这将释放磁盘空间，但可能需要重新下载工具。'
+  Are you sure you want to reset all settings to default values?: 确定要将所有设置重置为默认值吗？
+  Automatic Update: 自动更新
+  Automatically Check for Updates: 自动检查更新
+  Automatically Clean Old Logs: 自动清理旧日志
+  Automatically check status of all installed tools on application startup: 在应用启动时自动检查所有已安装工具的状态
+  Automatically delete log files older than 30 days to save disk space: 自动删顳30天以前的日志文件，节省磁盘空间
+  Browse...: 浏览...
+  Check Frequency: 检查频率
+  Check for Updates: 检查更新
+  Check for tool updates now: 立即检查工具更新
+  Check tool status on startup: 启动时检查工具状态
+  ? 'Checking for tool updates...
+
+
+    This feature will be improved in future versions.'
+  : '正在检查工具更新...
+
+
+    此功能将在后续版本中完善。'
+  Chinese: 中文
+  'Choose how to handle tool updates: automatic background updates or manual confirmation': 选择工具更新的处理方式：自动后台更新或手动确认更新
+  Cleanup Complete: 清理完成
+  Cleanup Failed: 清理失败
+  Conda Environment Path: Conda环境路径
+  Confirm Cleanup: 确认清理
+  Confirm Reset: 确认重置
+  Confirm Restoration: 确认还原
+  Daily: 每天
+  Default Installation Directory: 默认安装目录
+  Deletion Complete: 删除完成
+  Deletion Failed: 删除失败
+  Download cache has been cleared!: 下载缓存已清理完成！
+  Enable Chinese mainland mirror sources to significantly improve download speed: 启用中国大陆镜像源，显著提升下载速度
+  Environment Settings: 环境设置
+  Error: 错误
+  ? 'Error occurred while clearing cache:
+
+    {0}'
+  : '清理缓存时发生错误:
+
+    {0}'
+  ? 'Error occurred while deleting tool:
+
+    {0}'
+  : '删除工具时发生错误:
+
+    {0}'
+  ? 'Error occurred while exporting settings:
+
+    {0}'
+  : '导出设置时发生错误:
+
+    {0}'
+  ? 'Error occurred while importing settings:
+
+    {0}'
+  : '导入设置时发生错误:
+
+    {0}'
+  ? 'Error occurred while processing deletion request:
+
+    {0}'
+  : '处理删除请求时发生错误:
+
+    {0}'
+  Every 2 weeks: 每2周
+  Every 3 days: 每3天
+  Export Failed: 导出失败
+  Export Settings: 导出设置
+  Export Successful: 导出成功
+  General Settings: 常规设置
+  Immediately check if new versions are available for all installed tools: 立即检查所有已安装工具是否有新版本可用
+  Import Failed: 导入失败
+  Import Settings: 导入设置
+  Import Successful: 导入成功
+  Interface Language: 界面语言
+  Keep downloaded installation packages to save re-download time: 保留已下载的安装包，可节省重复下载时间
+  Keep installation package cache: 保留安装包缓存
+  Language Settings: 语言设置
+  Language Switch: 语言切换
+  Manage installed bioinformatics tools, view occupied space and perform batch deletion: 管理已安装的生物信息学工具，查看占用空间并进行批量删除
+  Manual Update: 手动更新
+  Manually Check for Updates: 手动检查更新
+  Maximum size per log file: 单个日志文件最大大小
+  No installed tools: 暂无已安装的工具
+  No tools were successfully deleted: 没有工具被成功删除
+  'Note: This setting only manages third-party bioinformatics tool updates (such as FastQC, BLAST, etc.)': 注意：此设置仅管理第三方生物信息工具更新（如FastQC、BLAST等）
+  Reset Complete: 重置完成
+  Restoration Successful: 还原成功
+  Restore to Default: 还原为默认
+  Select application display language: 选择应用程序的显示语言
+  Select {0}: 选择{0}
+  Set default installation location for all tools: 设置所有工具的默认安装位置
+  Set maximum size for individual log files, automatically rotate when exceeded: 设置单个日志文件的最大大小，超过后自动轮转
+  Set time interval for automatic tool update checks: 设置自动检查工具更新的时间间隔
+  Settings Update: 设置更新
+  Settings configuration has been successfully imported!: 设置配置已成功导入！
+  ? 'Settings have been exported to:
+
+    {0}'
+  : '设置已导出到:
+
+    {0}'
+  Show Detailed Installation Logs: 显示详细安装日志
+  Show Update Notifications: 显示更新通知
+  Show desktop notification when tool updates are found (manual mode only): 当发现工具更新时显示桌面通知（仅手动模式）
+  Show detailed technical log information during installation: 安装过程中显示详细的技术日志信息
+  Simplified Chinese: 简体中文
+  Specify Conda installation path for Python-based bioinformatics tools: 指定Conda安装路径，用于基于Python的生物信息学工具
+  Storage Management: 存储管理
+  Storage Settings: 存储设置
+  Storage Space Warning: 存储空间警告
+  Successfully deleted {0} tools: 成功删除 {0} 个工具
+  Tool Update Settings: 工具更新设置
+  Translation files unavailable, please check installation: 翻译文件不可用，请检查安装
+  Update Mode: 更新模式
+  Use mirror sources to accelerate downloads: 使用镜像源加速下载
+  Weekly: 每周
+  When enabled, will automatically check for software and tool updates in the background: 启用后将在后台自动检查软件和工具更新
+  ? '{0} has been updated to:
+
+    {1}'
+  : '{0}已更新为:
+
+    {1}'
+  ? 'Are you sure you want to restore <b>{0}</b> to the default path?
+
+
+    Default path: {1}
+
+
+    After restoration, relative paths will be used, and the software will automatically adapt to new versions upon upgrade.'
+  : '确定要将 <b>{0}</b> 还原为默认路径吗？
+
+
+    默认路径：{1}
+
+
+    还原后将使用相对路径，软件升级时会自动适配新版本。'
+  ? '{0} has been restored to the default path.
+
+
+    Current path: {1}'
+  : '{0} 已还原为默认路径。
+
+
+    当前路径：{1}'
+  Auto-check for updates: 自动检查更新
+  Automatically check for software and tool updates in the background: 启用后将在后台自动检查软件和工具更新
+  Automatically check the status of all installed tools at startup: 在应用启动时自动检查所有已安装工具的状态
+  Show detailed installation logs: 显示详细安装日志
+  Display detailed technical log information during installation: 安装过程中显示详细的技术日志信息
+  Select the display language of the application: 选择应用程序的显示语言
+  Set the default installation location for all tools: 设置所有工具的默认安装位置
+  Reset to Default: 还原为默认
+  Are you sure you want to reset <b>{0}</b> to the default path?: 确定要将 <b>{0}</b> 还原为默认路径吗？
+  Reset Successful: 还原成功
+  '{0} has been reset to the default path.': '{0} 已还原为默认路径。'
+  Enable China mainland mirror sources to significantly improve download speed: 启用中国大陆镜像源，显著提升下载速度
+  Keep downloaded installation packages to save time on repeated downloads: 保留已下载的安装包，可节省重复下载时间
+  Auto-clean old logs: 自动清理旧日志
+  Maximum size of a single log file: 单个日志文件最大大小
+  Set the maximum size of a single log file, automatically rotate when exceeded: 设置单个日志文件的最大大小，超过后自动轮转
+  'Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)': 注意：此设置仅管理第三方生物信息工具更新（如FastQC、BLAST等）
+  Auto Update: 自动更新
+  'Select how to handle tool updates: automatic background update or manual confirmation': 选择工具更新的处理方式：自动后台更新或手动确认更新
+  Every 3 Days: 每3天
+  Every 2 Weeks: 每2周
+  Set the time interval for automatically checking tool updates: 设置自动检查工具更新的时间间隔
+  Show update notifications: 显示更新通知
+  Show desktop notifications when tool updates are found (manual mode only): 当发现工具更新时显示桌面通知（仅手动模式）
+  Check for Tool Updates Now: 立即检查工具更新
+  Manual Check for Updates: 手动检查更新
+  Settings Updated: 设置更新
+  '{0} has been updated to:': '{0}已更新为:'
+  Japanese: 日本語
+  Checking for tool updates...: 正在检查工具更新...
+  'Settings have been exported to:': '设置已导出到:'
+  'An error occurred while exporting settings:': '导出设置时发生错误:'
+  'An error occurred while importing settings:': '导入设置时发生错误:'
+  Are you sure you want to clean up all download cache files?: 确定要清理所有下载缓存文件吗？
+  Download cache has been cleaned up!: 下载缓存已清理完成！
+  'An error occurred while cleaning up the cache:': '清理缓存时发生错误:'
+  'An error occurred while processing the deletion request:': '处理删除请求时发生错误:'
+  Successfully deleted {0} tool(s): 成功删除 {0} 个工具
+  ', cleaned up {0} environment(s)': ，清理了 {0} 个环境
+  'Failed to delete tools:': '删除失败的工具:'
+  'An error occurred while deleting tools:': '删除工具时发生错误:'
+  Translation files are not available, please check the installation: 翻译文件不可用，请检查安装
+ToolCardV3:
+  Details: 详情
+  Install: 安装
+  Launch: 启动
+  '{0}%': '{0}%'
+ToolDetailPage:
+  1 hour 15 min: 1小时15分
+  1.2 hours: 1.2小时
+  2.5 hours: 2.5小时
+  3.8 hours: 3.8小时
+  45 minutes: 45分钟
+  8 hours 30 min: 8小时30分
+  CPU Requirements: CPU要求
+  Data Visualization: 数据可视化
+  Dependencies: 依赖环境
+  Depends on database size: 取决于数据库大小
+  Depends on reference genome size: 取决于参考基因组大小
+  Depends on sequence count: 取决于序列数量
+  Disk Usage: 磁盘占用
+  Gene Annotation: 基因注释
+  Genome Assembly: 基因组组装
+  Genomics: 基因组学
+  Input Format: 输入格式
+  Installation Status: 安装状态
+  Installed: 已安装
+  Memory Requirements: 内存要求
+  Minimum 2GB: 最小2GB
+  Minimum 4GB: 最小4GB
+  Minimum 8GB: 最小8GB
+  Multi-core highly recommended: 多核强烈推荐
+  Multi-core recommended: 多核推荐
+  Multiple formats: 多种格式
+  No detailed description, will be added later: 暂无详细介绍，日后增添
+  No information available: 暂无信息
+  Not installed: 未安装
+  Not used: 未使用
+  Output Format: 输出格式
+  Phylogenetics: 系统发育
+  Programming Language: 编程语言
+  Quality Control: 质量控制
+  RNA Sequencing: RNA测序
+  Sequence Alignment: 序列比对
+  Sequence Analysis: 序列分析
+  Single core sufficient: 单核即可
+  Source Code: 源代码
+  Standard C Library: 标准C库
+  Standard C Library, zlib: 标准C库, zlib
+  Standard C++ Library: 标准C++库
+  Statistical Analysis: 统计分析
+  Storage Usage: 存储占用
+  Tool Description: 工具介绍
+  Uninstall Tool: 卸载工具
+  Unknown: 未知
+  Unknown Category: 未知分类
+  Usage Time: 使用时间
+  Used {0}: 已使用 {0}
+  Version: 版本
+  Version v{0}: 版本 v{0}
+  ← Back: ← 返回
+  📥 Install Tool: 📥 安装工具
+  🔧 Technical Specifications: 🔧 技术规格
+  🚀 Launch: 🚀 启动
+EnhancedDetailPage:
+  "Version {0}": "版本 {0}"
+  "Installed": "已安装"
+  "Not Installed": "未安装"
+  "🚀 Launch": "🚀 启动"
+  "Uninstall": "卸载"
+  "Used {0}": "已使用 {0}"
+  "📥 Install Tool": "📥 安装工具"
+  "📖 Usage Guide": "📖 使用说明"
+  "No usage instructions yet": "暂无使用说明"
+  "2.5 hours": "2.5小时"
+  "1.2 hours": "1.2小时"
+  "45 minutes": "45分钟"
+  "3.8 hours": "3.8小时"
+  "Not Used": "未使用"
+  "📝 Tool Overview": "📝 工具介绍"
+  "No detailed description": "暂无详细介绍"
+  "🔧 Technical Specs": "🔧 技术规格"
+  "Programming Language": "编程语言"
+  "Dependencies": "依赖环境"
+  "Input Formats": "输入格式"
+  "Output Formats": "输出格式"
+  "CPU Requirements": "CPU要求"
+  "Memory Requirements": "内存要求"
+  "Disk Usage": "存储占用"
+  "Download Sources": "下载源"
+  "Single core is fine": "单核即可"
+  "Minimum 2GB": "最小2GB"
+  "Multiple formats": "多种格式"
+  "Multi-core recommended": "多核推荐"
+  "Depends on database size": "取决于数据库大小"
+  "3GB or more": "3GB以上"
+  "1GB or more": "1GB以上"
+  "4GB or more recommended": "4GB以上推荐"
+  "Official: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC": "官方: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/\nGitHub: https://github.com/s-andrews/FastQC"
+  "Official: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs": "官方: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/\nGitHub: https://github.com/ncbi/blast_plus_docs"
+  "Installing {0}%": "安装中 {0}%"
+  "Installing...": "安装中..."
+  "Uninstalling {0}%": "卸载中 {0}%"
+  "Uninstalling...": "卸载中..."
+  "🏷️ Keywords": "🏷️ 关键词标签"
+  "Quality Control": "质量控制"
+  "RNA-seq Analysis": "RNA序列分析"
+  "DNA-seq Analysis": "DNA序列分析"
+  "FASTQ Processing": "FASTQ处理"
+  "Sequencing QC": "测序质量评估"
+  "High-throughput Sequencing": "高通量测序"
+  "Sequence Alignment": "序列比对"
+  "Homology Analysis": "同源性分析"
+  "Gene Annotation": "基因注释"
+  "Protein Analysis": "蛋白质分析"
+  "Phylogenetic Analysis": "系统发育分析"
+  "Sequence Search": "序列搜索"
+  "Genome Mapping": "基因组映射"
+  "Short Read Alignment": "短序列比对"
+  "NGS Data Processing": "NGS数据处理"
+  "Reference Alignment": "参考基因组比对"
+  "BAM Processing": "BAM文件处理"
+  "SAM Processing": "SAM文件处理"
+  "Alignment Processing": "序列比对结果处理"
+  "Genomic Data Analysis": "基因组数据分析"
+  "Variant Calling": "变异检测"
+  "Genome Visualization": "基因组可视化"
+  "BAM Viewer": "BAM查看器"
+  "VCF Viewer": "VCF查看器"
+  "Variant Validation": "变异验证"
+  "Alignment Visualization": "序列比对可视化"
+  "Annotation Viewer": "注释查看"
+  "Interactive Browsing": "交互式浏览"
+  "Multi-track Display": "多轨道显示"
+  "Genome Browser": "基因组浏览器"
+  "Bioinformatics": "生物信息学"
+  "Sequence Analysis": "序列分析"
+  "Data Processing": "数据处理"
+ToolCardV2:
+  Launch: 启动
+  Install: 安装
+  Details: 详情
+ToolCard:
+  Launch: 启动
+  Details: 详情
+  Install: 安装
+  Update: 更新
+ModernDownloadCard:
+  Preparing...: 准备中...
+  No download tasks: 暂无下载任务
+  Download progress will appear when installing tools: 开始安装工具时会显示下载进度
+  Download Manager: 下载管理器
+  Clear Completed: 清空已完成
+  "Total: 0 tasks": "总计：0 个任务"
+  "{0} in progress": "{0} 个下载中"
+  "{0} completed": "{0} 个已完成"
+  "{0} failed": "{0} 个失败"
+  "All tasks completed": "所有任务已完成"
+  "Total: {0} tasks": "总计：{0} 个任务"
+ToolDetailDialog:
+  "🚀 Launch Tool": "🚀 启动工具"
+  "📦 Install": "📦 安装"
+  "Main Features": "主要功能"
+  "📚 Citation": "📚 学术引用"
+  "No citation information yet\nTo be added later": "暂无引用信息\n日后增添"
+  "Copy BibTeX": "复制 BibTeX"
+  "🔗 Related Tools": "🔗 相关工具"
+  "Close": "关闭"
+  "Tool Details": "工具详情"
+  "v{0} · Bioinformatics Tool": "v{0} · 生物信息学工具"
+  "View Documentation": "查看文档"
+  "Overview": "功能介绍"
+  "Technical Specs": "技术规格"
+  "Usage Guide": "使用说明"
+  "Version History": "版本历史"
+
+ModernFilterCard:
+  Reset: 重置
+  Apply Filter: 应用筛选
+
+ToolCardV3:
+  Launch: 启动
+  Install: 安装
+  Details: 详情
+ToolDescriptions:
+  FastQC: "用于高通量测序数据的质量控制，生成完整的 HTML 报告。"
+  BLAST: "在大型数据库中进行序列相似性搜索，支持核酸与蛋白质序列。"
+  BWA: "快速准确的短读段比对工具，用于将序列比对到参考基因组。"
+  SAMtools: "处理 SAM/BAM/CRAM 比对文件的常用工具：排序、索引、查看等。"
+  HISAT2: "用于 RNA‑seq 等的超快速、灵敏的读段比对程序。"
+  IQ-TREE: "高效的系统发育树构建工具，支持模型选择与超快速自助法。"
+  IGV: "交互式基因组浏览器，可视化 BAM/VCF 等多种基因组数据格式。"
+ToolDescriptionsBySlug:
+  fastqc: "用于高通量测序数据的质量控制，生成完整的 HTML 报告。"
+  blast: "在大型数据库中进行序列相似性搜索，支持核酸与蛋白质序列。"
+  bwa: "快速准确的短读段比对工具，用于将序列比对到参考基因组。"
+  samtools: "处理 SAM/BAM/CRAM 比对文件的常用工具：排序、索引、查看等。"
+  hisat2: "用于 RNA‑seq 等的超快速、灵敏的读段比对程序。"
+  iqtree: "高效的系统发育树构建工具，支持模型选择与超快速自助法。"
+  igv: "交互式基因组浏览器，可视化 BAM/VCF 等多种基因组数据格式。"

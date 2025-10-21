@@ -108,7 +108,7 @@ class FilterPanel(QWidget):
         header_layout.setContentsMargins(0, 0, 0, 16)
         
         # 标题 - 🔥 使用SmartPaintLabel V2，完全兼容原有样式！
-        title_label = create_smart_label_v2("筛选工具")
+        title_label = create_smart_label_v2(self.tr("筛选工具"))
         title_label.setObjectName("FilterTitle")
         title_label.setProperty("class", "FilterTitle")
         title_label.setFixedSize(200, 32)  # 固定尺寸保证布局稳定
@@ -193,7 +193,7 @@ class FilterPanel(QWidget):
         """)
         
         # 手动创建分组标题 - 🔥 SmartPaintLabel V2，完全兼容样式！
-        category_title = create_smart_label_v2("工具类型")
+        category_title = create_smart_label_v2(self.tr("工具类型"))
         category_title.setFixedSize(260, 28)  # 固定尺寸
         
         # 🎯 关键：现代化分组标题样式
@@ -243,7 +243,7 @@ class FilterPanel(QWidget):
         """)
         
         # 手动创建分组标题 - 🔥 SmartPaintLabel V2，完全兼容样式！
-        status_title = create_smart_label_v2("安装状态")
+        status_title = create_smart_label_v2(self.tr("安装状态"))
         status_title.setFixedSize(260, 28)  # 固定尺寸
         
         # 🎯 关键：现代化分组标题样式
@@ -299,7 +299,7 @@ class FilterPanel(QWidget):
         button_layout.setSpacing(12)
         
         # 重置按钮
-        self.reset_btn = QPushButton("重置")
+        self.reset_btn = QPushButton(self.tr("重置"))
         self.reset_btn.setObjectName("FilterResetBtn")
         self.reset_btn.setProperty("class", "FilterResetBtn")
         # 计算自适应按钮高度
@@ -343,7 +343,7 @@ class FilterPanel(QWidget):
         button_layout.addWidget(self.reset_btn)
         
         # 应用按钮
-        self.apply_btn = QPushButton("应用")
+        self.apply_btn = QPushButton(self.tr("应用"))
         self.apply_btn.setObjectName("FilterApplyBtn")
         self.apply_btn.setProperty("class", "FilterApplyBtn")
         self.apply_btn.setMinimumHeight(button_height)
@@ -394,12 +394,12 @@ class FilterPanel(QWidget):
         
         # 工具分类数据
         categories = [
-            ('sequence', '序列分析'),
-            ('genomics', '基因组学'),
+            ('sequence', self.tr('序列分析')),
+            ('genomics', self.tr('基因组学')),
             ('rnaseq', 'RNA-seq'),
-            ('phylogeny', '系统发育'),
-            ('quality', '质量控制'),
-            ('visualization', '可视化')
+            ('phylogeny', self.tr('系统发育')),
+            ('quality', self.tr('质量控制')),
+            ('visualization', self.tr('可视化'))
         ]
         
         # 按钮参数
@@ -531,7 +531,8 @@ class FilterPanel(QWidget):
         """
         处理分类按钮切换事件
         """
-        print(f"[筛选按钮] 分类 {category} 切换为 {'选中' if checked else '未选中'}")
+        status_text = self.tr('选中') if checked else self.tr('未选中')
+        print(f"[筛选按钮] 分类 {category} 切换为 {status_text}")
         # 这里可以添加实时筛选逻辑，但为了保持兼容性，暂时保留原有应用机制
     
     def _create_status_button_grid(self):
@@ -544,9 +545,9 @@ class FilterPanel(QWidget):
         
         # 安装状态数据
         statuses = [
-            ('installed', '已安装'),
-            ('available', '可安装'),
-            ('update', '需更新')
+            ('installed', self.tr('已安装')),
+            ('available', self.tr('可安装')),
+            ('update', self.tr('需更新'))
         ]
         
         # 按钮参数（与分类按钮一致）
@@ -638,7 +639,8 @@ class FilterPanel(QWidget):
         """
         处理状态按钮切换事件
         """
-        print(f"[筛选按钮] 状态 {status} 切换为 {'选中' if checked else '未选中'}")
+        status_text = self.tr('选中') if checked else self.tr('未选中')
+        print(f"[筛选按钮] 状态 {status} 切换为 {status_text}")
     
     def setup_connections(self):
         """

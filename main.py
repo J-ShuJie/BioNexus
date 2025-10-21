@@ -36,27 +36,38 @@ __version__ = "1.2.13"
 
 import sys
 import os
+from pathlib import Path
+
+# Ensure project root is on sys.path BEFORE importing any local packages
+project_root = Path(__file__).parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 # ============================================================================
 # 启动器增强功能 - 在导入PyQt5之前处理控制台
 # ============================================================================
 
-# 首先尝试导入启动器工具
+"""
+在导入PyQt5之前处理控制台/日志初始化。
+重要：此处已将项目根目录加入sys.path，确保导入本地utils包，
+避免被全局 site-packages 中可能存在的同名 'utils' 包遮蔽。
+"""
+# 首先尝试导入启动器工具（本地utils包）
 try:
     from utils.launcher_utils import LaunchManager, ConsoleManager
-    
+
     # 创建启动管理器
     launcher = LaunchManager("BioNexus", __version__)
-    
+
     # 设置环境和日志
     launcher.setup_environment()
     launcher.initialize_logging()
-    
+
     # 智能隐藏控制台（除非在调试模式）
     if launcher.should_hide_console():
         ConsoleManager.hide_console()
-        
-except ImportError as e:
+
+except ImportError:
     # 如果launcher_utils不可用，使用基础的控制台隐藏
     import platform
     if platform.system() == "Windows" and "--debug" not in sys.argv and "--console" not in sys.argv:
@@ -67,13 +78,8 @@ except ImportError as e:
             console_window = kernel32.GetConsoleWindow()
             if console_window:
                 user32.ShowWindow(console_window, 0)  # SW_HIDE
-        except:
+        except Exception:
             pass  # 静默失败，不影响主程序
-from pathlib import Path
-
-# 添加项目根目录到Python路径
-project_root = Path(__file__).parent
-sys.path.insert(0, str(project_root))
 
 try:
     from PyQt5.QtWidgets import QApplication, QMessageBox
@@ -174,7 +180,14 @@ try:
         except ImportError as e:
             comprehensive_logger.log_module_import("utils.unified_logger", False, str(e))
             raise
-    
+
+        try:
+            from utils.translator import TranslationManager
+            comprehensive_logger.log_module_import("utils.translator.TranslationManager", True)
+        except ImportError as e:
+            comprehensive_logger.log_module_import("utils.translator.TranslationManager", False, str(e))
+            raise
+
     comprehensive_logger.log_startup_phase("所有模块导入", "核心模块导入完成", True)
 except ImportError as e:
     error_msg = f"错误: 无法导入应用模块: {e}"
@@ -267,6 +280,14 @@ class BioNexusLauncher:
             
             # 创建QApplication实例
             self.app = QApplication(sys.argv)
+
+            # 安装全局QComboBox滚轮防误触过滤器（仅下拉展开时允许滚轮改变值）
+            try:
+                from utils.qt_wheel_guard import install_combobox_wheel_guard
+                install_combobox_wheel_guard(self.app)
+            except Exception as e:
+                # 过滤器安装失败不影响应用启动
+                startup_logger.warning(f"QComboBox滚轮过滤器安装失败: {e}")
             
             # 设置应用程序属性
             self.app.setApplicationName("BioNexus Launcher")
@@ -295,7 +316,28 @@ class BioNexusLauncher:
         
         # 使用系统默认字体（避免版权风险）
         # 让Windows 10/11自动选择合适的系统字体（Segoe UI + 中文回退字体）
-    
+
+        # 初始化翻译管理器
+        try:
+            from utils.translator import get_translator
+            from data.config import ConfigManager
+
+            # 获取翻译管理器单例
+            translator = get_translator()
+
+            # 从配置中读取语言设置
+            config_manager = ConfigManager()
+            current_locale = getattr(config_manager.settings, 'language', 'zh_CN')
+
+            # 加载语言
+            translator.load_language(current_locale)
+            startup_logger.info(f"翻译系统初始化成功, 当前语言: {current_locale}")
+            self.comprehensive_logger.log_startup_phase("翻译系统", f"已加载语言: {current_locale}")
+        except Exception as e:
+            # 翻译系统失败不应阻止应用启动,使用默认中文
+            startup_logger.warning(f"翻译系统初始化失败: {e}, 将使用默认语言")
+            self.comprehensive_logger.log_startup_phase("翻译系统", f"初始化失败: {e}, 使用默认语言", False)
+
     def check_dependencies(self):
         """
         检查系统依赖和运行环境
@@ -488,7 +530,23 @@ class BioNexusLauncher:
             # 1. 初始化监控系统
             print("正在初始化监控系统...")
             self.monitor = initialize_monitoring(__version__)
-            
+
+            # 1.5. 清理旧日志（如果启用）
+            try:
+                from data.config import ConfigManager
+                from utils.log_cleaner import get_log_cleaner
+
+                config = ConfigManager()
+                if getattr(config.settings, 'auto_clean_logs', False):
+                    print("正在清理旧日志...")
+                    cleaner = get_log_cleaner()
+                    result = cleaner.clean_old_logs(days=30)
+                    if result['success'] and result['cleaned_count'] > 0:
+                        freed_mb = result['freed_space'] / (1024 * 1024)
+                        print(f"已清理 {result['cleaned_count']} 个旧日志文件夹，释放 {freed_mb:.2f} MB 空间")
+            except Exception as e:
+                print(f"日志清理失败: {e}")
+
             # 记录启动开始
             if 'startup_logger' in globals():
                 startup_logger.info("开始启动主应用程序")
@@ -531,7 +589,19 @@ class BioNexusLauncher:
             print("显示主窗口...")
             self.main_window.show()
             self.monitor.log_user_operation("应用启动", {"窗口": "已显示"})
-            
+
+            # 7.5. 检查工具状态（如果启用）
+            try:
+                from data.config import ConfigManager
+                config = ConfigManager()
+                if getattr(config.settings, 'check_tool_status_on_startup', False):
+                    print("正在检查已安装工具状态...")
+                    # 使用QTimer延迟执行，避免阻塞UI显示
+                    from PyQt5.QtCore import QTimer
+                    QTimer.singleShot(500, self.main_window.check_all_tools_status)
+            except Exception as e:
+                print(f"工具状态检查失败: {e}")
+
             # 8. 启动事件循环
             print("BioNexus Launcher 启动完成")
             result = self.app.exec_()
@@ -626,7 +696,14 @@ def main():
             print("BioNexus Launcher v1.1.12")
             print("生物信息学工具管理器 - Python版本")
             return 0
-    
+
+    # Install tr() patch to use our simple i18n system
+    try:
+        from utils.qt_tr_patch import install_tr_patch
+        install_tr_patch()
+    except Exception as e:
+        print(f"Warning: Could not install tr() patch: {e}")
+
     # 创建并启动应用程序
     launcher = BioNexusLauncher()
     return launcher.run()

@@ -27,16 +27,16 @@ class StorageAnalysisThread(QThread):
     def run(self):
         """在后台线程中执行存储分析"""
         try:
-            self.progress_updated.emit(10, "正在扫描已安装工具...")
+            self.progress_updated.emit(10, self.tr("Scanning installed tools..."))
             calc = get_storage_calculator()
-            
-            self.progress_updated.emit(40, "正在计算工具大小...")
+
+            self.progress_updated.emit(40, self.tr("Calculating tool sizes..."))
             tools_info = calc.get_all_tools_storage_info()
-            
-            self.progress_updated.emit(70, "正在分析存储使用情况...")
+
+            self.progress_updated.emit(70, self.tr("Analyzing storage usage..."))
             summary = calc.get_storage_summary()
-            
-            self.progress_updated.emit(100, "分析完成")
+
+            self.progress_updated.emit(100, self.tr("Analysis Complete"))
             self.analysis_finished.emit(tools_info, summary)
             
         except Exception as e:
@@ -59,7 +59,7 @@ class ToolsTableWidget(QTableWidget):
     def _init_table(self):
         """初始化表格"""
         # 设置列
-        headers = ["", "工具名称", "大小", "路径", "依赖环境"]
+        headers = [self.tr(""), self.tr("Tool Name"), self.tr("Size"), self.tr("Path"), self.tr("Dependencies")]
         self.setColumnCount(len(headers))
         self.setHorizontalHeaderLabels(headers)
         
@@ -119,7 +119,7 @@ class ToolsTableWidget(QTableWidget):
             self.setItem(row, 3, QTableWidgetItem(tool.path))
             
             # 依赖环境
-            deps_text = ", ".join(tool.dependencies) if tool.dependencies else "无"
+            deps_text = ", ".join(tool.dependencies) if tool.dependencies else self.tr("None")
             self.setItem(row, 4, QTableWidgetItem(deps_text))
         
         # 默认按大小排序（降序）
@@ -198,18 +198,18 @@ class StorageManagerWidget(QWidget):
         header_layout.setSpacing(20)
         
         # 存储概览信息（左侧）
-        self.overview_info_label = QLabel("加载中...")
+        self.overview_info_label = QLabel(self.tr("Loading..."))
         self.overview_info_label.setFont(QFont("Microsoft YaHei", 11, QFont.Bold))
         self.overview_info_label.setStyleSheet("color: #2c3e50;")
         header_layout.addWidget(self.overview_info_label)
-        
+
         header_layout.addStretch()
-        
+
         # 操作按钮组（右侧）
-        self.select_all_btn = QPushButton("全选")
-        self.select_none_btn = QPushButton("取消")
-        self.refresh_btn = QPushButton("刷新")
-        self.delete_selected_btn = QPushButton("删除")
+        self.select_all_btn = QPushButton(self.tr("Select All"))
+        self.select_none_btn = QPushButton(self.tr("Cancel"))
+        self.refresh_btn = QPushButton(self.tr("Refresh"))
+        self.delete_selected_btn = QPushButton(self.tr("Delete"))
         
         # 按钮样式
         button_style = """
@@ -329,13 +329,13 @@ class StorageManagerWidget(QWidget):
             bionexus_total = calc.format_size(summary['bionexus_total'])
             
             # 组合显示文本（精简版，删除总计部分）
-            overview_text = f"剩余: {system_free} | 工具占用: {tools_count}个/{tools_size}"
-            
+            overview_text = self.tr("Remaining: {0} | Tools using: {1}/{2}").format(system_free, tools_count, tools_size)
+
             self.overview_info_label.setText(overview_text)
-            
+
         except Exception as e:
             self.logger.error(f"更新概览信息失败: {e}")
-            self.overview_info_label.setText("概览信息更新失败")
+            self.overview_info_label.setText(self.tr("Failed to update overview information"))
     
     def _on_tools_selection_changed(self, selected_tools: List[str]):
         """处理工具选择变化"""

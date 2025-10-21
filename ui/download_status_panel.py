@@ -155,7 +155,7 @@ class DownloadItem(QWidget):
         layout.addWidget(self.progress_bar)
         
         # 状态文本
-        self.status_label = QLabel("准备下载...")
+        self.status_label = QLabel(self.tr("准备下载..."))
         self.status_label.setObjectName("StatusText")
         self.status_label.setWordWrap(True)
         layout.addWidget(self.status_label)
@@ -170,14 +170,14 @@ class DownloadItem(QWidget):
     def update_progress(self, progress: int, status_text: str):
         """更新进度和状态"""
         self.progress_bar.setValue(progress)
-        
+
         # 添加进度图标到状态文本
-        if progress < 100 and not ("完成" in status_text or "成功" in status_text):
-            if "下载" in status_text:
+        if progress < 100 and not (self.tr("完成") in status_text or self.tr("成功") in status_text):
+            if self.tr("下载") in status_text:
                 icon_text = "⬇️ " + status_text
-            elif "解压" in status_text or "安装" in status_text:
+            elif self.tr("解压") in status_text or self.tr("安装") in status_text:
                 icon_text = "📦 " + status_text
-            elif "验证" in status_text:
+            elif self.tr("验证") in status_text:
                 icon_text = "🔍 " + status_text
             else:
                 icon_text = "🔄 " + status_text
@@ -185,8 +185,8 @@ class DownloadItem(QWidget):
         else:
             self.status_label.setText(status_text)
         
-        # 如果进度达到100%或状态显示完成，标记为完成
-        if progress == 100 or "完成" in status_text or "成功" in status_text:
+        # 如果进度达到100%或状态显示完成,标记为完成
+        if progress == 100 or self.tr("完成") in status_text or self.tr("成功") in status_text:
             self.mark_completed()
     
     def mark_completed(self):
@@ -195,9 +195,9 @@ class DownloadItem(QWidget):
             self.is_completed = True
             self.progress_bar.setValue(100)
             self.close_btn.show()
-            
+
             # 更新状态文本，添加完成图标
-            self.status_label.setText("✅ 安装完成")
+            self.status_label.setText(self.tr("✅ 安装完成"))
             
             # 更新样式
             self.setProperty("completed", True)
@@ -207,7 +207,7 @@ class DownloadItem(QWidget):
     def mark_failed(self, error_message: str):
         """标记为失败状态"""
         self.progress_bar.setValue(0)
-        self.status_label.setText(f"❌ {error_message}")
+        self.status_label.setText(self.tr("❌ {0}").format(error_message))
         self.close_btn.show()
         
         # 更新样式
@@ -294,7 +294,7 @@ class DownloadStatusPanel(QWidget):
         main_layout.addWidget(self.scroll_area)
         
         # 空状态提示
-        self.empty_label = QLabel("暂无下载任务")
+        self.empty_label = QLabel(self.tr("暂无下载任务"))
         self.empty_label.setObjectName("EmptyLabel")
         self.empty_label.setAlignment(Qt.AlignCenter)
         self.content_layout.insertWidget(0, self.empty_label)
@@ -320,7 +320,7 @@ class DownloadStatusPanel(QWidget):
         layout.setContentsMargins(20, 16, 20, 16)
         
         # 标题
-        title = QLabel("下载状态")
+        title = QLabel(self.tr("下载状态"))
         title.setObjectName("PanelTitle")
         font = QFont()
         font.setBold(True)
@@ -339,7 +339,7 @@ class DownloadStatusPanel(QWidget):
         layout.addStretch()
         
         # 清空按钮
-        self.clear_btn = QPushButton("清空")
+        self.clear_btn = QPushButton(self.tr("清空"))
         self.clear_btn.setObjectName("ClearBtn")
         self.clear_btn.clicked.connect(self.clear_completed)
         # 现代化按钮样式
@@ -463,12 +463,12 @@ class DownloadStatusPanel(QWidget):
         添加工具更新历史项
         专门用于显示工具版本更新记录
         """
-        update_name = f"{tool_name} 更新"
+        update_name = self.tr("{0} 更新").format(tool_name)
         if success:
-            status_text = f"✅ 从 v{from_version} 更新到 v{to_version}"
+            status_text = self.tr("✅ 从 v{0} 更新到 v{1}").format(from_version, to_version)
             self.add_or_update_download(update_name, 100, status_text)
         else:
-            status_text = f"❌ 从 v{from_version} 更新到 v{to_version} 失败"
+            status_text = self.tr("❌ 从 v{0} 更新到 v{1} 失败").format(from_version, to_version)
             self.add_or_update_download(update_name, -1, status_text)
     
     def add_update_check_result(self, found_count: int, is_manual: bool = False):
@@ -477,12 +477,12 @@ class DownloadStatusPanel(QWidget):
         显示检查到的更新数量
         """
         if found_count > 0:
-            status_text = f"🔍 发现 {found_count} 个工具更新"
-            check_name = "更新检查" + ("（手动）" if is_manual else "")
+            status_text = self.tr("🔍 发现 {0} 个工具更新").format(found_count)
+            check_name = self.tr("更新检查") + (self.tr("(手动)") if is_manual else "")
         else:
-            status_text = "🔍 所有工具都是最新版本"
-            check_name = "更新检查" + ("（手动）" if is_manual else "")
-        
+            status_text = self.tr("🔍 所有工具都是最新版本")
+            check_name = self.tr("更新检查") + (self.tr("(手动)") if is_manual else "")
+
         self.add_or_update_download(check_name, 100, status_text)
     
     def clear_old_history(self, keep_count: int = 20):

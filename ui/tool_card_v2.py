@@ -67,7 +67,7 @@ class ToolCardV2(QWidget):
             self.status_icon = QLabel("✓")
             self.status_icon.setStyleSheet("color: #10b981; font-size: 14px;")
             
-            self.launch_btn = QPushButton("启动")
+            self.launch_btn = QPushButton(self.tr("Launch"))
             self.launch_btn.setFixedSize(45, 22)
             self.launch_btn.clicked.connect(lambda: self.launch_clicked.emit(self.tool_data['name']))
             
@@ -84,11 +84,11 @@ class ToolCardV2(QWidget):
             self.status_icon = QLabel("⬇")
             self.status_icon.setStyleSheet("color: #94a3b8; font-size: 14px;")
             
-            self.install_btn = QPushButton("安装")
+            self.install_btn = QPushButton(self.tr("Install"))
             self.install_btn.setFixedSize(45, 22)
             self.install_btn.clicked.connect(lambda: self.install_clicked.emit(self.tool_data['name']))
             
-            self.detail_btn = QPushButton("详情")
+            self.detail_btn = QPushButton(self.tr("Details"))
             self.detail_btn.setFixedSize(40, 22)
             self.detail_btn.clicked.connect(self._on_detail_clicked)
             
@@ -105,7 +105,11 @@ class ToolCardV2(QWidget):
         
     def _set_description_text(self):
         """设置描述文本，使用省略号处理"""
-        description = self.tool_data.get('description', '')
+        try:
+            from utils.tool_localization import get_localized_tool_description
+            description = get_localized_tool_description(self.tool_data)
+        except Exception:
+            description = self.tool_data.get('description', '')
         
         # 使用QFontMetrics计算文本
         metrics = QFontMetrics(self.desc_label.font())
@@ -198,7 +202,7 @@ class ToolCardV2(QWidget):
         else:
             # 恢复正常状态
             if hasattr(self, 'install_btn'):
-                self.install_btn.setText("安装")
+                self.install_btn.setText(self.tr("Install"))
                 self.install_btn.setEnabled(True)
         
     def mousePressEvent(self, event):

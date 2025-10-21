@@ -70,16 +70,9 @@ class Settings:
                 'auto_update_time': '02:00'      # 自动更新时间
             }
         
-        # 设置默认路径（如果为空）
-        if not self.default_install_dir:
-            # 获取项目根目录下的 installed_tools 路径
-            project_root = Path(__file__).parent.parent
-            self.default_install_dir = str(project_root / "installed_tools")
-        
-        if not self.conda_env_path:
-            # 获取项目根目录下的 envs_cache 路径
-            project_root = Path(__file__).parent.parent
-            self.conda_env_path = str(project_root / "envs_cache")
+        # 不再自动设置默认路径
+        # 保持为空字符串，让 path_resolver 动态计算当前软件目录
+        # 这样软件移动到任何位置都能正常工作
 
 
 class ConfigManager:
@@ -112,15 +105,23 @@ class ConfigManager:
         
         # 初始化默认配置
         self._settings = Settings()
+        logging.info(f"[ConfigManager] Settings对象创建后:")
+        logging.info(f"  default_install_dir = '{self._settings.default_install_dir}'")
+        logging.info(f"  conda_env_path = '{self._settings.conda_env_path}'")
+
         self._tools: List[Dict] = []
         self._recent_tools: List[str] = []
         self._app_state = AppState()
-        
+
         # 向后兼容：添加favorite_tools属性
         self.favorite_tools = []
-        
+
         # 加载已保存的配置
         self.load_all_configs()
+
+        logging.info(f"[ConfigManager] load_all_configs()执行后:")
+        logging.info(f"  default_install_dir = '{self._settings.default_install_dir}'")
+        logging.info(f"  conda_env_path = '{self._settings.conda_env_path}'")
     
     def load_all_configs(self):
         """加载所有配置文件"""
@@ -141,15 +142,17 @@ class ConfigManager:
                 with open(self.config_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     logging.info(f"加载配置文件: {self.config_file}")
-                    
+                    logging.info(f"[ConfigManager] JSON文件内容:")
+                    logging.info(f"  default_install_dir = '{data.get('default_install_dir', 'NOT FOUND')}'")
+                    logging.info(f"  conda_env_path = '{data.get('conda_env_path', 'NOT FOUND')}'")
+
                     # 更新设置对象
                     for key, value in data.items():
                         if hasattr(self._settings, key):
-                            # 特殊处理路径设置：如果配置文件中的路径为空，保留默认值
-                            if key in ['default_install_dir', 'conda_env_path'] and not value:
-                                continue  # 跳过空路径，保持__post_init__中设置的默认值
                             setattr(self._settings, key, value)
                             logging.debug(f"加载设置: {key} = {value}")
+                            if key in ['default_install_dir', 'conda_env_path']:
+                                logging.info(f"[ConfigManager] 设置 {key} = '{value}'")
                     
                     # 向后兼容性处理：检查并添加缺失的favorite_tools字段
                     if 'favorite_tools' not in data:

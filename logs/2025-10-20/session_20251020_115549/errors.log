@@ -1,0 +1,8 @@
+[2025-10-20 11:55:51] 错误 - Qt严重错误: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx, webgl, xcb.
+ | 上下文: {"type": "FATAL", "context": "<PyQt5.QtCore.QMessageLogContext object at 0x7e54738c8e50>"}
+2025-10-20 11:55:51,053 - ERROR - 错误 - Qt严重错误: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx, webgl, xcb.
+ | 上下文: {"type": "FATAL", "context": "<PyQt5.QtCore.QMessageLogContext object at 0x7e54738c8e50>"}

@@ -4,7 +4,7 @@
 🚀 全新响应式设计，适配所有屏幕尺寸
 
 基于DetailPage的响应式系统重构，提供：
-- 🎨 现代化卡片式界面设计  
+- 🎨 现代化卡片式界面设计
 - 📱 完美的多设备适配体验
 - 🔧 智能的布局调整算法
 - ✨ 流畅的视觉过渡效果
@@ -12,8 +12,9 @@
 技术栈：ResponsiveDetailPageManager + ResponsiveSettingsCard
 确保在任何窗口尺寸下都能完美显示，杜绝内容截断问题。
 """
+import logging
 from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QPushButton, QScrollArea, QFrame,
     QFileDialog, QMessageBox, QComboBox, QProgressBar,
     QListWidget, QListWidgetItem, QTextEdit, QSplitter, QSpinBox,
@@ -22,6 +23,9 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QFont
 from data.config import ConfigManager, Settings
+
+# 获取logger
+logger = logging.getLogger('BioNexus.SettingsPanel')
 from .responsive_layout import (
     ResponsiveDetailPageManager,
     ResponsiveSettingsCard,
@@ -30,6 +34,23 @@ from .responsive_layout import (
     IOSToggleSwitch,
     validate_responsive_config
 )
+
+
+class NoWheelComboBox(QComboBox):
+    """
+    A QComboBox variant that ignores mouse wheel events unless the popup is open.
+    Prevents accidental value changes when scrolling the settings view.
+    """
+    def wheelEvent(self, event):
+        try:
+            # Allow wheel only when the dropdown list is visible (intentional selection)
+            if hasattr(self, 'view') and self.view() and self.view().isVisible():
+                super().wheelEvent(event)
+            else:
+                event.ignore()
+        except Exception:
+            # Be conservative and ignore to avoid unintended changes
+            event.ignore()
 
 
 class ToggleSwitch(QPushButton):
@@ -169,9 +190,24 @@ class SettingsPanel(QWidget):
         super().__init__(parent)
         self.config_manager = config_manager
         self.setting_switches = {}  # 存储开关控件的引用
+
+        # 翻译相关的UI元素引用(用于retranslateUi)
+        self.ui_elements = {}
+
         self.init_ui()
         self.setup_connections()
         self.load_current_settings()
+
+        # Connect translation manager language change signal
+        try:
+            logger.info("Connecting to translation system...")
+            from utils.translator import get_translator
+            translator = get_translator()
+            logger.debug("Got translator instance")
+            translator.languageChanged.connect(self.retranslateUi)
+            logger.info("SUCCESS: Connected languageChanged signal to retranslateUi slot")
+        except Exception as e:
+            logger.error(f"FAILED: Unable to connect translation system: {e}")
     
     def init_ui(self):
         """
@@ -190,36 +226,76 @@ class SettingsPanel(QWidget):
         content_container.setStyleSheet("QWidget { background-color: transparent; }")
         
         # 将响应式滚动区域添加到主布局
-        main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(0, 0, 0, 0)
+        # Check if layout already exists (in case of retranslateUi)
+        main_layout = self.layout()
+        if main_layout is None:
+            main_layout = QVBoxLayout(self)
+            main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.addWidget(scroll_area)
         
         # 🎨 创建现代化卡片式设置分组
         self._create_responsive_general_settings(content_container)
+        self._add_separator(content_container)
+
         self._create_responsive_language_settings(content_container)
+        self._add_separator(content_container)
+
         self._create_responsive_environment_settings(content_container)
+        self._add_separator(content_container)
+
         self._create_responsive_advanced_settings(content_container)
+        self._add_separator(content_container)
+
         self._create_responsive_storage_settings(content_container)
+        self._add_separator(content_container)
+
         self._create_responsive_storage_manager(content_container)  # 新增存储管理
+        self._add_separator(content_container)
+
         self._create_responsive_tool_update_settings(content_container)
-        
+
         # 添加弹性空间
         content_container.layout.addStretch()
-    
+
+    def _add_separator(self, content_container: QWidget):
+        """添加分隔线（左右留白）"""
+        from PyQt5.QtWidgets import QFrame
+
+        # 创建分隔线容器（用于控制左右留白）
+        separator_container = QWidget()
+        separator_layout = QHBoxLayout(separator_container)
+        separator_layout.setContentsMargins(20, 12, 20, 12)  # 左右留白20px，上下12px
+
+        # 创建分隔线
+        separator = QFrame()
+        separator.setFrameShape(QFrame.HLine)
+        separator.setFrameShadow(QFrame.Plain)
+        separator.setStyleSheet("""
+            QFrame {
+                background-color: #e5e7eb;
+                border: none;
+                max-height: 1px;
+                min-height: 1px;
+            }
+        """)
+
+        separator_layout.addWidget(separator)
+        content_container.add_section(separator_container)
+
     def _create_responsive_general_settings(self, content_container: QWidget):
         """
         创建响应式常规设置卡片
         """
         # 创建现代化卡片容器
-        general_card = ResponsiveSettingsCard("常规设置", content_container)
+        general_card = ResponsiveSettingsCard(self.tr("General Settings"), content_container)
         content_container.add_section(general_card)
         
         # 自动检查更新设置
         auto_update_switch = IOSToggleSwitch()
         auto_update_item = ResponsiveSettingsItem(
-            "自动检查更新", 
+            self.tr("Auto-check for updates"),
             auto_update_switch,
-            "启用后将在后台自动检查软件和工具更新",
+            self.tr("Automatically check for software and tool updates in the background"),
             general_card
         )
         general_card.add_setting_item(auto_update_item)
@@ -228,9 +304,9 @@ class SettingsPanel(QWidget):
         # 启动时检查工具状态设置
         check_status_switch = IOSToggleSwitch()
         check_status_item = ResponsiveSettingsItem(
-            "启动时检查工具状态", 
+            self.tr("Check tool status on startup"),
             check_status_switch,
-            "在应用启动时自动检查所有已安装工具的状态",
+            self.tr("Automatically check the status of all installed tools at startup"),
             general_card
         )
         general_card.add_setting_item(check_status_item)
@@ -239,9 +315,9 @@ class SettingsPanel(QWidget):
         # 显示详细安装日志设置
         detailed_log_switch = IOSToggleSwitch()
         detailed_log_item = ResponsiveSettingsItem(
-            "显示详细安装日志", 
+            self.tr("Show detailed installation logs"),
             detailed_log_switch,
-            "安装过程中显示详细的技术日志信息",
+            self.tr("Display detailed technical log information during installation"),
             general_card
         )
         general_card.add_setting_item(detailed_log_item)
@@ -252,13 +328,14 @@ class SettingsPanel(QWidget):
         创建响应式语言设置卡片
         """
         # 创建现代化卡片容器
-        language_card = ResponsiveSettingsCard("语言设置", content_container)
+        language_card = ResponsiveSettingsCard(self.tr("Language Settings"), content_container)
         content_container.add_section(language_card)
-        
-        # 界面语言选择器
-        language_combo = QComboBox()
-        language_combo.addItem("简体中文", "zh_CN")
+
+        # 界面语言选择器（禁用滚轮意外切换）
+        language_combo = NoWheelComboBox()
+        language_combo.addItem(self.tr("Simplified Chinese"), "zh_CN")
         language_combo.addItem("English", "en_US")
+        language_combo.addItem("Deutsch", "de_DE")
         language_combo.setObjectName("LanguageComboBox")
         language_combo.setStyleSheet("""
             QComboBox {
@@ -280,9 +357,9 @@ class SettingsPanel(QWidget):
         """)
         
         language_item = ResponsiveSettingsItem(
-            "界面语言",
+            self.tr("Interface Language"),
             language_combo,
-            "选择应用程序的显示语言，重启后生效",
+            self.tr("Select the display language of the application"),
             language_card
         )
         language_card.add_setting_item(language_item)
@@ -293,26 +370,26 @@ class SettingsPanel(QWidget):
         创建响应式环境设置卡片
         """
         # 创建现代化卡片容器
-        env_card = ResponsiveSettingsCard("环境设置", content_container)
+        env_card = ResponsiveSettingsCard(self.tr("Environment Settings"), content_container)
         content_container.add_section(env_card)
-        
+
         # 默认安装目录设置
         install_dir_widget = self._create_path_input_widget("default_install_dir")
         install_dir_item = ResponsiveSettingsItem(
-            "默认安装目录",
+            self.tr("Default Installation Directory"),
             install_dir_widget,
-            "设置所有工具的默认安装位置",
+            self.tr("Set the default installation location for all tools"),
             env_card,
             vertical_layout=True  # 使用垂直布局，让路径控件独占一行
         )
         env_card.add_setting_item(install_dir_item)
-        
+
         # Conda环境路径设置
         conda_path_widget = self._create_path_input_widget("conda_env_path")
         conda_path_item = ResponsiveSettingsItem(
-            "Conda环境路径",
+            self.tr("Conda Environment Path"),
             conda_path_widget,
-            "指定Conda安装路径，用于基于Python的生物信息学工具",
+            self.tr("Specify Conda installation path for Python-based bioinformatics tools"),
             env_card,
             vertical_layout=True  # 使用垂直布局，让路径控件独占一行
         )
@@ -362,7 +439,7 @@ class SettingsPanel(QWidget):
         path_input.setText(current_path)
         
         # 创建浏览按钮
-        browse_btn = QPushButton("浏览...")
+        browse_btn = QPushButton(self.tr("Browse..."))
         browse_btn.setObjectName(f"{setting_name}_browse")
         browse_btn.setStyleSheet("""
             QPushButton {
@@ -383,14 +460,40 @@ class SettingsPanel(QWidget):
                 background-color: #e5e7eb;
             }
         """)
-        
+
+        # 创建"还原为默认"按钮
+        reset_btn = QPushButton(self.tr("Reset to Default"))
+        reset_btn.setObjectName(f"{setting_name}_reset")
+        reset_btn.setStyleSheet("""
+            QPushButton {
+                padding: 8px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                background-color: #ffffff;
+                color: #6b7280;
+                font-weight: 500;
+                font-size: 13px;
+                min-width: 90px;
+            }
+            QPushButton:hover {
+                background-color: #fef3c7;
+                border-color: #f59e0b;
+                color: #d97706;
+            }
+            QPushButton:pressed {
+                background-color: #fde68a;
+            }
+        """)
+
         # 连接信号
         path_input.textChanged.connect(lambda text: self._on_path_changed(setting_name, text))
         browse_btn.clicked.connect(lambda: self._browse_directory(setting_name, path_input))
-        
+        reset_btn.clicked.connect(lambda: self._reset_to_default_path(setting_name, path_input))
+
         # 添加到布局
         layout.addWidget(path_input, 1)  # 输入框占据主要空间
-        layout.addWidget(browse_btn, 0)  # 按钮固定宽度
+        layout.addWidget(browse_btn, 0)  # 浏览按钮固定宽度
+        layout.addWidget(reset_btn, 0)   # 还原按钮固定宽度
         
         # 保存引用以便后续操作
         if not hasattr(self, 'path_inputs'):
@@ -400,21 +503,57 @@ class SettingsPanel(QWidget):
         return container
     
     def _get_current_path_value(self, setting_name: str) -> str:
-        """获取当前路径设置值"""
+        """获取当前路径设置值（显示实际使用的路径）"""
+        from pathlib import Path
+
+        # 先从配置读取
         if hasattr(self.config_manager.settings, setting_name):
             path = getattr(self.config_manager.settings, setting_name, "")
-            return path if path else ""
+            if path:
+                # 如果配置不为空，解析并返回绝对路径显示
+                path_obj = Path(path)
+                if path_obj.is_absolute():
+                    return str(path_obj)
+                else:
+                    # 相对路径，转换为绝对路径显示
+                    return str((Path.cwd() / path).resolve())
+
+        # 配置为空，返回实际使用的默认路径（直接计算，不依赖PathResolver）
+        if setting_name == 'default_install_dir':
+            # 显示实际使用的安装目录（绝对路径）
+            return str((Path.cwd() / "installed_tools").resolve())
+        elif setting_name == 'conda_env_path':
+            # 显示实际使用的环境目录（绝对路径）
+            return str((Path.cwd() / "envs_cache").resolve())
+
         return ""
     
     def _on_path_changed(self, setting_name: str, new_path: str):
         """处理路径输入框内容变更"""
         # 验证路径并保存设置
         import os
+        from pathlib import Path
+
         if new_path and os.path.exists(new_path):
+            # 智能转换：如果路径在当前软件目录下，转换为相对路径
+            current_dir = Path.cwd()
+            new_path_obj = Path(new_path).resolve()
+
+            try:
+                # 尝试计算相对路径
+                relative_path = new_path_obj.relative_to(current_dir)
+                # 成功计算相对路径，说明在当前目录下
+                path_to_save = str(relative_path)
+                print(f"[设置面板] 转换为相对路径: {new_path} -> {path_to_save}")
+            except ValueError:
+                # 不在当前目录下，保存绝对路径
+                path_to_save = str(new_path_obj)
+                print(f"[设置面板] 保留绝对路径: {path_to_save}")
+
             # 路径有效，保存设置
-            setattr(self.config_manager.settings, setting_name, new_path)
+            setattr(self.config_manager.settings, setting_name, path_to_save)
             self.config_manager.save_settings()
-            self.setting_changed.emit(setting_name, new_path)
+            self.setting_changed.emit(setting_name, path_to_save)
             
             # 设置正常样式
             if setting_name in self.path_inputs:
@@ -471,7 +610,7 @@ class SettingsPanel(QWidget):
         # 打开文件夹选择对话框
         selected_dir = QFileDialog.getExistingDirectory(
             self,
-            f"选择{self._get_setting_display_name(setting_name)}",
+            self.tr("Select {0}").format(self._get_setting_display_name(setting_name)),
             current_path,
             QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks
         )
@@ -479,32 +618,82 @@ class SettingsPanel(QWidget):
         if selected_dir:
             # 更新输入框内容（这会触发 textChanged 信号）
             path_input.setText(selected_dir)
-    
+
+    def _reset_to_default_path(self, setting_name: str, path_input: QLineEdit):
+        """还原路径为默认值（相对路径）"""
+        import logging
+        from PyQt5.QtWidgets import QMessageBox
+
+        logger = logging.getLogger(__name__)
+
+        # 获取默认路径（相对路径）
+        from utils.path_resolver import get_path_resolver
+        path_resolver = get_path_resolver()
+
+        if setting_name == 'default_install_dir':
+            default_path = str(path_resolver.get_install_dir())
+            setting_display_name = self.tr("Default Installation Directory")
+        elif setting_name == 'conda_env_path':
+            default_path = str(path_resolver.get_env_cache_dir())
+            setting_display_name = self.tr("Conda Environment Path")
+        else:
+            return
+
+        # 确认对话框
+        reply = QMessageBox.question(
+            self,
+            self.tr("Confirm Restoration"),
+            self.tr("Are you sure you want to restore <b>{0}</b> to the default path?\n\n"
+                   "Default path: {1}\n\n"
+                   "After restoration, relative paths will be used, and the software will automatically adapt to new versions upon upgrade.").format(setting_display_name, default_path),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.Yes
+        )
+
+        if reply == QMessageBox.Yes:
+            # 清空配置（设为空字符串，让系统使用默认值）
+            setattr(self.config_manager.settings, setting_name, "")
+            self.config_manager.save_settings()
+
+            logger.info(f"[设置面板] 路径已还原为默认: {setting_name}")
+
+            # 更新输入框显示（显示解析后的实际路径）
+            path_input.setText(default_path)
+
+            # 显示成功提示
+            QMessageBox.information(
+                self,
+                self.tr("Restoration Successful"),
+                self.tr("{0} has been restored to the default path.\n\n"
+                       "Current path: {1}").format(setting_display_name, default_path),
+                QMessageBox.Ok
+            )
+
     def _create_responsive_advanced_settings(self, content_container: QWidget):
         """
         创建响应式高级设置卡片
         """
         # 创建现代化卡片容器
-        advanced_card = ResponsiveSettingsCard("高级选项", content_container)
+        advanced_card = ResponsiveSettingsCard(self.tr("Advanced Options"), content_container)
         content_container.add_section(advanced_card)
-        
+
         # 使用镜像源加速下载设置
         mirror_source_switch = IOSToggleSwitch()
         mirror_source_item = ResponsiveSettingsItem(
-            "使用镜像源加速下载", 
+            self.tr("Use mirror sources to accelerate downloads"),
             mirror_source_switch,
-            "启用中国大陆镜像源，显著提升下载速度",
+            self.tr("Enable China mainland mirror sources to significantly improve download speed"),
             advanced_card
         )
         advanced_card.add_setting_item(mirror_source_item)
         self.setting_switches["use_mirror_source"] = mirror_source_switch
-        
+
         # 保留安装包缓存设置
         keep_cache_switch = IOSToggleSwitch()
         keep_cache_item = ResponsiveSettingsItem(
-            "保留安装包缓存", 
+            self.tr("Keep installation package cache"),
             keep_cache_switch,
-            "保留已下载的安装包，可节省重复下载时间",
+            self.tr("Keep downloaded installation packages to save time on repeated downloads"),
             advanced_card
         )
         advanced_card.add_setting_item(keep_cache_item)
@@ -517,11 +706,11 @@ class SettingsPanel(QWidget):
         from ui.storage_manager_widget import StorageManagerWidget
         
         # 创建现代化卡片容器
-        storage_manager_card = ResponsiveSettingsCard("存储管理", content_container)
+        storage_manager_card = ResponsiveSettingsCard(self.tr("Storage Management"), content_container)
         content_container.add_section(storage_manager_card)
-        
+
         # 添加说明文字
-        note_label = QLabel("管理已安装的生物信息学工具，查看占用空间并进行批量删除")
+        note_label = QLabel(self.tr("Manage installed bioinformatics tools, view occupied space and perform batch deletion"))
         note_label.setStyleSheet("""
             QLabel {
                 color: #64748b;
@@ -549,15 +738,15 @@ class SettingsPanel(QWidget):
         创建响应式存储设置卡片
         """
         # 创建现代化卡片容器
-        storage_card = ResponsiveSettingsCard("存储设置", content_container)
+        storage_card = ResponsiveSettingsCard(self.tr("Storage Settings"), content_container)
         content_container.add_section(storage_card)
-        
+
         # 自动清理日志设置
         auto_clean_logs_switch = IOSToggleSwitch()
         auto_clean_logs_item = ResponsiveSettingsItem(
-            "自动清理旧日志", 
+            self.tr("Auto-clean old logs"),
             auto_clean_logs_switch,
-            "自动删顳30天以前的日志文件，节省磁盘空间",
+            self.tr("Automatically delete log files older than 30 days to save disk space"),
             storage_card
         )
         storage_card.add_setting_item(auto_clean_logs_item)
@@ -582,9 +771,9 @@ class SettingsPanel(QWidget):
         """)
         
         log_size_item = ResponsiveSettingsItem(
-            "单个日志文件最大大小",
+            self.tr("Maximum size of a single log file"),
             log_size_spinbox,
-            "设置单个日志文件的最大大小，超过后自动轮转",
+            self.tr("Set the maximum size of a single log file, automatically rotate when exceeded"),
             storage_card
         )
         storage_card.add_setting_item(log_size_item)
@@ -596,11 +785,11 @@ class SettingsPanel(QWidget):
         注意：仅管理第三方工具更新，不涉及BioNexus本体更新
         """
         # 创建现代化卡片容器
-        update_card = ResponsiveSettingsCard("工具更新设置", content_container)
+        update_card = ResponsiveSettingsCard(self.tr("Tool Update Settings"), content_container)
         content_container.add_section(update_card)
-        
+
         # 添加说明文字
-        note_label = QLabel("注意：此设置仅管理第三方生物信息工具更新（如FastQC、BLAST等）")
+        note_label = QLabel(self.tr("Note: This setting only manages updates for third-party bioinformatics tools (such as FastQC, BLAST, etc.)"))
         note_label.setStyleSheet("""
             QLabel {
                 color: #64748b;
@@ -617,8 +806,8 @@ class SettingsPanel(QWidget):
         update_card.content_layout.addWidget(note_label)
         
         # 更新模式选择
-        self.update_mode_combo = QComboBox()
-        self.update_mode_combo.addItems(["自动更新", "手动更新"])
+        self.update_mode_combo = NoWheelComboBox()
+        self.update_mode_combo.addItems([self.tr("Auto Update"), self.tr("Manual Update")])
         self.update_mode_combo.setStyleSheet("""
             QComboBox {
                 padding: 8px 12px;
@@ -634,17 +823,17 @@ class SettingsPanel(QWidget):
         self.update_mode_combo.currentTextChanged.connect(self._on_update_mode_changed)
         
         update_mode_item = ResponsiveSettingsItem(
-            "更新模式",
+            self.tr("Update Mode"),
             self.update_mode_combo,
-            "选择工具更新的处理方式：自动后台更新或手动确认更新",
+            self.tr("Select how to handle tool updates: automatic background update or manual confirmation"),
             update_card
         )
         update_card.add_setting_item(update_mode_item)
         self.setting_switches["update_mode"] = self.update_mode_combo
         
         # 检查频率设置
-        self.check_frequency_combo = QComboBox()
-        self.check_frequency_combo.addItems(["每天", "每3天", "每周", "每2周"])
+        self.check_frequency_combo = NoWheelComboBox()
+        self.check_frequency_combo.addItems([self.tr("Daily"), self.tr("Every 3 Days"), self.tr("Weekly"), self.tr("Every 2 Weeks")])
         self.check_frequency_combo.setStyleSheet("""
             QComboBox {
                 padding: 8px 12px;
@@ -659,9 +848,9 @@ class SettingsPanel(QWidget):
         """)
         
         check_frequency_item = ResponsiveSettingsItem(
-            "检查频率",
+            self.tr("Check Frequency"),
             self.check_frequency_combo,
-            "设置自动检查工具更新的时间间隔",
+            self.tr("Set the time interval for automatically checking tool updates"),
             update_card
         )
         update_card.add_setting_item(check_frequency_item)
@@ -670,16 +859,16 @@ class SettingsPanel(QWidget):
         # 显示通知设置（手动模式专用）
         self.show_notification_switch = IOSToggleSwitch()
         notification_item = ResponsiveSettingsItem(
-            "显示更新通知",
+            self.tr("Show update notifications"),
             self.show_notification_switch,
-            "当发现工具更新时显示桌面通知（仅手动模式）",
+            self.tr("Show desktop notifications when tool updates are found (manual mode only)"),
             update_card
         )
         update_card.add_setting_item(notification_item)
         self.setting_switches["tool_update_show_notification"] = self.show_notification_switch
         
         # 立即检查按钮
-        check_now_btn = QPushButton("立即检查工具更新")
+        check_now_btn = QPushButton(self.tr("Check for Tool Updates Now"))
         check_now_btn.setStyleSheet("""
             QPushButton {
                 padding: 10px 20px;
@@ -707,15 +896,15 @@ class SettingsPanel(QWidget):
         check_now_btn.clicked.connect(self._check_updates_now)
         
         check_now_item = ResponsiveSettingsItem(
-            "手动检查更新",
+            self.tr("Manual Check for Updates"),
             check_now_btn,
-            "立即检查所有已安装工具是否有新版本可用",
+            self.tr("Immediately check if new versions are available for all installed tools"),
             update_card
         )
         update_card.add_setting_item(check_now_item)
         
         # 初始化显示状态
-        self._on_update_mode_changed("自动更新")
+        self._on_update_mode_changed(self.tr("Auto Update"))
     
     def setup_connections(self):
         """
@@ -724,6 +913,11 @@ class SettingsPanel(QWidget):
         """
         # 开关控件事件连接
         for setting_name, switch in self.setting_switches.items():
+            # 特殊处理语言选择器
+            if setting_name == 'language' and isinstance(switch, QComboBox):
+                switch.currentIndexChanged.connect(self._on_language_changed)
+                continue
+
             # 检查是否是响应式开关
             if hasattr(switch, 'toggled_signal'):
                 switch.toggled_signal.connect(
@@ -733,7 +927,7 @@ class SettingsPanel(QWidget):
                 switch.toggled.connect(
                     lambda value, name=setting_name: self._on_setting_changed(name, value)
                 )
-        
+
         # 目录选择按钮事件连接
         for button in self.findChildren(QPushButton):
             setting_name = button.property("setting")
@@ -765,8 +959,8 @@ class SettingsPanel(QWidget):
         
         # 打开目录选择对话框
         directory = QFileDialog.getExistingDirectory(
-            self, 
-            f"选择{self._get_setting_display_name(setting_name)}", 
+            self,
+            self.tr("Select {0}").format(self._get_setting_display_name(setting_name)),
             current_path
         )
         
@@ -779,9 +973,9 @@ class SettingsPanel(QWidget):
             
             # 显示成功消息
             QMessageBox.information(
-                self, 
-                "设置更新", 
-                f"{self._get_setting_display_name(setting_name)}已更新为:\n{directory}"
+                self,
+                self.tr("Settings Updated"),
+                self.tr("{0} has been updated to:\n{1}").format(self._get_setting_display_name(setting_name), directory)
             )
             
             print(f"目录设置更新: \"{setting_name}\" = {directory}")
@@ -789,8 +983,8 @@ class SettingsPanel(QWidget):
     def _get_setting_display_name(self, setting_name: str) -> str:
         """获取设置项的显示名称"""
         name_map = {
-            "default_install_dir": "默认安装目录",
-            "conda_env_path": "Conda环境路径"
+            "default_install_dir": self.tr("Default Installation Directory"),
+            "conda_env_path": self.tr("Conda Environment Path")
         }
         return name_map.get(setting_name, setting_name)
     
@@ -799,7 +993,7 @@ class SettingsPanel(QWidget):
         更新模式变更处理
         根据选择的模式显示或隐藏相关设置
         """
-        is_manual = (mode_text == "手动更新")
+        is_manual = (mode_text == self.tr("Manual Update"))
         
         # 根据模式显示/隐藏通知设置
         if hasattr(self, 'show_notification_switch'):
@@ -822,8 +1016,8 @@ class SettingsPanel(QWidget):
         # 暂时显示一个信息对话框
         QMessageBox.information(
             self,
-            "检查更新",
-            "正在检查工具更新...\n\n此功能将在后续版本中完善。"
+            self.tr("Check for Updates"),
+            self.tr("Checking for tool updates...\n\nThis feature will be improved in future versions.")
         )
     
     def load_current_settings(self):
@@ -852,34 +1046,34 @@ class SettingsPanel(QWidget):
                 if setting_name == 'language' and hasattr(settings, 'language'):
                     # 语言设置特殊处理
                     language_map = {
-                        'zh_CN': '简体中文',
+                        'zh_CN': self.tr('简体中文'),
                         'en_US': 'English'
                     }
                     current_lang = getattr(settings, 'language', 'zh_CN')
-                    display_text = language_map.get(current_lang, '简体中文')
+                    display_text = language_map.get(current_lang, self.tr('简体中文'))
                     control.setCurrentText(display_text)
                 elif setting_name == 'update_mode':
                     # 工具更新模式设置
                     if hasattr(settings, 'tool_update') and settings.tool_update:
                         mode_value = settings.tool_update.get('mode', 'manual')
-                        display_text = '自动更新' if mode_value == 'auto' else '手动更新'
+                        display_text = self.tr('自动更新') if mode_value == 'auto' else self.tr('手动更新')
                         control.setCurrentText(display_text)
                     else:
-                        control.setCurrentText('手动更新')  # 默认手动模式
+                        control.setCurrentText(self.tr('手动更新'))  # 默认手动模式
                 elif setting_name == 'check_frequency':
                     # 检查频率设置
                     if hasattr(settings, 'tool_update') and settings.tool_update:
                         frequency = settings.tool_update.get('check_frequency', 'weekly')
                         frequency_map = {
-                            'daily': '每天',
-                            'every_3_days': '每3天',
-                            'weekly': '每周',
-                            'bi_weekly': '每2周'
+                            'daily': self.tr('每天'),
+                            'every_3_days': self.tr('每3天'),
+                            'weekly': self.tr('每周'),
+                            'bi_weekly': self.tr('每2周')
                         }
-                        display_text = frequency_map.get(frequency, '每周')
+                        display_text = frequency_map.get(frequency, self.tr('每周'))
                         control.setCurrentText(display_text)
                     else:
-                        control.setCurrentText('每周')  # 默认每周
+                        control.setCurrentText(self.tr('每周'))  # 默认每周
             elif isinstance(control, QSpinBox):
                 # 数字输入框使用setValue
                 if hasattr(settings, setting_name):
@@ -889,26 +1083,26 @@ class SettingsPanel(QWidget):
         # 更新语言选择
         if hasattr(self, 'language_combo'):
             language_map = {
-                'zh_CN': '中文',
+                'zh_CN': self.tr('中文'),
                 'en_US': 'English',
-                'ja_JP': '日本語',
+                'ja_JP': self.tr('日本語'),
                 'es_ES': 'Español',
                 'fr_FR': 'Français'
             }
             current_lang = getattr(settings, 'language', 'zh_CN')
-            display_lang = language_map.get(current_lang, '中文')
+            display_lang = language_map.get(current_lang, self.tr('中文'))
             self.language_combo.setCurrentText(display_lang)
         
         # 更新工具更新设置
         if hasattr(self, 'update_mode_combo') and hasattr(settings, 'tool_update'):
             update_mode = settings.tool_update.get('update_mode', 'auto')
-            mode_text = '自动更新' if update_mode == 'auto' else '手动更新'
+            mode_text = self.tr('自动更新') if update_mode == 'auto' else self.tr('手动更新')
             self.update_mode_combo.setCurrentText(mode_text)
-            
+
             # 更新检查频率
-            frequency_map = {1: '每天', 3: '每3天', 7: '每周', 14: '每2周'}
+            frequency_map = {1: self.tr('每天'), 3: self.tr('每3天'), 7: self.tr('每周'), 14: self.tr('每2周')}
             check_freq = settings.tool_update.get('check_frequency', 1)
-            freq_text = frequency_map.get(check_freq, '每天')
+            freq_text = frequency_map.get(check_freq, self.tr('每天'))
             self.check_frequency_combo.setCurrentText(freq_text)
     
     def refresh_settings(self):
@@ -921,9 +1115,9 @@ class SettingsPanel(QWidget):
         对应JavaScript中的恢复默认功能
         """
         reply = QMessageBox.question(
-            self, 
-            "确认重置", 
-            "确定要将所有设置重置为默认值吗？",
+            self,
+            self.tr("Confirm Reset"),
+            self.tr("Are you sure you want to reset all settings to default values?"),
             QMessageBox.Yes | QMessageBox.No
         )
         
@@ -945,7 +1139,7 @@ class SettingsPanel(QWidget):
                 value = getattr(default_settings, setting_name)
                 self.setting_changed.emit(setting_name, value)
             
-            QMessageBox.information(self, "重置完成", "所有设置已重置为默认值！")
+            QMessageBox.information(self, self.tr("Reset Complete"), self.tr("All settings have been reset to default values!"))
     
     def export_settings(self):
         """
@@ -953,9 +1147,9 @@ class SettingsPanel(QWidget):
         对应JavaScript中的导出配置功能
         """
         file_path, _ = QFileDialog.getSaveFileName(
-            self, 
-            "导出设置", 
-            "bionexus_settings.json", 
+            self,
+            self.tr("Export Settings"),
+            "bionexus_settings.json",
             "JSON Files (*.json)"
         )
         
@@ -968,10 +1162,10 @@ class SettingsPanel(QWidget):
                 with open(file_path, 'w', encoding='utf-8') as f:
                     json.dump(settings_data, f, ensure_ascii=False, indent=2)
                 
-                QMessageBox.information(self, "导出成功", f"设置已导出到:\n{file_path}")
-                
+                QMessageBox.information(self, self.tr("Export Successful"), self.tr("Settings have been exported to:\n{0}").format(file_path))
+
             except Exception as e:
-                QMessageBox.critical(self, "导出失败", f"导出设置时发生错误:\n{str(e)}")
+                QMessageBox.critical(self, self.tr("Export Failed"), self.tr("Error occurred while exporting settings:\n{0}").format(str(e)))
     
     def import_settings(self):
         """
@@ -979,9 +1173,9 @@ class SettingsPanel(QWidget):
         对应JavaScript中的导入配置功能
         """
         file_path, _ = QFileDialog.getOpenFileName(
-            self, 
-            "导入设置", 
-            "", 
+            self,
+            self.tr("Import Settings"),
+            "",
             "JSON Files (*.json)"
         )
         
@@ -1003,14 +1197,14 @@ class SettingsPanel(QWidget):
                 # 刷新UI
                 self.load_current_settings()
                 
-                QMessageBox.information(self, "导入成功", "设置配置已成功导入！")
-                
+                QMessageBox.information(self, self.tr("Import Successful"), self.tr("Settings configuration has been successfully imported!"))
+
             except Exception as e:
-                QMessageBox.critical(self, "导入失败", f"导入设置时发生错误:\n{str(e)}")
+                QMessageBox.critical(self, self.tr("Import Failed"), self.tr("Error occurred while importing settings:\n{0}").format(str(e)))
     
     def _on_update_mode_changed(self, mode_text: str):
         """处理更新模式变更"""
-        is_manual = mode_text == "手动更新"
+        is_manual = mode_text == self.tr("Manual Update")
         
         # 显示/隐藏相关设置控件
         # 自动模式显示检查频率，手动模式显示通知开关
@@ -1036,8 +1230,8 @@ class SettingsPanel(QWidget):
         """清理下载缓存"""
         reply = QMessageBox.question(
             self,
-            "确认清理",
-            "确定要清理所有下载缓存文件吗？\n这将释放磁盘空间，但可能需要重新下载工具。",
+            self.tr("Confirm Cleanup"),
+            self.tr("Are you sure you want to clear all download cache files?\nThis will free up disk space but may require re-downloading tools."),
             QMessageBox.Yes | QMessageBox.No
         )
         
@@ -1058,13 +1252,13 @@ class SettingsPanel(QWidget):
                     shutil.rmtree(cache_dir)
                     cache_dir.mkdir()
                 
-                QMessageBox.information(self, "清理完成", "下载缓存已清理完成！")
-                
+                QMessageBox.information(self, self.tr("Cleanup Complete"), self.tr("Download cache has been cleaned up!"))
+
                 # 刷新存储信息显示
                 self._update_storage_info()
-                
+
             except Exception as e:
-                QMessageBox.critical(self, "清理失败", f"清理缓存时发生错误:\n{str(e)}")
+                QMessageBox.critical(self, self.tr("Cleanup Failed"), self.tr("Error occurred while clearing cache:\n{0}").format(str(e)))
     
     def _update_storage_info(self):
         """更新存储使用信息"""
@@ -1114,8 +1308,8 @@ class SettingsPanel(QWidget):
             
         except Exception as e:
             print(f"更新存储信息失败: {e}")
-            self.disk_usage_label.setText("计算失败")
-            self.cache_size_label.setText("计算失败")
+            self.disk_usage_label.setText(self.tr("Calculation failed"))
+            self.cache_size_label.setText(self.tr("Calculation failed"))
     
     def _update_installed_tools_list(self):
         """更新已安装工具列表"""
@@ -1163,7 +1357,7 @@ class SettingsPanel(QWidget):
             
             # 如果没有已安装工具
             if self.installed_tools_list.count() == 0:
-                item = QListWidgetItem("暂无已安装的工具")
+                item = QListWidgetItem(self.tr("No installed tools"))
                 item.setFlags(item.flags() & ~Qt.ItemIsEnabled)
                 self.installed_tools_list.addItem(item)
                 
@@ -1192,7 +1386,7 @@ class SettingsPanel(QWidget):
                 self._perform_tool_deletion(tools_to_delete, cleanup_environments)
                 
         except Exception as e:
-            QMessageBox.critical(self, "错误", f"处理删除请求时发生错误:\n{str(e)}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Error occurred while processing deletion request:\n{0}").format(str(e)))
     
     def _perform_tool_deletion(self, tool_names: list, cleanup_environments: bool):
         """执行工具删除操作"""
@@ -1236,22 +1430,22 @@ class SettingsPanel(QWidget):
                 self.storage_manager.refresh_data()
             
             # 显示结果
-            result_msg = f"成功删除 {len(deleted_tools)} 个工具"
+            result_msg = self.tr("Successfully deleted {0} tool(s)").format(len(deleted_tools))
             if cleaned_environments:
-                result_msg += f"，清理了 {len(cleaned_environments)} 个环境"
-            
+                result_msg += self.tr(", cleaned up {0} environment(s)").format(len(cleaned_environments))
+
             if failed_tools:
-                result_msg += f"\n\n删除失败的工具:\n"
+                result_msg += self.tr("\n\nFailed to delete tools:")
                 for tool, error in failed_tools:
                     result_msg += f"• {tool}: {error}\n"
-            
+
             if deleted_tools or cleaned_environments:
-                QMessageBox.information(self, "删除完成", result_msg)
+                QMessageBox.information(self, self.tr("Deletion Complete"), result_msg)
             else:
-                QMessageBox.warning(self, "删除失败", "没有工具被成功删除")
-                
+                QMessageBox.warning(self, self.tr("Deletion Failed"), self.tr("No tools were successfully deleted"))
+
         except Exception as e:
-            QMessageBox.critical(self, "删除失败", f"删除工具时发生错误:\n{str(e)}")
+            QMessageBox.critical(self, self.tr("Deletion Failed"), self.tr("Error occurred while deleting tool:\n{0}").format(str(e)))
     
     def check_disk_space_before_install(self, required_size: int = 0) -> bool:
         """
@@ -1272,7 +1466,7 @@ class SettingsPanel(QWidget):
             if show_warning:
                 reply = QMessageBox.question(
                     self,
-                    "存储空间警告",
+                    self.tr("Storage Space Warning"),
                     warning_msg,
                     QMessageBox.Yes | QMessageBox.No,
                     QMessageBox.No
@@ -1281,9 +1475,214 @@ class SettingsPanel(QWidget):
                 return reply == QMessageBox.Yes
             
             return True
-            
+
         except Exception as e:
             # 检查失败时允许继续安装，但记录错误
             import logging
             logging.error(f"磁盘空间检查失败: {e}")
             return True
+
+    def _on_language_changed(self, index: int):
+        """
+        Language switch handler (real-time switch, no restart needed)
+        """
+        logger.info(f"_on_language_changed CALLED, index={index}")
+        try:
+            language_combo = self.setting_switches.get('language')
+            if not language_combo:
+                logger.error("ERROR: Unable to get language_combo")
+                return
+
+            logger.debug(f"Got language_combo: {language_combo}")
+
+            # Get selected language code
+            locale = language_combo.itemData(index)
+            if not locale:
+                logger.error(f"ERROR: index={index} has no associated language code")
+                return
+
+            logger.info(f"Selected language code: {locale}")
+
+            # Update config
+            logger.debug(f"Updating config: language={locale}")
+            self.config_manager.update_setting('language', locale)
+            logger.debug("Config updated")
+
+            # Switch language via TranslationManager
+            from utils.translator import get_translator
+            translator = get_translator()
+            logger.debug("Got translator instance")
+
+            logger.info(f"Calling translator.switch_language({locale})")
+            success = translator.switch_language(locale)
+            logger.info(f"translator.switch_language returned: {success}")
+
+            if success:
+                logger.info(f"SUCCESS: Language switched to: {locale}")
+                # TranslationManager will emit languageChanged signal
+                # All connected UI components will auto-call retranslateUi
+                try:
+                    # 清除下拉框焦点，避免继续滚轮时再次触发切换
+                    language_combo.clearFocus()
+                    # 将焦点移回设置面板，让滚轮用于滚动页面
+                    self.setFocus()
+                except Exception:
+                    pass
+            else:
+                logger.error(f"FAILED: Language switch failed: {locale}")
+                # Notify user translation file unavailable
+                from PyQt5.QtWidgets import QMessageBox
+                QMessageBox.warning(
+                    self,
+                    self.tr("Language Switch"),
+                    self.tr("Translation files are not available, please check the installation")
+                )
+
+        except Exception as e:
+            logger.error(f"EXCEPTION in language change handler: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def retranslateUi(self, locale: str = None):
+        """
+        Retranslate UI text - Real-time language switching
+        Triggered by TranslationManager's languageChanged signal
+
+        Args:
+            locale: New language code
+        """
+        logger.info("=" * 60)
+        logger.info("retranslateUi CALLED")
+        logger.info(f"Locale parameter: {locale}")
+
+        # Show loading overlay
+        self._show_loading_overlay()
+
+        # Save current settings values
+        logger.info("Step 1/5: Saving current settings values...")
+        current_settings = {}
+        for setting_name, control in self.setting_switches.items():
+            try:
+                if isinstance(control, ToggleSwitch):
+                    current_settings[setting_name] = control.is_active
+                elif isinstance(control, QComboBox):
+                    if setting_name == 'language':
+                        current_settings[setting_name] = control.itemData(control.currentIndex())
+                    else:
+                        current_settings[setting_name] = control.currentText()
+                elif isinstance(control, QSpinBox):
+                    current_settings[setting_name] = control.value()
+            except Exception as e:
+                logger.warning(f"WARN: Failed to save setting {setting_name}: {e}")
+        logger.info(f"SUCCESS: Saved {len(current_settings)} setting values")
+
+        # Clear and recreate UI
+        try:
+            # Clear main layout
+            logger.info("Step 2/5: Clearing main layout...")
+            old_layout = self.layout()
+            if old_layout:
+                item_count = old_layout.count()
+                logger.debug(f"Layout has {item_count} items")
+                # Remove all widgets
+                while old_layout.count():
+                    item = old_layout.takeAt(0)
+                    if item.widget():
+                        widget = item.widget()
+                        widget.setParent(None)
+                        widget.deleteLater()
+                logger.info("SUCCESS: Layout cleared")
+            else:
+                logger.warning("WARN: Layout does not exist")
+
+            # Reinitialize
+            logger.info("Step 3/5: Reinitializing UI...")
+            self.setting_switches = {}
+            self.init_ui()
+            logger.info(f"SUCCESS: UI reinitialized, new settings count: {len(self.setting_switches)}")
+
+            # Restore settings values
+            logger.info("Step 4/5: Restoring settings values...")
+            restored_count = 0
+            for setting_name, value in current_settings.items():
+                control = self.setting_switches.get(setting_name)
+                if control:
+                    try:
+                        if isinstance(control, ToggleSwitch):
+                            control.set_state(value)
+                        elif isinstance(control, QComboBox):
+                            if setting_name == 'language':
+                                # Find index by locale
+                                for i in range(control.count()):
+                                    if control.itemData(i) == value:
+                                        control.setCurrentIndex(i)
+                                        break
+                            else:
+                                control.setCurrentText(value)
+                        elif isinstance(control, QSpinBox):
+                            control.setValue(value)
+                        restored_count += 1
+                    except Exception as e:
+                        logger.warning(f"WARN: Failed to restore setting {setting_name}: {e}")
+                else:
+                    logger.warning(f"WARN: Control {setting_name} not found")
+            logger.info(f"SUCCESS: Restored {restored_count}/{len(current_settings)} setting values")
+
+            # Reconnect signals
+            logger.info("Step 5/5: Reconnecting signals...")
+            self.setup_connections()
+            logger.info("SUCCESS: Signals reconnected")
+
+            logger.info("=" * 60)
+
+        except Exception as e:
+            logger.error(f"EXCEPTION in retranslateUi: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            # Always hide loading overlay
+            self._hide_loading_overlay()
+
+    def _show_loading_overlay(self):
+        """Show a loading overlay with spinner"""
+        from PyQt5.QtWidgets import QLabel
+        from PyQt5.QtCore import Qt
+        from PyQt5.QtGui import QFont
+
+        # Create overlay if it doesn't exist
+        if not hasattr(self, '_loading_overlay'):
+            self._loading_overlay = QWidget(self)
+            self._loading_overlay.setStyleSheet("""
+                QWidget {
+                    background-color: rgba(255, 255, 255, 0.95);
+                }
+            """)
+
+            # Create layout
+            overlay_layout = QVBoxLayout(self._loading_overlay)
+            overlay_layout.setAlignment(Qt.AlignCenter)
+
+            # Loading text
+            loading_label = QLabel(self.tr("🔄 Switching language..."))
+            loading_label.setAlignment(Qt.AlignCenter)
+            font = QFont()
+            font.setPointSize(14)
+            font.setWeight(QFont.Bold)
+            loading_label.setFont(font)
+            loading_label.setStyleSheet("color: #3b82f6; background: transparent;")
+
+            overlay_layout.addWidget(loading_label)
+
+        # Show and resize to cover entire panel
+        self._loading_overlay.setGeometry(self.rect())
+        self._loading_overlay.raise_()
+        self._loading_overlay.show()
+
+        # Force immediate update
+        from PyQt5.QtWidgets import QApplication
+        QApplication.processEvents()
+
+    def _hide_loading_overlay(self):
+        """Hide the loading overlay"""
+        if hasattr(self, '_loading_overlay'):
+            self._loading_overlay.hide()

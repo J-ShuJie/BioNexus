@@ -64,7 +64,12 @@ class ToolCard(QWidget):
         self._update_status_display()
         
         # 描述文本 - 中间区域，允许换行
-        description = self.tool_data['description'][:40] + "..."  # 限制长度
+        try:
+            from utils.tool_localization import get_localized_tool_description
+            base_desc = get_localized_tool_description(self.tool_data)
+        except Exception:
+            base_desc = self.tool_data.get('description', '')
+        description = (base_desc[:40] + "...") if base_desc else ""
         self.description_label = QLabel(description, self)
         self.description_label.setGeometry(4, 16, 73, 20)
         self.description_label.setWordWrap(True)
@@ -96,35 +101,32 @@ class ToolCard(QWidget):
         status = self.tool_data['status']
         
         if status == ToolStatus.INSTALLED.value:
-            # 已安装：启动按钮
-            self.launch_btn = QPushButton("启动", self)
+            # 已安装：启动按钮 + 详情按钮
+            self.launch_btn = QPushButton(self.tr("Launch"), self)
             self.launch_btn.setGeometry(4, 38, 30, 10)  # 紧凑按钮
             self.launch_btn.setObjectName("LaunchBtn")
-            
             # 详情按钮
-            self.info_btn = QPushButton("详情", self)
+            self.info_btn = QPushButton(self.tr("Details"), self)
             self.info_btn.setGeometry(36, 38, 30, 10)
             self.info_btn.setObjectName("InfoBtn")
-            
+        
         elif status == ToolStatus.AVAILABLE.value:
-            # 未安装：安装按钮
-            self.install_btn = QPushButton("安装", self)
+            # 未安装：安装按钮 + 详情按钮
+            self.install_btn = QPushButton(self.tr("Install"), self)
             self.install_btn.setGeometry(4, 38, 30, 10)
             self.install_btn.setObjectName("InstallBtn")
-            
             # 详情按钮
-            self.info_btn = QPushButton("详情", self)
+            self.info_btn = QPushButton(self.tr("Details"), self)
             self.info_btn.setGeometry(36, 38, 30, 10)
             self.info_btn.setObjectName("InfoBtn")
         
         elif status == ToolStatus.UPDATE.value:
-            # 需要更新：更新按钮
-            self.update_btn = QPushButton("更新", self)
+            # 需要更新：更新按钮 + 详情按钮
+            self.update_btn = QPushButton(self.tr("Update"), self)
             self.update_btn.setGeometry(4, 38, 30, 10)
             self.update_btn.setObjectName("UpdateBtn")
-            
             # 详情按钮
-            self.info_btn = QPushButton("详情", self)
+            self.info_btn = QPushButton(self.tr("Details"), self)
             self.info_btn.setGeometry(36, 38, 30, 10)
             self.info_btn.setObjectName("InfoBtn")
         
@@ -225,7 +227,7 @@ class ToolCard(QWidget):
         else:
             # 恢复正常状态
             if hasattr(self, 'install_btn'):
-                self.install_btn.setText("安装")
+                self.install_btn.setText(self.tr("Install"))
                 self.install_btn.setEnabled(True)
     
     def get_tool_name(self) -> str:

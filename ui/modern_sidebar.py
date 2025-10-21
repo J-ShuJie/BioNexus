@@ -30,18 +30,18 @@ class ModernSidebar(QWidget):
     
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
         # 状态变量
         self.current_view = "all-tools"
         self.recent_tools = []
         self.hover_item = None
         self.animation_progress = 0.0
-        
+
         # 布局区域
         self.search_rect = QRect()
         self.nav_rects = {}  # view_name -> QRect
         self.recent_rects = {}  # tool_name -> QRect
-        
+
         # 颜色主题
         self.colors = {
             'bg_start': QColor(250, 251, 252),      # #fafbfc
@@ -55,14 +55,17 @@ class ModernSidebar(QWidget):
             'status_installed': QColor(16, 185, 129),     # #10b981
             'status_available': QColor(245, 158, 11),     # #f59e0b
         }
-        
+
         # 动画设置
         self.hover_animation = QPropertyAnimation(self, b"animationProgress")
         self.hover_animation.setDuration(200)
         self.hover_animation.setEasingCurve(QEasingCurve.OutCubic)
-        
+
         self._setup_widget()
         self._create_search_input()
+
+        # Connect to language change signal
+        self._connect_language_change()
     
     def _setup_widget(self):
         """设置控件属性"""
@@ -76,7 +79,7 @@ class ModernSidebar(QWidget):
     def _create_search_input(self):
         """创建搜索输入框（仍使用 QLineEdit，但样式通过 paintEvent 绘制）"""
         self.search_input = QLineEdit(self)
-        self.search_input.setPlaceholderText("搜索生物信息学工具...")
+        self.search_input.setPlaceholderText(self.tr("Search bioinformatics tools..."))
         
         # 设置透明背景，我们通过 paintEvent 绘制外观
         self.search_input.setStyleSheet("""
@@ -178,9 +181,9 @@ class ModernSidebar(QWidget):
     def _draw_navigation(self, painter):
         """绘制导航菜单"""
         nav_items = [
-            ("all-tools", "📋", "全部工具"),
-            ("my-tools", "⭐", "我的工具"),
-            ("settings", "⚙️", "设置")
+            ("all-tools", "📋", self.tr("All Tools")),
+            ("my-tools", "⭐", self.tr("My Tools")),
+            ("settings", "⚙️", self.tr("Settings"))
         ]
         
         y_offset = 70  # 搜索框下方
@@ -259,7 +262,7 @@ class ModernSidebar(QWidget):
         font.setWeight(QFont.DemiBold)
         painter.setFont(font)
         painter.setPen(QPen(self.colors['text_secondary']))
-        painter.drawText(15, title_y, "🕒 最近使用")
+        painter.drawText(15, title_y, self.tr("🕒 Recently Used"))
         
         # 工具列表
         y_offset = title_y + 15
@@ -402,3 +405,21 @@ class ModernSidebar(QWidget):
     def get_search_text(self):
         """获取搜索文本"""
         return self.search_input.text()
+
+    def _connect_language_change(self):
+        """Connect to language change signal"""
+        try:
+            from utils.translator import get_translator
+            translator = get_translator()
+            translator.languageChanged.connect(self.retranslateUi)
+        except Exception as e:
+            print(f"Warning: Could not connect language change signal in ModernSidebar: {e}")
+
+    def retranslateUi(self):
+        """Update all translatable text - called when language changes"""
+        # Update search box placeholder
+        if hasattr(self, 'search_input'):
+            self.search_input.setPlaceholderText(self.tr("Search bioinformatics tools..."))
+
+        # Trigger repaint to update all painted text (nav items, recent tools title)
+        self.update()

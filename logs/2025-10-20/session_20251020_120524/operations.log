@@ -1,0 +1,38 @@
+2025-10-20 12:05:29,933 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:30,786 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
+2025-10-20 12:05:33,102 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:33,112 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-20 12:05:45,480 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:45,491 - BioNexus.operations - INFO - 视图切换: settings → my-tools - 成功
+2025-10-20 12:05:45,990 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:46,000 - BioNexus.operations - INFO - 视图切换: my-tools → settings - 成功
+2025-10-20 12:05:46,011 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "auto_update", "新值": "True"}
+2025-10-20 12:05:46,020 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "auto_update", "新值": "True"}
+2025-10-20 12:05:46,032 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "check_tool_status_on_startup", "新值": "True"}
+2025-10-20 12:05:46,040 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "check_tool_status_on_startup", "新值": "True"}
+2025-10-20 12:05:46,054 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "show_detailed_install_log", "新值": "True"}
+2025-10-20 12:05:46,061 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "show_detailed_install_log", "新值": "True"}
+2025-10-20 12:05:46,065 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "tool_update_show_notification", "新值": "True"}
+2025-10-20 12:05:46,073 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "tool_update_show_notification", "新值": "True"}
+2025-10-20 12:05:46,532 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:46,543 - BioNexus.operations - INFO - 视图切换: settings → all-tools - 成功
+2025-10-20 12:05:47,791 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:05:47,801 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-20 12:06:11,509 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:06:11,519 - BioNexus.operations - INFO - 视图切换: settings → my-tools - 成功
+2025-10-20 12:06:11,875 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:06:11,884 - BioNexus.operations - INFO - 视图切换: my-tools → settings - 成功
+2025-10-20 12:06:11,896 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "auto_update", "新值": "True"}
+2025-10-20 12:06:11,905 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "auto_update", "新值": "True"}
+2025-10-20 12:06:11,918 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "check_tool_status_on_startup", "新值": "True"}
+2025-10-20 12:06:11,926 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "check_tool_status_on_startup", "新值": "True"}
+2025-10-20 12:06:11,936 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "show_detailed_install_log", "新值": "True"}
+2025-10-20 12:06:11,943 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "show_detailed_install_log", "新值": "True"}
+2025-10-20 12:06:11,951 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "tool_update_show_notification", "新值": "True"}
+2025-10-20 12:06:11,959 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "tool_update_show_notification", "新值": "True"}
+2025-10-20 12:06:12,751 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:06:12,761 - BioNexus.operations - INFO - 视图切换: settings → all-tools - 成功
+2025-10-20 12:06:13,447 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
+2025-10-20 12:06:13,456 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
+2025-10-20 12:06:14,666 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
+2025-10-20 12:06:14,851 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

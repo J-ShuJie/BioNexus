@@ -70,6 +70,7 @@ class ModernToolbar(QWidget):
         }
         
         self._setup_widget()
+        self._connect_language_change()
     
     def _setup_widget(self):
         """设置控件属性"""
@@ -463,7 +464,7 @@ class ModernToolbar(QWidget):
         painter.setPen(QPen(text_color))
         
         # 绘制箭头和文字
-        text = "← 返回"
+        text = self.tr("← Back")
         fm = QFontMetrics(font)
         text_rect = fm.boundingRect(text)
         text_x = int(draw_rect.x() + (draw_rect.width() - text_rect.width()) // 2)
@@ -519,4 +520,18 @@ class ModernToolbar(QWidget):
         """窗口大小改变事件 - 确保按钮位置正确"""
         super().resizeEvent(event)
         self._update_button_rects()
+        self.update()
+
+    def _connect_language_change(self):
+        """Connect to language change signal"""
+        try:
+            from utils.translator import get_translator
+            translator = get_translator()
+            translator.languageChanged.connect(self.retranslateUi)
+        except Exception as e:
+            print(f"Warning: Could not connect language change signal in ModernToolbar: {e}")
+
+    def retranslateUi(self):
+        """Retranslate toolbar text - for language switching"""
+        # Toolbar text is drawn in paintEvent, so just trigger a repaint
         self.update()

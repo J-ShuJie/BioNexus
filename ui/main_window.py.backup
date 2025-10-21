@@ -1,0 +1,2039 @@
+"""
+主窗口组件
+整合所有UI组件，提供完整的应用界面
+包含标题栏、边栏、主内容区、工具栏等
+对应HTML中的整体布局结构和JavaScript交互逻辑
+
+⚠️  铁律：禁止使用 QLabel 和 QText 系列组件！
+🚫 IRON RULE: NEVER USE QLabel, QTextEdit, QTextBrowser, QPlainTextEdit
+✅ 替代方案: 使用 smart_text_module.py 中的智能文本组件
+📋 原因: QLabel/QText 存在文字截断、字体渲染、DPI适配等问题
+"""
+import logging
+from PyQt5.QtWidgets import (
+    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
+    QStackedWidget, QScrollArea, QFrame, QPushButton,
+    QLabel, QGridLayout, QMessageBox, QApplication
+)
+from PyQt5.QtCore import Qt, pyqtSignal, QTimer
+from PyQt5.QtGui import QFont, QIcon
+
+# 获取logger
+logger = logging.getLogger('BioNexus.MainWindow')
+
+from .modern_sidebar import ModernSidebar
+from .modern_toolbar import ModernToolbar
+from .tool_card import ToolCard
+from .tool_card_v2 import ToolCardV2
+from .tool_detail_panel import ToolDetailDialog
+# 使用增强版详情页面，解决自适应高度和边距问题
+from .tool_detail_enhanced import EnhancedDetailPage as ToolDetailPage
+# from .filter_panel import FilterPanel  # 旧系统，已停用
+from .modern_filter_card import ModernFilterCard
+from .modern_download_card import ModernDownloadCard
+from .overlay_widget import OverlayWidget
+from .settings_panel import SettingsPanel
+from .card_grid_container import CardScrollArea
+# from .download_status_panel import DownloadStatusPanel  # 旧系统，已停用
+from core.tool_manager import ToolManager
+from data.config import ConfigManager
+from data.models import AppState
+from utils.unified_logger import get_logger, performance_monitor, operation_logger
+from utils.path_resolver import PathResolver
+# EnvironmentManager 延迟加载，不是启动必需的
+
+
+# TitleBar类已移除，使用系统原生标题栏
+
+
+class MainWindow(QMainWindow):
+    """
+    主窗口类
+    整合所有UI组件，提供完整的应用界面
+    对应HTML中的整体布局和JavaScript应用逻辑
+    """
+    
+    def __init__(self):
+        super().__init__()
+        
+        print(f"🔧 [DEBUG VERSION] 主窗口版本: 2025-09-09-10:25 - 修复下载状态链路中断问题")
+        
+        # 初始化组件
+        self.config_manager = ConfigManager()
+
+        # 设置路径解析器的配置管理器（让所有工具都能读取路径配置）
+        PathResolver.set_config_manager(self.config_manager)
+
+        self.tool_manager = ToolManager(self.config_manager)
+        self.app_state = self.config_manager.app_state
+
+        # 环境管理器延迟加载（按需初始化，不是启动必需的）
+        self.env_manager = None
+        
+        # 初始化新的工具更新系统（仅管理第三方工具，不包括BioNexus本体）
+        from core.updater.tool_update_controller import ToolUpdateController
+        self.tool_update_controller = ToolUpdateController(self, self.config_manager, self.tool_manager)
+        
+        # 启动时更新检查标记（不再使用定时器延迟）
+        
+        # 监控系统（由main.py设置）
+        self.monitor = None
+        
+        # UI组件
+        self.title_bar = None
+        self.sidebar = None
+        self.tools_grid = None
+        self.settings_panel = None
+        self.filter_panel = None
+        self.download_status_panel = None
+        self.main_content_stack = None
+        self.current_detail_page = None  # 当前详情页面
+        self.overlay = None  # 遮罩层
+        
+        # 筛选状态
+        self.current_search = ""
+        self.current_categories = []
+        self.current_statuses = []
+
+        # Initialization completion flag - prevent retranslateUi before UI is ready
+        self._ui_fully_initialized = False
+
+        self.init_ui()
+        self.setup_connections()
+        self.load_styles()
+        self.load_initial_data()
+        self._set_window_icon()
+
+        # 检测并处理路径迁移
+        self._check_and_handle_path_migration()
+
+        # Connect translation manager language change signal
+        try:
+            logger.info("Connecting to translation system...")
+            from utils.translator import get_translator
+            translator = get_translator()
+            logger.debug("Got translator instance")
+            translator.languageChanged.connect(self.retranslateUi)
+            logger.info("SUCCESS: Connected languageChanged signal to retranslateUi slot")
+        except Exception as e:
+            logger.error(f"FAILED: Unable to connect translation system: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+
+        # Mark UI as fully initialized - retranslateUi can now safely run
+        self._ui_fully_initialized = True
+        logger.info("MainWindow initialization completed - UI ready for language switching")
+
+    def _calculate_window_size(self):
+        """
+        计算智能窗口大小
+        屏幕尺寸的50%，但不小于900x600
+        """
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+        
+        # 计算屏幕50%的大小
+        screen_width = screen_geometry.width()
+        screen_height = screen_geometry.height()
+        
+        # 50%屏幕大小
+        window_width = int(screen_width * 0.5)
+        window_height = int(screen_height * 0.5)
+        
+        # 设置最小值
+        min_width = 900
+        min_height = 600
+        
+        # 应用最小值限制
+        window_width = max(window_width, min_width)
+        window_height = max(window_height, min_height)
+        
+        return window_width, window_height
+    
+    def _center_window(self):
+        """
+        将窗口居中显示
+        """
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+        
+        window_geometry = self.geometry()
+        
+        # 计算居中位置
+        x = (screen_geometry.width() - window_geometry.width()) // 2
+        y = (screen_geometry.height() - window_geometry.height()) // 2
+        
+        # 移动窗口到中心
+        self.move(x, y)
+    
+    def init_ui(self):
+        """
+        初始化用户界面
+        对应HTML中的主体结构
+        """
+        # 设置窗口属性
+        self.setWindowTitle("BioNexus Launcher")
+        
+        # 智能设置窗口大小
+        window_width, window_height = self._calculate_window_size()
+        
+        # 设置最小尺寸：确保至少能显示1个完整卡片
+        # 最小宽度 = 侧边栏(250) + 最小边距*2(40) + 卡片宽度(81) + 预留空间(29)
+        min_window_width = 250 + 40 + 81 + 29  # = 400px
+        self.setMinimumSize(max(min_window_width, 400), 600)
+        self.resize(window_width, window_height)
+        
+        # 窗口居中显示
+        self._center_window()
+        
+        # 创建中央部件
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        
+        # 主布局 - 垂直排列：标题栏 + 内容区
+        main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        
+        # 使用系统原生标题栏（移除了自定义标题栏）
+        
+        # 主内容区域 - 水平排列：边栏 + 内容
+        content_layout = QHBoxLayout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(0)
+        
+        # 左侧边栏 - 使用现代化版本
+        self.sidebar = ModernSidebar()
+        content_layout.addWidget(self.sidebar)
+        
+        # 右侧主内容区
+        self._create_main_content_area(content_layout)
+        
+        content_widget = QWidget()
+        content_widget.setLayout(content_layout)
+        main_layout.addWidget(content_widget)
+        
+        # 创建遮罩层（初始隐藏）
+        self.overlay = OverlayWidget(central_widget)
+        self.overlay.clicked.connect(self._on_overlay_clicked)
+        
+        central_widget.setLayout(main_layout)
+        
+        # 使用系统原生标题栏（已移除无边框设置）
+    
+    def _create_main_content_area(self, content_layout: QHBoxLayout):
+        """
+        创建右侧主内容区域
+        对应HTML中的main-content结构
+        """
+        # 主内容容器
+        main_content_widget = QWidget()
+        main_content_widget.setObjectName("MainContent")
+        main_content_layout = QVBoxLayout()
+        main_content_layout.setContentsMargins(0, 0, 0, 0)
+        main_content_layout.setSpacing(0)
+        
+        # 顶部工具栏
+        self._create_toolbar(main_content_layout)
+        
+        # 内容堆栈 - 切换不同视图
+        self.main_content_stack = QStackedWidget()
+        
+        # 工具展示区域 - 使用新的卡片滚动容器
+        self.tools_grid = CardScrollArea()
+        self.main_content_stack.addWidget(self.tools_grid)
+        
+        # 设置面板
+        self.settings_panel = SettingsPanel(self.config_manager)
+        self.main_content_stack.addWidget(self.settings_panel)
+        
+        main_content_layout.addWidget(self.main_content_stack)
+        main_content_widget.setLayout(main_content_layout)
+        
+        # 主内容区域包含筛选面板的容器
+        content_container = QWidget()
+        container_layout = QHBoxLayout()
+        container_layout.setContentsMargins(0, 0, 0, 0)
+        container_layout.setSpacing(0)
+        
+        container_layout.addWidget(main_content_widget)
+        
+        # 现代化悬浮卡片系统
+        self.modern_filter_card = None
+        
+        # 🎯 预创建下载卡片（隐藏状态），确保能记录所有下载/卸载状态
+        print("【MAIN WINDOW】开始预创建下载卡片...")
+        try:
+            from .modern_download_card import ModernDownloadCard
+            self.modern_download_card = ModernDownloadCard(self)
+            self.modern_download_card.card_closed.connect(self._close_modern_download_card)
+            self.modern_download_card.hide()  # 初始隐藏
+            print(f"【MAIN WINDOW】✅ 预创建下载卡片完成，对象地址: {id(self.modern_download_card)}")
+        except Exception as e:
+            print(f"【MAIN WINDOW】❌ 预创建下载卡片失败: {e}")
+            self.modern_download_card = None
+        
+        # 初始化下载按钮状态（在面板创建后）
+        self._update_download_button_state()
+        
+        content_container.setLayout(container_layout)
+        content_layout.addWidget(content_container)
+    
+    def _create_toolbar(self, main_content_layout: QVBoxLayout):
+        """
+        创建现代化工具栏 - 与侧边栏中线对齐
+        """
+        # 使用现代化工具栏
+        self.toolbar = ModernToolbar()
+        
+        # 连接信号
+        print(f"【CONNECTION DEBUG】连接工具栏信号")
+        print(f"【CONNECTION DEBUG】工具栏对象: {self.toolbar}")
+        print(f"【CONNECTION DEBUG】filter_clicked 信号: {self.toolbar.filter_clicked}")
+        self.toolbar.filter_clicked.connect(self._toggle_filter_panel)
+        print(f"【CONNECTION DEBUG】已连接 filter_clicked -> _toggle_filter_panel")
+        
+        self.toolbar.download_status_clicked.connect(self._toggle_download_status_panel)
+        print(f"【CONNECTION DEBUG】已连接 download_status_clicked -> _toggle_download_status_panel")
+        
+        # 连接返回按钮信号
+        self.toolbar.back_clicked.connect(self.go_back_to_main)
+        print(f"【CONNECTION DEBUG】已连接 back_clicked -> go_back_to_main")
+        
+        main_content_layout.addWidget(self.toolbar)
+        
+        # 为兼容性创建虚拟的按钮引用
+        self.filter_btn = type('obj', (object,), {'clicked': self.toolbar.filter_clicked})
+        self.download_status_btn = type('obj', (object,), {'clicked': self.toolbar.download_status_clicked})
+    
+    def setup_connections(self):
+        """
+        设置信号连接
+        对应JavaScript中的事件监听器设置
+        """
+        # 已移除自定义标题栏相关连接（使用系统原生标题栏）
+        
+        # 边栏信号连接
+        self.sidebar.search_changed.connect(self._on_search_changed)
+        self.sidebar.view_changed.connect(self._on_view_changed)
+        self.sidebar.recent_tool_clicked.connect(self._on_recent_tool_clicked)
+        
+        # 移除重复的筛选按钮连接 - 已在 _create_toolbar 中连接
+        print(f"【CONNECTION DEBUG】跳过重复的筛选按钮连接，因为已在工具栏创建时连接")
+        
+        # 现代化卡片信号连接将在卡片创建时动态连接
+        
+        # 工具管理器信号连接
+        print("[系统初始化] 开始连接工具管理器信号")
+        self.tool_manager.tool_installed.connect(self._on_tool_installed)
+        print("[系统初始化] tool_installed 信号已连接到 _on_tool_installed")
+        self.tool_manager.tool_launched.connect(self._on_tool_launched)
+        print("[系统初始化] tool_launched 信号已连接到 _on_tool_launched")
+        self.tool_manager.tool_uninstalled.connect(self._on_tool_uninstalled)
+        print("[系统初始化] tool_uninstalled 信号已连接到 _on_tool_uninstalled")
+        self.tool_manager.installation_progress.connect(self._on_installation_progress)
+        print("[系统初始化] installation_progress 信号已连接到 _on_installation_progress")
+        self.tool_manager.error_occurred.connect(self._on_tool_error)
+        print("[系统初始化] error_occurred 信号已连接到 _on_tool_error")
+        print("[系统初始化] 所有工具管理器信号连接完成")
+        
+        # 设置面板信号连接
+        self.settings_panel.setting_changed.connect(self._on_setting_changed)
+        
+        # 卡片滚动区域信号连接
+        self.tools_grid.card_selected.connect(self._on_card_selected)
+        self.tools_grid.card_install_clicked.connect(self._on_install_tool)
+        self.tools_grid.card_launch_clicked.connect(self._on_launch_tool)
+        # 连接收藏信号（如果卡片容器支持）
+        if hasattr(self.tools_grid, 'card_favorite_toggled'):
+            self.tools_grid.card_favorite_toggled.connect(self._on_tool_favorite_toggled)
+        # 移除了card_info_clicked，改为直接显示详情页面
+    
+    def load_styles(self):
+        """
+        加载样式表
+        对应HTML中的CSS样式
+        """
+        try:
+            from pathlib import Path
+            style_file = Path(__file__).parent.parent / "resources" / "styles.qss"
+            
+            if style_file.exists():
+                with open(style_file, 'r', encoding='utf-8') as f:
+                    self.setStyleSheet(f.read())
+            else:
+                print(f"样式文件不存在: {style_file}")
+        except Exception as e:
+            print(f"加载样式文件失败: {e}")
+    
+    def load_initial_data(self):
+        """
+        加载初始数据
+        对应JavaScript中的初始化数据加载
+        """
+        # 更新工具显示
+        self._update_tools_display()
+        
+        # 更新最近使用工具列表
+        self.sidebar.update_recent_tools(self.config_manager.recent_tools)
+        
+        # 设置默认视图
+        self._on_view_changed("all-tools")
+        
+        # 设置工具更新连接并立即检查更新（作为加载过程的一部分）
+        self._setup_tool_update_connections()
+        if self._should_check_updates_on_startup():
+            self._startup_check_for_updates()
+    
+    @performance_monitor("更新工具显示")
+    def _update_tools_display(self):
+        """更新工具显示"""
+        # 使用新架构从tool_manager获取工具数据
+        tools_data = self.tool_manager.get_all_tools_data()
+        
+        # 添加收藏状态到工具数据
+        favorite_count = 0
+        for tool in tools_data:
+            tool['is_favorite'] = self.config_manager.is_tool_favorite(tool['name'])
+            if tool['is_favorite']:
+                favorite_count += 1
+        
+        # 应用排序
+        tools_data = self._sort_tools(tools_data)
+        
+        print(f"[工具显示] 共 {len(tools_data)} 个工具，其中 {favorite_count} 个已收藏，已按首字母排序")
+        
+        self.tools_grid.set_cards(tools_data)
+        self._apply_current_filters()
+    
+    def _sort_tools(self, tools_data: list, sort_by: str = "name") -> list:
+        """
+        对工具列表进行排序
+        
+        Args:
+            tools_data: 工具数据列表
+            sort_by: 排序方式，支持：
+                - "name": 按工具名称首字母排序（默认）
+                - "status": 按状态排序（已安装优先）
+                - "category": 按分类排序
+                - "favorite": 按收藏状态排序（收藏优先）
+        
+        Returns:
+            排序后的工具列表
+        """
+        if sort_by == "name":
+            # 按首字母排序（忽略大小写）
+            return sorted(tools_data, key=lambda tool: tool['name'].lower())
+        
+        elif sort_by == "status":
+            # 按状态排序：已安装 > 需更新 > 未安装
+            status_priority = {"installed": 0, "update": 1, "available": 2}
+            return sorted(tools_data, key=lambda tool: (
+                status_priority.get(tool['status'], 3),  # 状态优先级
+                tool['name'].lower()  # 同状态内按名称排序
+            ))
+        
+        elif sort_by == "category":
+            # 按分类排序，同分类内按名称排序
+            return sorted(tools_data, key=lambda tool: (
+                tool.get('category', 'unknown').lower(),
+                tool['name'].lower()
+            ))
+        
+        elif sort_by == "favorite":
+            # 按收藏状态排序：收藏优先，同状态内按名称排序
+            return sorted(tools_data, key=lambda tool: (
+                not tool.get('is_favorite', False),  # False(未收藏)排在后面
+                tool['name'].lower()
+            ))
+        
+        else:
+            # 默认按名称排序
+            return sorted(tools_data, key=lambda tool: tool['name'].lower())
+    
+    def _force_refresh_all_ui(self):
+        """强制刷新所有UI组件 - 解决状态不同步问题"""
+        print("[强制刷新] 开始刷新所有UI组件")
+        
+        # 1. 强制刷新工具列表
+        self._update_tools_display()
+        
+        # 2. 强制更新工具网格
+        self.tools_grid.update()
+        self.tools_grid.repaint()
+        
+        # 3. 强制刷新主窗口
+        self.update()
+        self.repaint()
+        
+        # 4. 处理所有待处理的事件
+        from PyQt5.QtWidgets import QApplication
+        QApplication.processEvents()
+        
+        print("[强制刷新] UI刷新完成")
+
+    @performance_monitor("应用筛选条件")
+    def _apply_current_filters(self):
+        """应用当前的筛选条件"""
+        self.tools_grid.filter_cards(
+            self.current_search, 
+            self.current_categories, 
+            self.current_statuses
+        )
+    
+    # _toggle_maximize方法已移除（使用原生标题栏后不需要）
+    
+    def _on_search_changed(self, search_term: str):
+        """
+        搜索内容变化处理
+        对应JavaScript中的handleSearch函数
+        """
+        # 记录搜索操作到监控系统
+        if self.monitor and search_term.strip():
+            self.monitor.log_user_operation("搜索工具", {"关键词": search_term})
+        
+        self.current_search = search_term.lower()
+        self._apply_current_filters()
+    
+    @performance_monitor("视图切换")
+    @operation_logger("视图切换")
+    def _on_view_changed(self, view_name: str):
+        """
+        视图切换处理
+        对应JavaScript中的handleNavClick和renderCurrentView函数
+        """
+        # 记录视图切换到监控系统
+        if self.monitor:
+            self.monitor.log_view_switch(
+                self.app_state.current_view, 
+                view_name, 
+                True
+            )
+        
+        self.app_state.current_view = view_name
+        self.current_view = view_name  # 保存当前视图用于收藏刷新
+        
+        if view_name == "all-tools":
+            # 显示所有工具 - 重要：清除所有筛选条件显示全部工具
+            self.main_content_stack.setCurrentWidget(self.tools_grid)
+            # 清除筛选条件，确保显示所有工具
+            self.current_categories = []
+            self.current_statuses = []
+            self._update_tools_display()
+            
+        elif view_name == "my-tools":
+            # 显示收藏的工具
+            self.main_content_stack.setCurrentWidget(self.tools_grid)
+            self._show_favorite_tools()
+            
+        elif view_name == "settings":
+            # 显示设置页面
+            self.main_content_stack.setCurrentWidget(self.settings_panel)
+            self.settings_panel.refresh_settings()
+    
+    def _on_recent_tool_clicked(self, tool_name: str):
+        """
+        最近使用工具点击处理
+        对应JavaScript中的handleRecentItemClick函数
+        """
+        # 记录最近工具点击到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("点击最近工具", {"工具名": tool_name})
+        
+        # 切换到全部工具视图
+        self.sidebar.set_active_view("all-tools")
+        self._on_view_changed("all-tools")
+        
+        # 清除搜索条件
+        self.sidebar.clear_search()
+        self.current_search = ""
+        self.current_categories = []
+        self.current_statuses = []
+        
+        # 选中对应工具
+        QTimer.singleShot(100, lambda: self._select_tool_card(tool_name))
+    
+    def _toggle_filter_panel(self):
+        """
+        切换筛选面板显示状态 - 1.2.1版本
+        对应JavaScript中的handleFilterToggle函数
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"【MAIN WINDOW DEBUG】=== _toggle_filter_panel 函数被调用 ===")
+        print(f"【MAIN WINDOW DEBUG】=== _toggle_filter_panel 函数被调用 ===")
+        
+        # 现代化悬浮卡片切换逻辑（旧系统已移除）
+        print(f"【MAIN WINDOW DEBUG】检查现代化筛选卡片状态: card={self.modern_filter_card}")
+        logger.info(f"【MAIN WINDOW DEBUG】检查现代化筛选卡片状态: card={self.modern_filter_card}")
+        
+        if self.modern_filter_card and self.modern_filter_card.isVisible():
+            print(f"【MAIN WINDOW DEBUG】现代化筛选卡片当前可见，准备关闭")
+            logger.info(f"【MAIN WINDOW DEBUG】现代化筛选卡片当前可见，准备关闭")
+            self._close_modern_filter_card()
+        else:
+            print(f"【MAIN WINDOW DEBUG】现代化筛选卡片当前隐藏，准备打开")
+            logger.info(f"【MAIN WINDOW DEBUG】现代化筛选卡片当前隐藏，准备打开")
+            try:
+                self._open_modern_filter_card()
+                print(f"【MAIN WINDOW DEBUG】_open_modern_filter_card 调用完成")
+                logger.info(f"【MAIN WINDOW DEBUG】_open_modern_filter_card 调用完成")
+            except Exception as e:
+                print(f"【MAIN WINDOW DEBUG】_open_modern_filter_card 发生异常: {e}")
+                logger.error(f"【MAIN WINDOW DEBUG】_open_modern_filter_card 发生异常: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        print(f"【MAIN WINDOW DEBUG】=== _toggle_filter_panel 函数执行完成 ===")
+        logger.info(f"【MAIN WINDOW DEBUG】=== _toggle_filter_panel 函数执行完成 ===")
+        
+        # 记录到日志 - 移到最后，确保函数完整执行
+        if hasattr(self, 'monitor') and self.monitor:
+            self.monitor.log_user_operation("筛选按钮点击", {"function": "_toggle_filter_panel"})
+            print(f"【MAIN WINDOW DEBUG】已记录到监控日志")
+    
+    def _open_filter_panel(self):
+        """打开筛选面板 - 1.2.1版本"""
+        print(f"【MAIN WINDOW DEBUG】=== _open_filter_panel 函数开始执行 ===")
+        
+        # 如果下载状态面板打开，先关闭它（保持相互排斥的新特性）
+        if hasattr(self, 'modern_download_card') and self.modern_download_card and self.modern_download_card.isVisible():
+            print(f"【MAIN WINDOW DEBUG】关闭现代化下载卡片")
+            self._close_modern_download_card()
+        # 旧系统已移除，无需检查 download_status_panel
+            
+        # 设置当前筛选状态
+        print(f"【MAIN WINDOW DEBUG】设置筛选状态: 分类={self.current_categories}, 状态={self.current_statuses}")
+        self.filter_panel.set_selected_filters(self.current_categories, self.current_statuses)
+        
+        print(f"【MAIN WINDOW DEBUG】调用 filter_panel.show() 显示筛选面板")
+        
+        # 强制重新应用圆角样式（每次显示时都重新设置）
+        self.filter_panel.setWindowFlags(Qt.FramelessWindowHint)
+        self.filter_panel.setAttribute(Qt.WA_TranslucentBackground, True)
+        import logging
+        logger = logging.getLogger('BioNexus.ui_operations')
+        logger.info(f"[主窗口] 强制重新应用筛选面板圆角样式")
+        print(f"【MAIN WINDOW DEBUG】强制重新应用筛选面板圆角样式")
+        
+        # 悬浮面板定位：右侧边距20px，顶部边距100px
+        panel_x = self.width() - self.filter_panel.width() - 20
+        panel_y = 100
+        self.filter_panel.move(panel_x, panel_y)
+        print(f"【MAIN WINDOW DEBUG】筛选面板定位到: ({panel_x}, {panel_y})")
+        
+        self.filter_panel.show()
+        print(f"【MAIN WINDOW DEBUG】筛选面板 show() 调用完成，当前可见状态: {self.filter_panel.isVisible()}")
+        
+        # 更新现代化工具栏状态（适配新的工具栏）
+        if hasattr(self, 'toolbar'):
+            print(f"【MAIN WINDOW DEBUG】更新工具栏筛选状态为激活")
+            self.toolbar.set_filter_active(True)
+        
+        print(f"【MAIN WINDOW DEBUG】=== _open_filter_panel 函数执行完成 ===")
+    
+    # def _close_filter_panel(self):  # 旧系统方法，已不再使用
+    
+    def _open_modern_filter_card(self):
+        """打开现代化筛选卡片 - 参考下载卡片逻辑"""
+        import logging
+        logger = logging.getLogger(__name__)
+        print(f"【MAIN WINDOW DEBUG】=== _open_modern_filter_card 函数开始执行 ===")
+        logger.info(f"【MAIN WINDOW DEBUG】=== _open_modern_filter_card 函数开始执行 ===")
+        
+        # 如果下载卡片打开，先关闭它（相互排斥）
+        if self.modern_download_card and self.modern_download_card.isVisible():
+            print(f"【MAIN WINDOW DEBUG】关闭现代化下载卡片")
+            self._close_modern_download_card()
+        # 旧系统已移除，无需检查 download_status_panel
+            
+        # 如果卡片不存在，创建它
+        if not self.modern_filter_card:
+            print("【MAIN WINDOW DEBUG】创建现代化筛选卡片")
+            logger.info("【MAIN WINDOW DEBUG】创建现代化筛选卡片")
+            from .modern_filter_card import ModernFilterCard
+            try:
+                self.modern_filter_card = ModernFilterCard(self)
+                print(f"【MAIN WINDOW DEBUG】筛选卡片创建成功: {self.modern_filter_card}")
+            except Exception as e:
+                print(f"【MAIN WINDOW ERROR】创建筛选卡片失败: {e}")
+                import traceback
+                print(f"【MAIN WINDOW ERROR】详细错误:\n{traceback.format_exc()}")
+                return
+            
+            # 连接信号 - 保持与旧版本完全一致
+            self.modern_filter_card.filters_applied.connect(self._on_filters_applied)
+            self.modern_filter_card.filters_reset.connect(self._on_filters_reset)
+            self.modern_filter_card.card_closed.connect(self._close_modern_filter_card)
+            print("【MAIN WINDOW DEBUG】现代化筛选卡片信号连接完成")
+            logger.info("【MAIN WINDOW DEBUG】现代化筛选卡片信号连接完成")
+        
+        # 设置当前筛选状态
+        print(f"【MAIN WINDOW DEBUG】设置筛选状态: 分类={self.current_categories}, 状态={self.current_statuses}")
+        logger.info(f"【MAIN WINDOW DEBUG】设置筛选状态: 分类={self.current_categories}, 状态={self.current_statuses}")
+        self.modern_filter_card.set_selected_filters(self.current_categories, self.current_statuses)
+        
+        # 获取精确的位置信息 - 与下载卡片完全一致的逻辑
+        toolbar_rect = self.toolbar.geometry()
+        filter_button_rect = self.toolbar.filter_rect
+        
+        print(f"【MAIN WINDOW DEBUG】工具栏矩形: {toolbar_rect}")
+        print(f"【MAIN WINDOW DEBUG】筛选按钮矩形: {filter_button_rect}")
+        logger.info(f"【MAIN WINDOW DEBUG】工具栏矩形: {toolbar_rect}")
+        logger.info(f"【MAIN WINDOW DEBUG】筛选按钮矩形: {filter_button_rect}")
+        
+        # 显示遮罩层
+        print("【MAIN WINDOW DEBUG】显示遮罩层")
+        logger.info("【MAIN WINDOW DEBUG】显示遮罩层")
+        self.overlay.show_animated()
+        
+        # 显示卡片 - 使用智能定位（靠右对齐）
+        print("【MAIN WINDOW DEBUG】开始显示现代化筛选卡片")
+        logger.info("【MAIN WINDOW DEBUG】开始显示现代化筛选卡片")
+        try:
+            self.modern_filter_card.show_aligned_to_toolbar(
+                toolbar_bottom=toolbar_rect.bottom(),
+                button_rect=filter_button_rect,
+                window_rect=self.rect()
+            )
+        except Exception as e:
+            print(f"【MAIN WINDOW ERROR】显示筛选卡片失败: {e}")
+            import traceback
+            print(f"【MAIN WINDOW ERROR】详细错误:\n{traceback.format_exc()}")
+        
+        # 确保卡片在遮罩层之上
+        print("【MAIN WINDOW DEBUG】将卡片提升到最前面")
+        logger.info("【MAIN WINDOW DEBUG】将卡片提升到最前面")
+        self.modern_filter_card.raise_()
+        
+        # 更新工具栏状态 - 设置按钮为激活状态（蓝色）
+        if hasattr(self, 'toolbar'):
+            print(f"【MAIN WINDOW DEBUG】更新工具栏筛选状态为激活")
+            self.toolbar.set_filter_active(True)
+        
+        print(f"【MAIN WINDOW DEBUG】=== _open_modern_filter_card 函数执行完成 ===")
+    
+    def _close_modern_filter_card(self):
+        """关闭现代化筛选卡片"""
+        print(f"【MAIN WINDOW DEBUG】=== _close_modern_filter_card 函数开始执行 ===")
+        
+        if self.modern_filter_card:
+            print(f"【MAIN WINDOW DEBUG】隐藏现代化筛选卡片")
+            self.modern_filter_card.hide()
+        
+        # 隐藏遮罩层
+        self.overlay.hide_animated()
+        
+        # 更新工具栏状态
+        if hasattr(self, 'toolbar'):
+            print(f"【MAIN WINDOW DEBUG】更新工具栏筛选状态为非激活")
+            self.toolbar.set_filter_active(False)
+        
+        print(f"【MAIN WINDOW DEBUG】=== _close_modern_filter_card 函数执行完成 ===")
+    
+    
+    def _on_filters_applied(self, categories: list, statuses: list):
+        """
+        筛选条件应用处理
+        对应JavaScript中的applyFilters函数
+        """
+        # 记录筛选应用到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("应用筛选", {
+                "分类": categories,
+                "状态": statuses
+            })
+        
+        self.current_categories = categories
+        self.current_statuses = statuses
+        self._apply_current_filters()
+    
+    def _on_overlay_clicked(self):
+        """遮罩层点击事件处理 - 关闭所有弹出卡片"""
+        # 关闭筛选卡片
+        if self.modern_filter_card and self.modern_filter_card.isVisible():
+            self._close_modern_filter_card()
+        
+        # 关闭下载卡片
+        if self.modern_download_card and self.modern_download_card.isVisible():
+            self._close_modern_download_card()
+    
+    def _on_filters_reset(self):
+        """
+        筛选条件重置处理
+        对应JavaScript中的resetFilters函数
+        """
+        # 记录筛选重置到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("重置筛选", {})
+        
+        self.current_categories = []
+        self.current_statuses = []
+        self._apply_current_filters()
+    
+    def _on_tool_installed(self, tool_name: str):
+        """工具安装完成处理"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        msg = f"[日志-I1] *** _on_tool_installed 信号回调被触发 ***: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        
+        # 记录工具安装到监控系统
+        if self.monitor:
+            msg = f"[日志-I2] 记录安装操作到监控系统: {tool_name}"
+            print(msg)
+            logger.info(msg)
+            self.monitor.log_tool_operation(tool_name, "安装", True)
+        
+        # 更新工具卡片状态
+        msg = f"[日志-I3] 开始更新工具卡片状态: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            msg = f"[日志-I4] 找到工具卡片({type(card).__name__})，更新状态: {tool_name}"
+            print(msg)
+            logger.info(msg)
+            # 先清除安装进度状态
+            card.set_installing_state(False, 0, "")
+            msg = f"[日志-I5] 已清除安装进度状态: {tool_name}"
+            print(msg)
+            logger.info(msg)
+            
+            # 更新工具数据状态（适配ToolCardV3）
+            if hasattr(card, 'tool_data'):
+                card.tool_data['status'] = 'installed'
+                card.tool_data['executable_path'] = f"/path/to/{tool_name.lower()}"
+                card.tool_data['disk_usage'] = "15.2 MB"
+                # 强制重绘卡片
+                card.update()
+                card.repaint()
+                msg = f"[日志-I6] 已更新ToolCardV3数据并重绘: {tool_name}"
+            elif hasattr(card, 'update_tool_status'):
+                # 兼容老版本ToolCard
+                card.update_tool_status("installed", 
+                                      executable_path=f"/path/to/{tool_name.lower()}",
+                                      disk_usage="15.2 MB")
+                msg = f"[日志-I6] 已更新ToolCard状态: {tool_name}"
+            else:
+                msg = f"[日志-I6] 警告：未知的卡片类型，无法更新状态: {tool_name}"
+            print(msg)
+            logger.info(msg)
+        else:
+            msg = f"[日志-I4] 警告：未找到工具卡片: {tool_name}"
+            print(msg)
+            logger.warning(msg)
+        
+        # 更新最近使用列表
+        msg = f"[日志-I7] 更新最近使用列表: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        self.config_manager.update_recent_tools(tool_name)
+        self.sidebar.update_recent_tools(self.config_manager.recent_tools)
+        msg = f"[日志-I8] 最近使用列表更新完成: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        
+        # 刷新整个工具列表显示（确保状态同步）
+        msg = f"[日志-I9] *** 开始强制刷新UI ***: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        self._force_refresh_all_ui()
+        
+        # 如果当前在详情页面且是刚安装的工具，刷新详情页面显示
+        if (self.current_detail_page and 
+            hasattr(self.current_detail_page, 'tool_data') and 
+            self.current_detail_page.tool_data['name'] == tool_name):
+            print(f"[日志-I11] 当前详情页面显示的是刚安装的工具，刷新页面: {tool_name}")
+            logger.info(f"[日志-I11] 当前详情页面显示的是刚安装的工具，刷新页面: {tool_name}")
+            
+            # 更新工具数据状态
+            print(f"[日志-I12] 更新详情页面工具数据状态: {tool_name} -> installed")
+            logger.info(f"[日志-I12] 更新详情页面工具数据状态: {tool_name} -> installed")
+            self.current_detail_page.tool_data['status'] = 'installed'
+            self.current_detail_page.tool_data['executable_path'] = f"/path/to/{tool_name.lower()}"
+            self.current_detail_page.tool_data['disk_usage'] = "15.2 MB"
+            
+            # 刷新详情页面显示（重新创建UI，这会根据新状态显示正确的按钮）
+            if hasattr(self.current_detail_page, 'update_ui'):
+                print(f"[日志-I13] 调用详情页面的update_ui方法: {tool_name}")
+                logger.info(f"[日志-I13] 调用详情页面的update_ui方法: {tool_name}")
+                self.current_detail_page.update_ui()
+                print(f"[日志-I14] 详情页面update_ui调用完成: {tool_name}")
+                logger.info(f"[日志-I14] 详情页面update_ui调用完成: {tool_name}")
+            else:
+                # 如果没有update_ui方法，重新创建详情页面
+                print(f"[日志-I13] 详情页面没有update_ui方法，重新创建页面: {tool_name}")
+                logger.info(f"[日志-I13] 详情页面没有update_ui方法，重新创建页面: {tool_name}")
+                tool_data = self.current_detail_page.tool_data
+                self.show_tool_detail_page(tool_data)
+        
+        msg = f"[日志-I10] *** UI刷新完成 ***: {tool_name}"
+        print(msg)
+        logger.info(msg)
+    
+    def _on_tool_launched(self, tool_name: str):
+        """工具启动完成处理"""
+        # 记录工具启动到监控系统
+        if self.monitor:
+            self.monitor.log_tool_operation(tool_name, "启动", True)
+        
+        # 更新最近使用列表
+        self.config_manager.update_recent_tools(tool_name)
+        self.sidebar.update_recent_tools(self.config_manager.recent_tools)
+    
+    def _on_tool_uninstalled(self, tool_name: str):
+        """工具卸载完成处理"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        print(f"[日志-D1] *** _on_tool_uninstalled 信号回调被触发 ***: {tool_name}")
+        
+        # 记录工具卸载到监控系统
+        if self.monitor:
+            print(f"[日志-D2] 记录卸载操作到监控系统: {tool_name}")
+            self.monitor.log_tool_operation(tool_name, "卸载", True)
+        
+        # 🎯 更新下载卡片：标记卸载任务完成
+        if self.modern_download_card:
+            display_name = self.tr("{0} (卸载)").format(tool_name)
+            # 使用100%进度和完成状态
+            self.modern_download_card.add_or_update_download(display_name, 100, self.tr("卸载完成"))
+        
+        # 更新下载按钮状态
+        self._update_download_button_state()
+        
+        # 更新工具卡片状态
+        print(f"[日志-D3] 开始更新工具卡片状态: {tool_name}")
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            print(f"[日志-D4] 找到工具卡片({type(card).__name__})，更新状态: {tool_name}")
+            # 先清除卸载进度状态
+            card.set_installing_state(False, 0, "")
+            print(f"[日志-D5] 已清除卸载进度状态: {tool_name}")
+            
+            # 更新工具数据状态（适配ToolCardV3）
+            if hasattr(card, 'tool_data'):
+                card.tool_data['status'] = 'available'
+                card.tool_data['executable_path'] = ""
+                card.tool_data['disk_usage'] = ""
+                # 强制重绘卡片
+                card.update()
+                card.repaint()
+                print(f"[日志-D6] 已更新ToolCardV3数据并重绘为未安装状态: {tool_name}")
+            elif hasattr(card, 'update_tool_status'):
+                # 兼容老版本ToolCard
+                card.update_tool_status("available", 
+                                      executable_path="",
+                                      disk_usage="")
+                print(f"[日志-D6] 已更新ToolCard为未安装状态: {tool_name}")
+            else:
+                print(f"[日志-D6] 警告：未知的卡片类型，无法更新状态: {tool_name}")
+        else:
+            print(f"[日志-D4] 警告：未找到工具卡片: {tool_name}")
+        
+        # 从最近使用列表中移除
+        print(f"[日志-D7] 从最近使用列表中移除: {tool_name}")
+        logger.info(f"[日志-D7] 从最近使用列表中移除: {tool_name}")
+        try:
+            self.config_manager.remove_from_recent_tools(tool_name)
+            self.sidebar.update_recent_tools(self.config_manager.recent_tools)
+            print(f"[日志-D8] 最近使用列表更新完成: {tool_name}")
+            logger.info(f"[日志-D8] 最近使用列表更新完成: {tool_name}")
+        except Exception as e:
+            print(f"[日志-D8] 警告：更新最近使用列表失败: {e}")
+            logger.error(f"[日志-D8] 警告：更新最近使用列表失败: {e}")
+        
+        # 刷新工具列表显示
+        print(f"[日志-D9] *** 开始强制刷新UI ***: {tool_name}")
+        logger.info(f"[日志-D9] *** 开始强制刷新UI ***: {tool_name}")
+        self._force_refresh_all_ui()
+        
+        # 如果当前在详情页面且是刚卸载的工具，刷新详情页面显示
+        if (self.current_detail_page and 
+            hasattr(self.current_detail_page, 'tool_data') and 
+            self.current_detail_page.tool_data['name'] == tool_name):
+            print(f"[日志-D11] 当前详情页面显示的是刚卸载的工具，刷新页面: {tool_name}")
+            logger.info(f"[日志-D11] 当前详情页面显示的是刚卸载的工具，刷新页面: {tool_name}")
+            
+            # 更新工具数据状态
+            print(f"[日志-D12] 更新详情页面工具数据状态: {tool_name} -> available")
+            logger.info(f"[日志-D12] 更新详情页面工具数据状态: {tool_name} -> available")
+            self.current_detail_page.tool_data['status'] = 'available'
+            self.current_detail_page.tool_data['executable_path'] = ""
+            self.current_detail_page.tool_data['disk_usage'] = ""
+            
+            # 刷新详情页面显示
+            if hasattr(self.current_detail_page, 'update_ui'):
+                print(f"[日志-D13] 调用详情页面的update_ui方法: {tool_name}")
+                logger.info(f"[日志-D13] 调用详情页面的update_ui方法: {tool_name}")
+                self.current_detail_page.update_ui()
+                print(f"[日志-D14] 详情页面update_ui调用完成: {tool_name}")
+                logger.info(f"[日志-D14] 详情页面update_ui调用完成: {tool_name}")
+            else:
+                # 如果没有update_ui方法，重新创建详情页面
+                print(f"[日志-D13] 详情页面没有update_ui方法，重新创建页面: {tool_name}")
+                logger.info(f"[日志-D13] 详情页面没有update_ui方法，重新创建页面: {tool_name}")
+                tool_data = self.current_detail_page.tool_data
+                self.show_tool_detail_page(tool_data)
+        
+        print(f"[日志-D10] *** UI刷新完成 ***: {tool_name}")
+        logger.info(f"[日志-D10] *** UI刷新完成 ***: {tool_name}")
+    
+    def _on_installation_progress(self, tool_name: str, progress: int, status_text: str):
+        """安装/卸载进度更新处理（接收 ToolManager 的进度信号）"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        # 🎯 判断是安装还是卸载任务
+        is_uninstall = "卸载" in status_text or "删除" in status_text or "清理" in status_text or "停止" in status_text
+        task_type = "卸载" if is_uninstall else "安装"
+        
+        print(f"【下载状态链路-P1】收到{task_type}进度信号: {tool_name} - {progress}% - {status_text}")
+        logger.info(f"【下载状态链路-P1】收到{task_type}进度信号: {tool_name} - {progress}% - {status_text}")
+        
+        # 更新工具卡片状态
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            print(f"【下载状态链路-P2】✅ 找到工具卡片，更新进度显示")
+            logger.info(f"【下载状态链路-P2】✅ 找到工具卡片，更新进度显示")
+            # 根据任务类型设置状态：安装=True，卸载=False
+            is_installing_operation = not is_uninstall
+            card.set_installing_state(is_installing_operation, progress, status_text)
+        else:
+            print(f"【下载状态链路-P2】⚠️ 未找到工具卡片: {tool_name}")
+            logger.warning(f"【下载状态链路-P2】⚠️ 未找到工具卡片: {tool_name}")
+        
+        print(f"【下载状态链路-P2.5】✅ 工具卡片更新完成，继续执行后续流程")
+        logger.info(f"【下载状态链路-P2.5】✅ 工具卡片更新完成，继续执行后续流程")
+        
+        # 如果当前在详情页面且是正在安装/卸载的工具，更新详情页面按钮进度
+        if (self.current_detail_page and 
+            hasattr(self.current_detail_page, 'tool_data') and 
+            self.current_detail_page.tool_data['name'] == tool_name):
+            print(f"【下载状态链路-P3】更新详情页面进度: {tool_name}, {progress}%, {status_text}")
+            logger.info(f"【下载状态链路-P3】更新详情页面进度: {tool_name}, {progress}%, {status_text}")
+            if hasattr(self.current_detail_page, 'set_installing_state'):
+                # 根据任务类型设置状态：安装=True，卸载=False
+                is_installing_operation = not is_uninstall
+                self.current_detail_page.set_installing_state(is_installing_operation, progress, status_text)
+        
+        print(f"【下载状态链路-P3.5】✅ 详情页面检查完成，准备更新下载面板")
+        logger.info(f"【下载状态链路-P3.5】✅ 详情页面检查完成，准备更新下载面板")
+        
+        # 更新下载状态面板（旧版）
+        if hasattr(self, 'download_status_panel'):
+            print(f"【下载状态链路-P4】更新旧版下载状态面板")
+            logger.info(f"【下载状态链路-P4】更新旧版下载状态面板")
+            try:
+                self.download_status_panel.add_or_update_download(tool_name, progress, status_text)
+                print(f"【下载状态链路-P4.1】✅ 旧版下载状态面板更新成功")
+                logger.info(f"【下载状态链路-P4.1】✅ 旧版下载状态面板更新成功")
+            except Exception as e:
+                print(f"【下载状态链路-P4.1】❌ 旧版下载状态面板更新异常: {e}")
+                logger.error(f"【下载状态链路-P4.1】❌ 旧版下载状态面板更新异常: {e}")
+        else:
+            print(f"【下载状态链路-P4】⚠️ 旧版下载状态面板不存在")
+            logger.warning(f"【下载状态链路-P4】⚠️ 旧版下载状态面板不存在")
+        
+        print(f"【下载状态链路-P4.5】✅ 旧版下载面板检查完成，现在检查现代化下载卡片")
+        logger.info(f"【下载状态链路-P4.5】✅ 旧版下载面板检查完成，现在检查现代化下载卡片")
+        
+        # 🎯 更新现代化下载卡片（现在预创建了，始终存在）
+        if self.modern_download_card:
+            # 为卸载任务添加特殊标记，让下载卡片能正确显示状态
+            display_name = self.tr("{0} (卸载)").format(tool_name) if is_uninstall else tool_name
+            print(f"【下载状态链路-P5】✅ 更新下载卡片: {display_name} - {progress}% - {status_text}")
+            logger.info(f"【下载状态链路-P5】✅ 更新下载卡片: {display_name} - {progress}% - {status_text}")
+            try:
+                self.modern_download_card.add_or_update_download(display_name, progress, status_text)
+                print(f"【下载状态链路-P5.1】✅ 下载卡片更新成功")
+                logger.info(f"【下载状态链路-P5.1】✅ 下载卡片更新成功")
+            except Exception as e:
+                print(f"【下载状态链路-P5.1】❌ 下载卡片更新异常: {e}")
+                logger.error(f"【下载状态链路-P5.1】❌ 下载卡片更新异常: {e}")
+        else:
+            print(f"【下载状态链路-P5】❌ 严重错误：下载卡片不存在！状态丢失！")
+            logger.error(f"【下载状态链路-P5】❌ 严重错误：下载卡片不存在！状态丢失！")
+        
+        # 更新下载按钮状态
+        print(f"【下载状态链路-P6】更新工具栏下载按钮状态")
+        logger.info(f"【下载状态链路-P6】更新工具栏下载按钮状态")
+        self._update_download_button_state()
+        print(f"【下载状态链路-P6.1】✅ 工具栏下载按钮状态更新完成")
+        logger.info(f"【下载状态链路-P6.1】✅ 工具栏下载按钮状态更新完成")
+    
+    def _on_tool_error(self, tool_name: str, error_message: str):
+        """工具错误处理"""
+        # 记录工具错误到监控系统
+        if self.monitor:
+            self.monitor.log_tool_operation(tool_name, "错误", False, error_message)
+        
+        QMessageBox.critical(self, self.tr("{0} 错误").format(tool_name), error_message)
+        
+        # 重置安装状态
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            card.set_installing_state(False)
+        
+        # 如果当前在详情页面且是出错的工具，清除详情页面安装状态
+        if (self.current_detail_page and 
+            hasattr(self.current_detail_page, 'tool_data') and 
+            self.current_detail_page.tool_data['name'] == tool_name):
+            print(f"[安装错误-详情页面] 清除详情页面安装状态: {tool_name}")
+            if hasattr(self.current_detail_page, 'set_installing_state'):
+                self.current_detail_page.set_installing_state(False)
+        
+        # 更新下载状态面板为失败状态
+        self.download_status_panel.mark_download_failed(tool_name, error_message)
+        
+        # 更新现代化下载卡片为失败状态
+        if self.modern_download_card:
+            self.modern_download_card.mark_download_failed(tool_name, error_message)
+        
+        # 更新下载按钮状态
+        self._update_download_button_state()
+    
+    def _on_setting_changed(self, setting_name: str, value):
+        """设置变更处理"""
+        # 记录设置变更到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("设置变更", {
+                "设置项": setting_name,
+                "新值": str(value)
+            })
+        
+        # 处理特殊的设置变更
+        if setting_name == "check_updates_now":
+            # 立即检查工具更新请求（来自设置面板的手动检查，无论结果都要弹窗）
+            self.tool_update_controller.check_for_updates_from_settings()
+        elif setting_name.startswith("tool_update_"):
+            # 工具更新相关设置变更，通知更新控制器
+            if hasattr(self, 'tool_update_controller'):
+                current_settings = self.tool_update_controller.get_update_settings()
+                # 更新相应的设置项
+                setting_key = setting_name.replace("tool_update_", "")
+                current_settings[setting_key] = value
+                self.tool_update_controller.update_settings(current_settings)
+        
+        print(f"设置已更新: {setting_name} = {value}")
+    
+    def _select_tool_card(self, tool_name: str):
+        """选中指定的工具卡片"""
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            card.set_selected(True)
+    
+    def _on_card_selected(self, tool_name: str):
+        """处理卡片选中事件（现在改为显示详情页面）"""
+        # 获取工具数据
+        tool_data = self.tool_manager.get_tool_info(tool_name)
+        if tool_data:
+            self.show_tool_detail_page(tool_data)
+    
+    def _on_install_tool(self, tool_name: str):
+        """处理工具安装请求（从工具卡片触发）"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        msg = f"【下载状态链路-1】工具卡片安装请求: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        
+        # 🎯 记录调用源
+        import traceback
+        call_stack = traceback.extract_stack()
+        if len(call_stack) > 2:
+            caller = call_stack[-3]
+            print(f"【下载状态链路-1.1】调用源: {caller.filename}:{caller.lineno} in {caller.name}")
+            logger.info(f"【下载状态链路-1.1】调用源: {caller.filename}:{caller.lineno} in {caller.name}")
+        
+        if self.monitor:
+            self.monitor.log_user_operation("请求安装工具", {"工具名": tool_name})
+        
+        # 🎯 检查下载卡片是否存在
+        if self.modern_download_card:
+            print(f"【下载状态链路-2】✅ 下载卡片已存在，准备接收状态更新")
+            logger.info(f"【下载状态链路-2】✅ 下载卡片已存在，准备接收状态更新")
+        else:
+            print(f"【下载状态链路-2】❌ 警告：下载卡片不存在！状态可能丢失")
+            logger.warning(f"【下载状态链路-2】❌ 警告：下载卡片不存在！状态可能丢失")
+        
+        msg = f"【下载状态链路-3】开始调用 tool_manager.install_tool: {tool_name}"
+        print(msg)
+        logger.info(msg)
+        success = self.tool_manager.install_tool(tool_name)
+        
+        msg = f"【下载状态链路-4】tool_manager.install_tool 返回结果: {success}"
+        print(msg)
+        logger.info(msg)
+        
+        if not success:
+            msg = f"【下载状态链路-5】❌ 安装失败，显示警告对话框: {tool_name}"
+            print(msg)
+            logger.error(msg)
+            QMessageBox.warning(self, self.tr("安装失败"), self.tr("无法启动 {0} 的安装过程").format(tool_name))
+        else:
+            msg = f"【下载状态链路-6】✅ 安装请求成功提交，等待 installation_progress 信号: {tool_name}"
+            print(msg)
+            logger.info(msg)
+            
+            # 如果当前在详情页面且是正在安装的工具，设置初始安装状态
+            if (self.current_detail_page and 
+                hasattr(self.current_detail_page, 'tool_data') and 
+                self.current_detail_page.tool_data['name'] == tool_name):
+                print(f"[安装开始-详情页面] 设置详情页面初始安装状态: {tool_name}")
+                logger.info(f"[安装开始-详情页面] 设置详情页面初始安装状态: {tool_name}")
+                if hasattr(self.current_detail_page, 'set_installing_state'):
+                    self.current_detail_page.set_installing_state(True, 0, self.tr("准备安装..."))
+    
+    def _on_launch_tool(self, tool_name: str):
+        """处理工具启动请求"""
+        if self.monitor:
+            self.monitor.log_user_operation("请求启动工具", {"工具名": tool_name})
+        
+        success = self.tool_manager.launch_tool(tool_name)
+        if not success:
+            QMessageBox.warning(self, self.tr("启动失败"), self.tr("无法启动 {0}").format(tool_name))
+    
+    def _on_uninstall_tool(self, tool_name: str):
+        """处理工具卸载请求（从详情页面或工具卡片触发）"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        print(f"【下载状态链路-U1】工具卸载请求: {tool_name}")
+        logger.info(f"【下载状态链路-U1】工具卸载请求: {tool_name}")
+        
+        # 🎯 记录调用源
+        import traceback
+        call_stack = traceback.extract_stack()
+        if len(call_stack) > 2:
+            caller = call_stack[-3]
+            print(f"【下载状态链路-U1.1】调用源: {caller.filename}:{caller.lineno} in {caller.name}")
+            logger.info(f"【下载状态链路-U1.1】调用源: {caller.filename}:{caller.lineno} in {caller.name}")
+        
+        if self.monitor:
+            self.monitor.log_user_operation("请求卸载工具", {"工具名": tool_name})
+        
+        # 🎯 检查下载卡片是否存在
+        if self.modern_download_card:
+            print(f"【下载状态链路-U2】✅ 下载卡片已存在，准备接收卸载状态更新")
+            logger.info(f"【下载状态链路-U2】✅ 下载卡片已存在，准备接收卸载状态更新")
+        else:
+            print(f"【下载状态链路-U2】❌ 警告：下载卡片不存在！卸载状态可能丢失")
+            logger.warning(f"【下载状态链路-U2】❌ 警告：下载卡片不存在！卸载状态可能丢失")
+        
+        # 显示确认对话框
+        print(f"【下载状态链路-U3】显示卸载确认对话框: {tool_name}")
+        logger.info(f"【下载状态链路-U3】显示卸载确认对话框: {tool_name}")
+        reply = QMessageBox.question(
+            self,
+            self.tr("确认卸载"),
+            self.tr("您确定要卸载 {0} 吗？\n\n卸载后将删除工具文件和相关配置，此操作不可撤销。").format(tool_name),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            print(f"【下载状态链路-U4】✅ 用户确认卸载，开始执行: {tool_name}")
+            logger.info(f"【下载状态链路-U4】✅ 用户确认卸载，开始执行: {tool_name}")
+            # 显示卸载进度（在卡片上显示）
+            card = self.tools_grid.get_card_by_name(tool_name)
+            if card:
+                print(f"【下载状态链路-U5】✅ 找到工具卡片，设置卸载进度: {tool_name}")
+                logger.info(f"【下载状态链路-U5】✅ 找到工具卡片，设置卸载进度: {tool_name}")
+                card.set_installing_state(True, 0, self.tr("准备卸载..."))
+            else:
+                print(f"【下载状态链路-U5】❌ 警告：未找到工具卡片: {tool_name}")
+                logger.warning(f"【下载状态链路-U5】❌ 警告：未找到工具卡片: {tool_name}")
+            
+            # 如果当前在详情页面且是正在卸载的工具，设置初始卸载状态
+            if (self.current_detail_page and 
+                hasattr(self.current_detail_page, 'tool_data') and 
+                self.current_detail_page.tool_data['name'] == tool_name):
+                print(f"【下载状态链路-U6】设置详情页面初始卸载状态: {tool_name}")
+                logger.info(f"【下载状态链路-U6】设置详情页面初始卸载状态: {tool_name}")
+                if hasattr(self.current_detail_page, 'set_installing_state'):
+                    self.current_detail_page.set_installing_state(True, 0, self.tr("准备卸载..."))
+            
+            # 执行卸载
+            print(f"[日志-U5] 开始调用 tool_manager.uninstall_tool: {tool_name}")
+            success = self.tool_manager.uninstall_tool(tool_name)
+            print(f"[日志-U6] tool_manager.uninstall_tool 返回结果: {success}")
+            
+            if success:
+                print(f"[日志-U7] 卸载成功，显示成功对话框: {tool_name}")
+                QMessageBox.information(self, self.tr("卸载成功"), self.tr("{0} 已成功卸载").format(tool_name))
+                # 注释：移除自动跳转，让用户可以选择何时返回
+                # if hasattr(self, 'current_detail_page') and self.current_detail_page:
+                #     print(f"[日志-U8] 当前在详情页面，返回主界面: {tool_name}")
+                #     self.go_back_to_main()
+                print(f"[日志-U9] 卸载处理完成，等待 tool_uninstalled 信号: {tool_name}")
+            else:
+                print(f"[日志-U10] 卸载失败，清除进度并显示警告: {tool_name}")
+                # 清除卸载进度显示
+                if card:
+                    card.set_installing_state(False, 0, "")
+                
+                # 如果当前在详情页面且是卸载失败的工具，清除详情页面卸载状态
+                if (self.current_detail_page and 
+                    hasattr(self.current_detail_page, 'tool_data') and 
+                    self.current_detail_page.tool_data['name'] == tool_name):
+                    print(f"[卸载失败-详情页面] 清除详情页面卸载状态: {tool_name}")
+                    if hasattr(self.current_detail_page, 'set_installing_state'):
+                        self.current_detail_page.set_installing_state(False)
+                
+                QMessageBox.warning(self, self.tr("卸载失败"), self.tr("无法卸载 {0}，请检查工具是否正在使用中").format(tool_name))
+        else:
+            print(f"[日志-U11] 用户取消了卸载操作: {tool_name}")
+    
+    def _on_tool_info(self, tool_name: str):
+        """显示工具详情信息"""
+        if self.monitor:
+            self.monitor.log_user_operation("查看工具详情", {"工具名": tool_name})
+        
+        tool_data = self.tool_manager.get_tool_info(tool_name)
+        if tool_data:
+            # 构建详情信息
+            details_text = self.tr("工具名称: {0}\n").format(tool_data['name'])
+            details_text += self.tr("版本: {0}\n").format(tool_data['version'])
+            try:
+                from utils.tool_localization import get_localized_tool_description
+                desc_text = get_localized_tool_description(tool_data)
+            except Exception:
+                desc_text = tool_data.get('description', '')
+            details_text += self.tr("Description: {0}\n").format(desc_text)
+            details_text += self.tr("安装来源: {0}\n").format(tool_data['install_source'])
+
+            if tool_data.get('executable_path'):
+                details_text += self.tr("可执行文件: {0}\n").format(tool_data['executable_path'])
+
+            if tool_data.get('disk_usage'):
+                details_text += self.tr("磁盘占用: {0}\n").format(tool_data['disk_usage'])
+
+            if tool_data.get('total_runtime', 0) > 0:
+                runtime = tool_data['total_runtime']
+                hours = runtime // 3600
+                minutes = (runtime % 3600) // 60
+                details_text += self.tr("使用时长: {0}小时{1}分钟\n").format(hours, minutes)
+
+            QMessageBox.information(self, self.tr("{0} 详情").format(tool_name), details_text)
+    
+    def _on_tool_favorite_toggled(self, tool_name: str, is_favorite: bool):
+        """
+        处理工具收藏状态切换
+        """
+        print(f"[收藏信号-1] *** _on_tool_favorite_toggled 被触发 ***: {tool_name}, is_favorite={is_favorite}")
+        
+        # 记录到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("收藏工具", {
+                "工具名": tool_name,
+                "收藏状态": "收藏" if is_favorite else "取消收藏"
+            })
+            print(f"[收藏信号-2] 已记录到监控系统")
+        
+        # 使用ConfigManager的方法更新收藏状态（自动保存）
+        print(f"[收藏操作] 切换前 - {tool_name}: {'收藏' if is_favorite else '非收藏'}")
+        actual_state = self.config_manager.toggle_favorite_tool(tool_name)
+        print(f"[收藏操作] 切换后 - {tool_name}: {'收藏' if actual_state else '非收藏'}")
+        
+        # 更新工具卡片UI（无论状态是否一致都要更新，确保同步）
+        print(f"[收藏操作-同步1] 开始更新工具卡片UI: {tool_name} -> {'收藏' if actual_state else '未收藏'}")
+        if hasattr(self, 'tools_grid'):
+            card = self.tools_grid.get_card_by_name(tool_name)
+            if card:
+                print(f"[收藏操作-同步2] 找到工具卡片 {type(card).__name__}: {tool_name}")
+                
+                # 检查卡片类型并调用相应方法
+                if hasattr(card, 'set_favorite'):
+                    card.set_favorite(actual_state)
+                    print(f"[收藏操作-同步3] 调用 set_favorite 方法更新: {tool_name} -> {'收藏' if actual_state else '未收藏'}")
+                elif hasattr(card, 'is_favorite'):
+                    # 直接设置属性并重绘（适配其他卡片类型）
+                    card.is_favorite = actual_state
+                    card.update()
+                    card.repaint()
+                    print(f"[收藏操作-同步3] 直接设置 is_favorite 属性并重绘: {tool_name} -> {'收藏' if actual_state else '未收藏'}")
+                else:
+                    print(f"[收藏操作-同步3] 警告：卡片不支持收藏更新: {type(card).__name__}")
+                    
+                print(f"[收藏操作-同步4] 工具卡片UI更新完成: {tool_name}")
+            else:
+                print(f"[收藏操作-同步2] 警告：未找到工具卡片: {tool_name}")
+        else:
+            print(f"[收藏操作-同步1] 警告：tools_grid 不存在")
+        
+        # 如果当前在详情页面且是同一个工具，同步更新详情页面的收藏按钮
+        if (self.current_detail_page and 
+            hasattr(self.current_detail_page, 'tool_data') and 
+            self.current_detail_page.tool_data['name'] == tool_name and
+            hasattr(self.current_detail_page, 'set_favorite_state')):
+            print(f"[收藏操作] 同步更新详情页面收藏按钮: {tool_name} -> {'收藏' if actual_state else '未收藏'}")
+            self.current_detail_page.set_favorite_state(actual_state)
+        
+        print(f"【收藏结果】{tool_name} - {'已收藏' if actual_state else '取消收藏'}")
+        
+        # 如果当前处于“我的工具”页面，刷新显示
+        if hasattr(self, 'current_view') and self.current_view == "my-tools":
+            print(f"[收藏操作] 当前在我的工具页面，刷新显示")
+            self._show_favorite_tools()
+        else:
+            print(f"[收藏操作] 当前视图: {getattr(self, 'current_view', 'unknown')}，不需刷新我的工具")
+    
+    def _show_favorite_tools(self):
+        """显示收藏的工具"""
+        import logging
+        logging.info("开始显示收藏工具")
+        
+        # 获取所有工具数据
+        all_tools = self.tool_manager.get_all_tools_data()
+        logging.debug(f"获取到 {len(all_tools)} 个工具")
+        
+        # 添加收藏状态
+        for tool in all_tools:
+            tool['is_favorite'] = self.config_manager.is_tool_favorite(tool['name'])
+            if tool['is_favorite']:
+                logging.debug(f"收藏工具: {tool['name']}")
+        
+        # 过滤出收藏的工具
+        favorite_tools = [tool for tool in all_tools if tool['is_favorite']]
+        favorite_names = [tool['name'] for tool in favorite_tools]
+        
+        # 显示收藏工具
+        self.tools_grid.set_cards(favorite_tools)
+        
+        logging.info(f"显示收藏工具: {len(favorite_tools)} 个 - {favorite_names}")
+        print(f"[收藏页面] 显示收藏工具: {len(favorite_tools)} 个 - {favorite_names}")
+    
+    def closeEvent(self, event):
+        """
+        窗口关闭事件处理
+        清理资源
+        """
+        # 记录窗口关闭到监控系统
+        if self.monitor:
+            self.monitor.log_user_operation("应用关闭", {"关闭方式": "窗口关闭按钮"})
+        
+        
+        # 清理现代化下载卡片
+        if self.modern_download_card:
+            self.modern_download_card.hide()
+            self.modern_download_card = None
+        
+        # 清理工具管理器资源
+        self.tool_manager.cleanup()
+        
+        # 保存应用状态
+        # 这里可以保存窗口大小、位置等状态信息
+        
+        event.accept()
+    
+    def show_tool_detail_page(self, tool_data: dict):
+        """显示工具详情页面"""
+        # 确保工具数据包含收藏状态
+        tool_data['is_favorite'] = self.config_manager.is_tool_favorite(tool_data['name'])
+        print(f"[详情页面] 创建详情页面: {tool_data['name']}, 收藏状态: {'收藏' if tool_data['is_favorite'] else '未收藏'}")
+        
+        # 创建详情页面
+        detail_page = ToolDetailPage(tool_data, self)
+        
+        # 连接返回信号（现在返回按钮在工具栏上，但保留这个以兼容）
+        detail_page.back_requested.connect(self.go_back_to_main)
+        detail_page.install_requested.connect(self._on_install_tool)
+        detail_page.launch_requested.connect(self._on_launch_tool)
+        detail_page.uninstall_requested.connect(self._on_uninstall_tool)
+        detail_page.favorite_toggled.connect(self._on_tool_favorite_toggled)
+        
+        # 添加到堆栈并切换
+        self.main_content_stack.addWidget(detail_page)
+        self.main_content_stack.setCurrentWidget(detail_page)
+        self.current_detail_page = detail_page
+        
+        # 切换工具栏到详情页模式
+        self.toolbar.switch_to_detail_mode()
+        
+        # 记录操作
+        if self.monitor:
+            self.monitor.log_user_operation("查看工具详情", {"工具名": tool_data.get('name', 'Unknown')})
+    
+    def go_back_to_main(self):
+        """返回到主页面"""
+        # 切换到工具网格页面
+        self.main_content_stack.setCurrentWidget(self.tools_grid)
+        
+        # 移除当前详情页面
+        if self.current_detail_page:
+            self.main_content_stack.removeWidget(self.current_detail_page)
+            self.current_detail_page.deleteLater()
+            self.current_detail_page = None
+        
+        # 切换工具栏到列表模式
+        self.toolbar.switch_to_list_mode()
+        
+        # 记录操作
+        if self.monitor:
+            self.monitor.log_user_operation("返回主页面", {})
+    
+    # ====== 统一更新系统 v1.1.12 ======
+    
+    # 移除了 _on_update_clicked 方法 - 不再需要主界面更新按钮
+    
+    def _setup_tool_update_connections(self):
+        """设置工具更新系统的信号连接"""
+        # 连接工具更新控制器的信号
+        self.tool_update_controller.update_status_changed.connect(self._on_tool_update_status_changed)
+        self.tool_update_controller.history_updated.connect(self._on_tool_update_history_changed)
+        
+        # 连接设置面板的更新检查请求
+        self.settings_panel.setting_changed.connect(self._on_setting_changed)
+    
+    def _should_check_updates_on_startup(self) -> bool:
+        """检查是否应该在启动时检查更新"""
+        settings = self.config_manager.settings
+        if hasattr(settings, 'tool_update') and settings.tool_update:
+            update_mode = settings.tool_update.get('update_mode', 'auto')
+            return update_mode in ['auto', 'manual']  # 两种模式都需要检查，只是处理方式不同
+        return True  # 默认检查
+    
+    def _startup_check_for_updates(self):
+        """启动时检查工具更新（新版本）"""
+        # 这是启动时的自动检查，不是手动触发
+        self.tool_update_controller.check_for_updates(is_manual=False)
+    
+    # 移除了 _check_for_updates 方法 - 手动检查现在直接通过工具更新控制器处理
+    
+    def _on_tool_update_status_changed(self, tool_name: str, status: str):
+        """处理工具更新状态变化"""
+        # 在下载状态面板显示更新进度
+        if hasattr(self, 'download_status_panel'):
+            if status == "更新中":
+                self.download_status_panel.add_or_update_download(
+                    self.tr("{0} 更新").format(tool_name), 0, self.tr("准备更新...")
+                )
+            elif status == "更新成功":
+                self.download_status_panel.add_or_update_download(
+                    self.tr("{0} 更新").format(tool_name), 100, self.tr("更新完成")
+                )
+                # 刷新工具显示
+                self._update_tools_display()
+            elif status == "更新失败":
+                self.download_status_panel.add_or_update_download(
+                    self.tr("{0} 更新").format(tool_name), -1, self.tr("更新失败")
+                )
+        
+        # 重置更新按钮状态（如果是手动触发）
+        if hasattr(self, 'update_btn'):
+            self._reset_update_button()
+    
+    def _on_tool_update_history_changed(self, history: list):
+        """处理工具更新历史变化"""
+        # 可以在这里更新UI显示更新历史
+        pass
+    
+    def _reset_update_button(self):
+        """重置更新按钮状态"""
+        self.update_btn.setText("⬇")
+        self.update_btn.setEnabled(True)
+        self.update_btn.setToolTip(self.tr("检查更新"))
+    
+    # 注意：旧的统一更新对话框方法已被移除
+    # 新的工具更新系统通过 tool_update_controller 处理所有更新逻辑
+    # 包括更新对话框、进度显示和完成通知
+    
+    # ===========================================
+    # 下载状态面板控制方法
+    # ===========================================
+    
+    def _toggle_download_status_panel(self):
+        """切换下载状态面板显示/隐藏 - 使用现代化悬浮卡片"""
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数被调用 ===")
+        print(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数被调用 ===")
+        
+        # 如果筛选卡片打开，先关闭它（相互排斥）
+        if self.modern_filter_card and self.modern_filter_card.isVisible():
+            print(f"【MAIN WINDOW DEBUG】关闭现代化筛选卡片")
+            logger.info(f"【MAIN WINDOW DEBUG】关闭现代化筛选卡片")
+            self._close_modern_filter_card()
+        # 旧系统已移除，无需检查 filter_panel
+        
+        # 切换现代化下载卡片
+        print(f"【MAIN WINDOW DEBUG】检查现代化下载卡片状态: card={self.modern_download_card}")
+        logger.info(f"【MAIN WINDOW DEBUG】检查现代化下载卡片状态: card={self.modern_download_card}")
+        
+        if self.modern_download_card and self.modern_download_card.isVisible():
+            print(f"【MAIN WINDOW DEBUG】现代化下载卡片当前可见，准备关闭")
+            logger.info(f"【MAIN WINDOW DEBUG】现代化下载卡片当前可见，准备关闭")
+            self._close_modern_download_card()
+        else:
+            print(f"【MAIN WINDOW DEBUG】现代化下载卡片当前隐藏，准备打开")
+            logger.info(f"【MAIN WINDOW DEBUG】现代化下载卡片当前隐藏，准备打开")
+            try:
+                self._show_modern_download_card()
+                print(f"【MAIN WINDOW DEBUG】_show_modern_download_card 调用完成")
+                logger.info(f"【MAIN WINDOW DEBUG】_show_modern_download_card 调用完成")
+            except Exception as e:
+                print(f"【MAIN WINDOW DEBUG】_show_modern_download_card 发生异常: {e}")
+                logger.error(f"【MAIN WINDOW DEBUG】_show_modern_download_card 发生异常: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        print(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数执行完成 ===")
+        logger.info(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数执行完成 ===")
+    
+    def _show_download_status_panel(self):
+        """显示下载状态面板"""
+        # 隐藏筛选面板（相互排斥）
+        if self.filter_panel.isVisible():
+            self.filter_panel.hide()
+        
+        # 强制重新应用圆角样式（每次显示时都重新设置）
+        self.download_status_panel.setWindowFlags(Qt.FramelessWindowHint)
+        self.download_status_panel.setAttribute(Qt.WA_TranslucentBackground, True)
+        import logging
+        logger = logging.getLogger('BioNexus.ui_operations')
+        logger.info(f"[主窗口] 强制重新应用下载面板圆角样式")
+        print(f"【DOWNLOAD PANEL DEBUG】强制重新应用下载面板圆角样式")
+        
+        # 悬浮面板定位：右侧边距20px，顶部边距100px
+        panel_x = self.width() - self.download_status_panel.width() - 20
+        panel_y = 100
+        self.download_status_panel.move(panel_x, panel_y)
+        print(f"【DOWNLOAD PANEL DEBUG】下载面板定位到: ({panel_x}, {panel_y})")
+        
+        self.download_status_panel.show()
+        
+        # 现代化工具栏不需要手动更新样式
+    
+    # def _close_download_status_panel(self):  # 旧系统方法，已不再使用
+    
+    def _show_modern_download_card(self):
+        """显示现代化下载状态卡片"""
+        import logging
+        logger = logging.getLogger(__name__)
+        print(f"【MAIN WINDOW DEBUG】=== _show_modern_download_card 函数开始执行 ===")
+        logger.info(f"【MAIN WINDOW DEBUG】=== _show_modern_download_card 函数开始执行 ===")
+        
+        # 🎯 下载卡片已在初始化时预创建，无需重复创建
+        if not self.modern_download_card:
+            print("【MAIN WINDOW ERROR】下载卡片未正确初始化！")
+            logger.error("【MAIN WINDOW ERROR】下载卡片未正确初始化！")
+            return
+        
+        # 显示遮罩层
+        print("【MAIN WINDOW DEBUG】显示遮罩层")
+        logger.info("【MAIN WINDOW DEBUG】显示遮罩层")
+        self.overlay.show_animated()
+        
+        # 获取精确的位置信息
+        toolbar_rect = self.toolbar.geometry()
+        download_button_rect = self.toolbar.download_rect
+        
+        print(f"【MAIN WINDOW DEBUG】工具栏矩形: {toolbar_rect}")
+        print(f"【MAIN WINDOW DEBUG】下载按钮矩形: {download_button_rect}")
+        logger.info(f"【MAIN WINDOW DEBUG】工具栏矩形: {toolbar_rect}")
+        logger.info(f"【MAIN WINDOW DEBUG】下载按钮矩形: {download_button_rect}")
+        
+        # 显示卡片 - 传递完整的几何信息
+        print("【MAIN WINDOW DEBUG】开始显示现代化下载卡片")
+        logger.info("【MAIN WINDOW DEBUG】开始显示现代化下载卡片")
+        self.modern_download_card.show_aligned_to_toolbar(
+            toolbar_bottom=toolbar_rect.bottom(),
+            button_rect=download_button_rect,
+            window_rect=self.rect()
+        )
+        
+        # 确保卡片在遮罩层之上
+        print("【MAIN WINDOW DEBUG】将卡片提升到最前面")
+        logger.info("【MAIN WINDOW DEBUG】将卡片提升到最前面")
+        self.modern_download_card.raise_()
+        
+        # 更新工具栏状态 - 设置下载按钮为激活状态
+        if hasattr(self, 'toolbar'):
+            self.toolbar.set_download_active(True)
+        
+        # 同步旧版面板的数据到新卡片
+        self._sync_download_data_to_modern_card()
+    
+    def _close_modern_download_card(self):
+        """关闭现代化下载状态卡片"""
+        if self.modern_download_card:
+            self.modern_download_card.hide()
+        
+        # 隐藏遮罩层
+        self.overlay.hide_animated()
+        
+        # 更新工具栏状态
+        if hasattr(self, 'toolbar'):
+            self.toolbar.set_download_active(False)
+    
+    def _sync_download_data_to_modern_card(self):
+        """同步下载数据到现代化卡片"""
+        if not self.modern_download_card:
+            return
+        
+        # 从旧版下载状态面板获取数据并同步到新卡片
+        # 这里需要根据旧版面板的数据结构进行适配
+        if hasattr(self.download_status_panel, 'download_items'):
+            for tool_name, old_item in self.download_status_panel.download_items.items():
+                if hasattr(old_item, 'progress_bar') and hasattr(old_item, 'status_label'):
+                    progress = old_item.progress_bar.value()
+                    status = old_item.status_label.text()
+                    self.modern_download_card.add_or_update_download(tool_name, progress, status)
+        
+        # 现代化工具栏不需要手动更新样式
+    
+    def _update_download_button_state(self):
+        """更新下载按钮的状态显示"""
+        # 只从现代化下载卡片获取计数（旧系统已移除）
+        if self.modern_download_card:
+            active_count, total_count = self.modern_download_card.get_download_count()
+        else:
+            # 默认值：没有下载任务
+            active_count, total_count = 0, 0
+        
+        # 更新现代化工具栏的下载计数
+        if hasattr(self, 'toolbar'):
+            self.toolbar.set_download_count(active_count)
+    
+    def _set_window_icon(self):
+        """设置应用窗口图标"""
+        import os
+        
+        # 构建图标路径
+        icon_path = os.path.join("resources", "icons", "app", "bionexus_icon.jpeg")
+        
+        # 检查图标文件是否存在
+        if os.path.exists(icon_path):
+            try:
+                # 创建并设置图标
+                app_icon = QIcon(icon_path)
+                self.setWindowIcon(app_icon)
+                
+                # 同时设置应用程序图标（任务栏等）
+                if QApplication.instance():
+                    QApplication.instance().setWindowIcon(app_icon)
+                
+                print(f"【ICON】应用图标设置成功: {icon_path}")
+            except Exception as e:
+                print(f"【ICON ERROR】设置图标失败: {e}")
+        else:
+            print(f"【ICON WARNING】图标文件未找到: {icon_path}")
+            # 尝试备用路径（兼容性）
+            fallback_path = "icon.jpeg"
+            if os.path.exists(fallback_path):
+                try:
+                    app_icon = QIcon(fallback_path)
+                    self.setWindowIcon(app_icon)
+                    print(f"【ICON】使用备用图标: {fallback_path}")
+                except Exception as e:
+                    print(f"【ICON ERROR】备用图标也失败: {e}")
+
+    def check_all_tools_status(self):
+        """
+        检查所有已安装工具的状态
+        在启动时调用（如果设置启用）
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        logger.info("开始检查所有已安装工具状态...")
+
+        # 获取所有已安装的工具
+        installed_tools = self.config_manager.get_tools_by_status('installed')
+
+        if not installed_tools:
+            logger.info("没有已安装的工具需要检查")
+            return
+
+        logger.info(f"找到 {len(installed_tools)} 个已安装工具，开始验证...")
+
+        # 记录检查结果
+        check_results = {
+            'valid': [],      # 状态正常的工具
+            'invalid': [],    # 状态异常的工具
+            'errors': []      # 检查出错的工具
+        }
+
+        for tool_data in installed_tools:
+            tool_name = tool_data.get('name')
+
+            try:
+                # 获取工具实例
+                tool_instance = self.tool_manager.get_tool(tool_name)
+
+                if not tool_instance:
+                    logger.warning(f"无法获取工具实例: {tool_name}")
+                    check_results['errors'].append(tool_name)
+                    continue
+
+                # 验证安装状态
+                is_valid = tool_instance.verify_installation()
+
+                if is_valid:
+                    logger.info(f"✓ {tool_name} - 状态正常")
+                    check_results['valid'].append(tool_name)
+                else:
+                    logger.warning(f"✗ {tool_name} - 状态异常（安装文件可能已损坏或移动）")
+                    check_results['invalid'].append(tool_name)
+
+                    # 更新工具状态为 available
+                    self.config_manager.update_tool_status(tool_name, 'available')
+
+                    # 刷新UI中的工具卡片
+                    if tool_name in self.tool_cards:
+                        card = self.tool_cards[tool_name]
+                        card.set_available_state()
+
+            except Exception as e:
+                logger.error(f"检查 {tool_name} 状态时出错: {e}")
+                check_results['errors'].append(tool_name)
+
+        # 记录检查摘要
+        logger.info("=" * 50)
+        logger.info(f"工具状态检查完成:")
+        logger.info(f"  - 正常: {len(check_results['valid'])} 个")
+        logger.info(f"  - 异常: {len(check_results['invalid'])} 个")
+        logger.info(f"  - 错误: {len(check_results['errors'])} 个")
+
+        if check_results['invalid']:
+            logger.warning(f"发现异常工具: {', '.join(check_results['invalid'])}")
+
+        logger.info("=" * 50)
+
+        # 如果有异常工具，显示通知（可选）
+        if check_results['invalid']:
+            invalid_count = len(check_results['invalid'])
+            logger.info(f"检测到 {invalid_count} 个工具状态异常，已自动更新状态")
+
+    def _check_and_handle_path_migration(self):
+        """
+        检测并处理路径迁移
+        当软件位置变更且用户有手动设置的绝对路径时，提示用户选择处理方式
+        """
+        import logging
+        from pathlib import Path
+        from PyQt5.QtCore import QTimer
+
+        logger = logging.getLogger(__name__)
+
+        # 需要检查的路径设置
+        path_settings = ['default_install_dir', 'conda_env_path']
+
+        for setting_name in path_settings:
+            saved_path = getattr(self.config_manager.settings, setting_name, "")
+
+            # 空路径跳过（使用默认值）
+            if not saved_path:
+                continue
+
+            saved_path_obj = Path(saved_path)
+
+            # 相对路径跳过（已经是理想状态）
+            if not saved_path_obj.is_absolute():
+                continue
+
+            # 是绝对路径，检查是否指向旧版本
+            current_dir = Path.cwd()
+            current_dir_str = str(current_dir).replace('\\', '/')
+
+            # 检查路径是否不在当前软件目录下
+            try:
+                saved_path_obj.relative_to(current_dir)
+                # 能计算相对路径，说明在当前目录下，继续检查
+            except ValueError:
+                # 不在当前目录下，这是真正的外部路径，不处理
+                logger.info(f"{setting_name} 指向外部路径，保持不变: {saved_path}")
+                continue
+
+            # 在当前目录下，但使用了绝对路径（可能是旧版本遗留）
+            # 检查路径中是否包含旧版本号
+            if 'BioNexus_' in saved_path and current_dir_str not in saved_path:
+                # 发现路径迁移情况
+                logger.info(f"检测到路径迁移: {setting_name} = {saved_path}")
+
+                # 计算新的默认路径
+                from utils.path_resolver import get_path_resolver
+                path_resolver = get_path_resolver()
+
+                if setting_name == 'default_install_dir':
+                    new_path = str(path_resolver.get_install_dir())
+                elif setting_name == 'conda_env_path':
+                    new_path = str(path_resolver.get_env_cache_dir())
+                else:
+                    continue
+
+                # 延迟显示对话框，确保主窗口已完全显示
+                def show_migration_dialog():
+                    from ui.path_migration_dialog import PathMigrationDialog
+
+                    dialog = PathMigrationDialog(saved_path, new_path, setting_name, self)
+                    if dialog.exec_() == PathMigrationDialog.Accepted:
+                        choice = dialog.get_user_choice()
+
+                        if choice == 'migrate':
+                            # 用户选择迁移到新路径
+                            logger.info(f"用户选择迁移路径: {setting_name} -> {new_path}")
+
+                            # 转换为相对路径保存
+                            try:
+                                relative_path = Path(new_path).relative_to(current_dir)
+                                path_to_save = str(relative_path)
+                            except ValueError:
+                                path_to_save = new_path
+
+                            setattr(self.config_manager.settings, setting_name, path_to_save)
+                            self.config_manager.save_settings()
+
+                            logger.info(f"路径已更新并保存: {path_to_save}")
+                        else:
+                            # 用户选择保留原路径
+                            logger.info(f"用户选择保留原路径: {setting_name} = {saved_path}")
+
+                # 延迟500ms显示对话框
+                QTimer.singleShot(500, show_migration_dialog)
+
+    def retranslateUi(self, locale: str = None):
+        """
+        Retranslate UI text - Real-time language switching
+        Triggered by TranslationManager's languageChanged signal
+
+        Args:
+            locale: New language code
+        """
+        logger.info("=" * 60)
+        logger.info("retranslateUi CALLED")
+        logger.info(f"Locale parameter: {locale}")
+
+        # CRITICAL: Check if UI is fully initialized before proceeding
+        if not getattr(self, '_ui_fully_initialized', False):
+            logger.warning("SKIPPED: retranslateUi called before UI fully initialized")
+            logger.warning("This is expected during initial window construction")
+            return
+
+        logger.info("UI is fully initialized, proceeding with retranslation...")
+
+        # Update window title
+        logger.debug("Updating window title...")
+        self.setWindowTitle(self.tr("BioNexus Launcher"))
+        logger.debug(f"Window title updated to: {self.windowTitle()}")
+
+        # Save current view state
+        current_index = self.main_content_stack.currentIndex()
+        current_tool = getattr(self, '_current_displayed_tool', None)
+        logger.info(f"Current view index: {current_index}")
+        logger.info(f"Current tool: {current_tool}")
+
+        # IMPORTANT: If on detail page but no tool, force back to main page
+        if current_index == 1 and not current_tool:
+            logger.warning("WARNING: On detail page but no tool selected - forcing back to main page")
+            current_index = 0
+
+        # Recreate all major UI components to refresh translations
+        try:
+            # 1. Recreate sidebar
+            logger.info("Step 1/7: Recreating sidebar...")
+            if self.sidebar:
+                old_sidebar = self.sidebar
+                self.sidebar = ModernSidebar()
+                # Reconnect signals
+                self.sidebar.search_changed.connect(self._on_search_changed)
+                self.sidebar.view_changed.connect(self._on_view_changed)
+                self.sidebar.recent_tool_clicked.connect(self._on_recent_tool_clicked)
+                # Replace widget - get parent layout dynamically
+                parent_layout = old_sidebar.parent().layout()
+                if parent_layout:
+                    parent_layout.replaceWidget(old_sidebar, self.sidebar)
+                    old_sidebar.deleteLater()
+                    logger.info("SUCCESS: Sidebar recreated")
+                else:
+                    logger.error("FAILED: Could not get parent layout for sidebar")
+            else:
+                logger.debug("SKIP: Sidebar does not exist")
+
+            # 2. Recreate toolbar
+            logger.info("Step 2/7: Recreating toolbar...")
+            if self.toolbar:
+                old_toolbar = self.toolbar
+                self.toolbar = ModernToolbar()
+                # Reconnect signals
+                self.toolbar.filter_clicked.connect(self._toggle_filter_panel)
+                self.toolbar.download_status_clicked.connect(self._toggle_download_status_panel)
+                self.toolbar.back_clicked.connect(self.go_back_to_main)
+                # Replace widget
+                parent_layout = old_toolbar.parent().layout()
+                if parent_layout:
+                    parent_layout.replaceWidget(old_toolbar, self.toolbar)
+                old_toolbar.deleteLater()
+                logger.info("SUCCESS: Toolbar recreated")
+            else:
+                logger.debug("SKIP: Toolbar does not exist")
+
+            # 3. Recreate filter panel (if exists)
+            logger.info("Step 3/7: Recreating filter panel...")
+            if hasattr(self, 'filter_panel') and self.filter_panel:
+                old_filter = self.filter_panel
+                from ui.filter_panel import FilterPanel
+                self.filter_panel = FilterPanel(self.tool_manager.get_all_tools())
+                self.filter_panel.filter_changed.connect(self._on_filter_changed)
+                self.filter_panel.setVisible(old_filter.isVisible())
+                # Replace widget
+                parent_layout = old_filter.parent().layout()
+                if parent_layout:
+                    parent_layout.replaceWidget(old_filter, self.filter_panel)
+                old_filter.deleteLater()
+                logger.info("SUCCESS: Filter panel recreated")
+            else:
+                logger.debug("SKIP: Filter panel does not exist")
+
+            # 4. Recreate download status panel (if exists)
+            logger.info("Step 4/7: Recreating download status panel...")
+            if hasattr(self, 'download_status_panel') and self.download_status_panel:
+                old_download = self.download_status_panel
+                from ui.download_status_panel import DownloadStatusPanel
+                self.download_status_panel = DownloadStatusPanel(self.tool_manager)
+                self.download_status_panel.setVisible(old_download.isVisible())
+                # Replace widget
+                parent_layout = old_download.parent().layout()
+                if parent_layout:
+                    parent_layout.replaceWidget(old_download, self.download_status_panel)
+                old_download.deleteLater()
+                logger.info("SUCCESS: Download status panel recreated")
+            else:
+                logger.debug("SKIP: Download status panel does not exist")
+
+            # 5. Refresh tool cards
+            logger.info("Step 5/7: Refreshing tool cards...")
+            self._update_tools_display()
+            logger.info("SUCCESS: Tool cards refreshed")
+
+            # 6. Reload tool detail if currently displayed
+            logger.info("Step 6/7: Checking if tool detail needs reload...")
+            if current_tool and current_index == 1:  # Detail page
+                logger.info(f"Reloading tool detail: {current_tool}")
+                self.show_tool_detail(current_tool)
+                logger.info("SUCCESS: Tool detail reloaded")
+            else:
+                logger.debug("SKIP: Not on tool detail page")
+
+            # 7. settings_panel will automatically receive signal and refresh
+            logger.info("Step 7/7: settings_panel will auto-refresh via signal")
+
+            # 8. Restore view index to ensure correct page is displayed
+            logger.info("Step 8/8: Restoring view index...")
+            logger.debug(f"Restoring stack index to: {current_index}")
+            self.main_content_stack.setCurrentIndex(current_index)
+            logger.info("SUCCESS: View index restored")
+
+            logger.info("=" * 60)
+
+        except Exception as e:
+            logger.error(f"EXCEPTION in retranslateUi: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            # Don't crash the app - just log the error
+            logger.error("Translation update failed, but app will continue running")
