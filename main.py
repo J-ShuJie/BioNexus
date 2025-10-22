@@ -325,16 +325,60 @@ class BioNexusLauncher:
             # 获取翻译管理器单例
             translator = get_translator()
 
-            # 从配置中读取语言设置
+            # 初始化配置管理器
             config_manager = ConfigManager()
-            current_locale = getattr(config_manager.settings, 'language', 'zh_CN')
+
+            # 判断是否首次启动（尚无配置文件）
+            try:
+                config_path = getattr(config_manager, 'config_file', None)
+                first_run = (config_path is None) or (not config_path.exists())
+            except Exception:
+                first_run = False
+
+            if first_run:
+                # 基于系统语言自动选择（仅首次）
+                system_locale = QLocale.system().name() or ''  # e.g., en_US, zh_CN, de_DE
+                normalized = system_locale.replace('-', '_')
+
+                supported = set(translator.get_supported_languages().keys())
+
+                chosen = None
+                if normalized in supported:
+                    chosen = normalized
+                else:
+                    lang_part = (normalized.split('_')[0] if normalized else '').lower()
+                    fallback_map = {
+                        'en': 'en_US',
+                        'zh': 'zh_CN',
+                        'de': 'de_DE',
+                    }
+                    if lang_part in fallback_map and fallback_map[lang_part] in supported:
+                        chosen = fallback_map[lang_part]
+                if not chosen:
+                    chosen = 'en_US' if 'en_US' in supported else next(iter(supported))
+
+                # 持久化选择
+                try:
+                    config_manager.update_setting('language', chosen)
+                except Exception:
+                    try:
+                        config_manager.settings.language = chosen
+                        config_manager.save_settings()
+                    except Exception:
+                        pass
+
+                current_locale = chosen
+                startup_logger.info(f"首次启动，系统语言 {system_locale} -> 选择 {chosen}")
+            else:
+                # 后续启动使用用户保存的选择
+                current_locale = getattr(config_manager.settings, 'language', 'zh_CN')
 
             # 加载语言
             translator.load_language(current_locale)
             startup_logger.info(f"翻译系统初始化成功, 当前语言: {current_locale}")
             self.comprehensive_logger.log_startup_phase("翻译系统", f"已加载语言: {current_locale}")
         except Exception as e:
-            # 翻译系统失败不应阻止应用启动,使用默认中文
+            # 翻译系统失败不应阻止应用启动, 使用默认中文
             startup_logger.warning(f"翻译系统初始化失败: {e}, 将使用默认语言")
             self.comprehensive_logger.log_startup_phase("翻译系统", f"初始化失败: {e}, 使用默认语言", False)
 

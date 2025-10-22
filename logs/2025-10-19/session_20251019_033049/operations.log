@@ -1,8 +1,0 @@
-2025-10-19 03:30:53,001 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
-2025-10-19 03:30:53,295 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
-2025-10-19 03:30:54,136 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
-2025-10-19 03:30:54,140 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
-2025-10-19 03:31:04,104 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "default_install_dir", "新值": "C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.18\\installed_tools"}
-2025-10-19 03:31:04,108 - BioNexus.operations - INFO - 用户操作: 设置变更 - {"设置项": "default_install_dir", "新值": "C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.18\\installed_tools"}
-2025-10-19 03:31:19,406 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
-2025-10-19 03:31:19,447 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

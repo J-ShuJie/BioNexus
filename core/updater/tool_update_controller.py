@@ -151,13 +151,11 @@ class ToolUpdateController(QObject):
         """安排应用关闭时更新"""
         self.logger.log_runtime(f"安排{len(updates)}个工具在应用关闭时更新")
         
-        # 可以在系统托盘或状态栏显示小提示
-        if hasattr(self.parent_window, 'download_status_panel'):
-            self.parent_window.download_status_panel.add_or_update_download(
-                "工具更新",
-                0,
-                f"发现{len(updates)}个工具更新，将在应用关闭时自动更新"
-            )
+        # 可以在状态区域显示小提示（使用现代化下载卡片）
+        if hasattr(self.parent_window, 'modern_download_card') and self.parent_window.modern_download_card:
+            title = self.parent_window.tr("工具更新")
+            msg = self.parent_window.tr("发现{0}个工具更新，将在应用关闭时自动更新").format(len(updates))
+            self.parent_window.modern_download_card.add_or_update_download(title, 0, msg)
     
     def _execute_auto_updates(self, updates: List[Dict[str, Any]]):
         """执行自动更新"""

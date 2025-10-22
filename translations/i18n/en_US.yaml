@@ -147,6 +147,7 @@ MainWindow:
 
     '
   '{0} (Uninstall)': '{0} (Uninstall)'
+  '{0} (卸载)': '{0} (Uninstall)'
   '{0} Details': '{0} Details'
   '{0} Error': '{0} Error'
   '{0} Update': '{0} Update'
@@ -517,6 +518,10 @@ ModernDownloadCard:
   No download tasks: No download tasks
   Download progress will appear when installing tools: Download progress will appear when installing tools
   Download Manager: Download Manager
+  "Install: {0}": "Install: {0}"
+  "Uninstall: {0}": "Uninstall: {0}"
+  Unknown: Unknown
+  Completed: Completed
   Clear Completed: Clear Completed
   "Total: 0 tasks": "Total: 0 tasks"
   "{0} in progress": "{0} in progress"
@@ -537,9 +542,6 @@ FilterPanel:
   重置: Reset
   应用: Apply
   应用筛选: Apply Filter
-ModernFilterCard:
-  重置: Reset
-  应用筛选: Apply Filter
 ToolDescriptions:
   FastQC: "A quality control tool for high-throughput sequencing data. Generates comprehensive HTML reports."
   BLAST: "Sequence similarity search against large databases; supports nucleotide and protein sequences."
@@ -556,3 +558,61 @@ ToolDescriptionsBySlug:
   hisat2: "Ultrafast and sensitive alignment program for mapping next‑generation sequencing reads (RNA‑seq)."
   iqtree: "Efficient phylogenetic tree inference with model selection and ultrafast bootstrap."
   igv: "Interactive Genomics Viewer for visualizing BAM/VCF and many genomics data formats."
+Tools:
+  FastQC.Description: 'A quality control tool for high-throughput sequencing data, providing detailed reports and visualizations. Supports FASTQ, SAM and BAM formats.'
+  BLAST.Description: 'Basic Local Alignment Search Tool for finding sequence similarity; supports nucleotide and protein searches.'
+  BWA.Description: 'Burrows–Wheeler Aligner for mapping short DNA reads to large reference genomes. Efficient for Illumina data.'
+  SAMtools.Description: 'A suite of tools for manipulating high-throughput sequencing alignments in SAM/BAM/CRAM formats, including sorting, indexing and statistics.'
+  IGV.Description: 'A powerful genome visualization tool supporting many formats (BAM, VCF, BED, etc.). Visualize alignments, variants and annotations together.'
+  HISAT2.Description: 'A fast and memory-efficient RNA‑seq read aligner supporting spliced alignments; suitable for transcriptome analysis.'
+  IQ-TREE.Description: 'An efficient phylogenetic inference software using maximum likelihood; supports diverse models and bootstrap analyses.'
+ModernFilterCard:
+  筛选工具: Filter Tools
+  工具分类: Tool Categories
+  序列分析: Sequence Analysis
+  进化分析: Phylogenetics
+  基因组学: Genomics
+  序列比对: Alignment
+  结构分析: Structure Analysis
+  基因注释: Annotation
+  安装状态: Installation Status
+  已安装: Installed
+  可安装: Available
+  需要更新: Update Available
+  重置: Reset
+  应用筛选: Apply Filter
+  取消: Cancel
+EnhancedDetailPage:
+  "Version {0}": "Version {0}"
+  "Installed": "Installed"
+  "Not Installed": "Not Installed"
+  "🚀 Launch": "🚀 Launch"
+  "Uninstall": "Uninstall"
+  "Used {0}": "Used {0}"
+  "📥 Install Tool": "📥 Install Tool"
+  "📖 Usage Guide": "📖 Usage Guide"
+  "No usage instructions yet": "No usage instructions yet"
+  "2.5 hours": "2.5 hours"
+  "1.2 hours": "1.2 hours"
+  "45 minutes": "45 minutes"
+  "3.8 hours": "3.8 hours"
+  "Not Used": "Not Used"
+  "📝 Tool Overview": "📝 Tool Overview"
+  "No detailed description": "No detailed description"
+  "🔧 Technical Specs": "🔧 Technical Specs"
+  "Programming Language": "Programming Language"
+  "Dependencies": "Dependencies"
+  "Input Formats": "Input Formats"
+  "Output Formats": "Output Formats"
+  "CPU Requirements": "CPU Requirements"
+  "Memory Requirements": "Memory Requirements"
+  "Disk Usage": "Disk Usage"
+  "Download Sources": "Download Sources"
+  "Single core is fine": "Single core is fine"
+  "Minimum 2GB": "Minimum 2GB"
+  "Multiple formats": "Multiple formats"
+  "Multi-core recommended": "Multi-core recommended"
+  "Depends on database size": "Depends on database size"
+  "3GB or more": "3GB or more"
+  "1GB or more": "1GB or more"
+  "4GB or more recommended": "4GB or more recommended"

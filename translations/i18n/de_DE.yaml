@@ -114,6 +114,7 @@ MainWindow:
   ? "Version: {0}\n\n    "
   : "Version: {0}\n\n    "
   '{0} (Uninstall)': '{0} (Deinstallieren)'
+  '{0} (卸载)': '{0} (Deinstallieren)'
   '{0} Details': '{0} Details'
   '{0} Error': '{0} Fehler'
   '{0} Update': '{0} Update'
@@ -676,6 +677,10 @@ ModernDownloadCard:
   "{0} failed": "{0} fehlgeschlagen"
   "All tasks completed": "Alle Aufgaben abgeschlossen"
   "Total: {0} tasks": "Gesamt: {0} Aufgaben"
+  "Install: {0}": "Installieren: {0}"
+  "Uninstall: {0}": "Deinstallieren: {0}"
+  Unknown: Unbekannt
+  Completed: Abgeschlossen
 ToolDetailDialog:
   🚀 启动工具: 🚀 Tool starten
   📦 安装: 📦 Installieren
@@ -706,9 +711,6 @@ ToolDetailDialog:
   "Usage Guide": "Benutzerhandbuch"
   "Version History": "Versionsverlauf"
 
-ModernFilterCard:
-  Reset: Zurücksetzen
-  Apply Filter: Filter anwenden
 
 ToolCardV3:
   Launch: Starten
@@ -730,3 +732,27 @@ ToolDescriptionsBySlug:
   hisat2: "Sehr schneller, sensitiver Aligner für Next‑Generation‑Reads (z. B. RNA‑seq)."
   iqtree: "Effiziente phylogenetische Bauminferenz mit Modellauswahl und sehr schnellem Bootstrap."
   igv: "Interaktiver Genombrowser zur Visualisierung von BAM/VCF und vielen weiteren Formaten."
+Tools:
+  FastQC.Description: 'Ein Qualitätssicherungswerkzeug für Hochdurchsatz‑Sequenzdaten mit detaillierten Berichten und Visualisierungen. Unterstützt die Formate FASTQ, SAM und BAM.'
+  BLAST.Description: 'Basic Local Alignment Search Tool zur Suche nach Sequenzähnlichkeiten; unterstützt Nukleotid‑ und Protein‑Suchen.'
+  BWA.Description: 'Burrows–Wheeler‑Aligner zum Abgleichen kurzer DNA‑Reads mit großen Referenzgenomen. Effizient für Illumina‑Daten.'
+  SAMtools.Description: 'Werkzeugsammlung zur Verarbeitung von Alignments aus Hochdurchsatz‑Sequenzierungen in den Formaten SAM/BAM/CRAM, einschließlich Sortieren, Indizieren und Statistik.'
+  IGV.Description: 'Leistungsstarkes Genom‑Visualisierungstool mit Unterstützung vieler Formate (BAM, VCF, BED usw.). Zeigt Alignments, Varianten und Annotationen gemeinsam an.'
+  HISAT2.Description: 'Ein schneller und speichereffizienter RNA‑seq‑Aligner mit Unterstützung für gespleißte Alignments; geeignet für Transkriptom‑Analysen.'
+  IQ-TREE.Description: 'Effiziente Software zur phylogenetischen Inferenz mittels Maximum‑Likelihood; unterstützt vielfältige Modelle und Bootstrap‑Analysen.'
+ModernFilterCard:
+  筛选工具: Tools filtern
+  工具分类: Toolkategorien
+  序列分析: Sequenzanalyse
+  进化分析: Phylogenie
+  基因组学: Genomik
+  序列比对: Alignment
+  结构分析: Strukturanalyse
+  基因注释: Genannotierung
+  安装状态: Installationsstatus
+  已安装: Installiert
+  可安装: Verfügbar
+  需要更新: Update verfügbar
+  重置: Zurücksetzen
+  应用筛选: Filter anwenden
+  取消: Abbrechen

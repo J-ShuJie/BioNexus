@@ -26,6 +26,12 @@ except Exception:
         def current_locale() -> str:  # type: ignore
             return 'zh_CN'
 
+# Lightweight access to i18n translator without requiring PyQt
+try:
+    from utils.i18n import get_i18n  # type: ignore
+except Exception:
+    get_i18n = None  # type: ignore
+
 
 _SUFFIX_BY_LOCALE = {
     'zh_CN': ('zh', 'cn', 'zh_cn', 'zh-CN'),
@@ -35,17 +41,11 @@ _SUFFIX_BY_LOCALE = {
 
 
 def _from_variant_fields(data: Dict, locale: str) -> str:
-    """Try to read description from variant fields like description_en/zh/de."""
-    # Direct exact match first
-    key_exact = f'description_{locale}'
-    if key_exact in data and isinstance(data[key_exact], str):
-        return data[key_exact]
-
-    # Try common suffixes for the locale
-    for suf in _SUFFIX_BY_LOCALE.get(locale, ()):  # type: ignore[arg-type]
-        key = f'description_{suf}'
-        if key in data and isinstance(data[key], str):
-            return data[key]
+    """
+    Deprecated: variant-field based lookups are no longer used.
+    This function always returns an empty string to enforce YAML as the
+    single source of truth for localized tool descriptions.
+    """
     return ''
 
 
@@ -53,39 +53,48 @@ def get_localized_tool_description(tool_data: Dict) -> str:
     """
     Return a localized description for a tool.
 
-    Priority:
-    1) tool_data['descriptions'][current_locale]
-    2) tool_data['description_<variant>'] (e.g., description_en/zh/de)
-    3) tool_data['description']
-    4) ''
+    Source of truth:
+    - YAML: context 'Tools', key '<tool_id>.Description' only
     """
     if not isinstance(tool_data, dict):
         return ''
 
     locale = current_locale() or 'zh_CN'
 
-    # 1) Look for consolidated mapping
-    descriptions = tool_data.get('descriptions')
-    if isinstance(descriptions, dict):
-        # Exact locale
-        if locale in descriptions and isinstance(descriptions[locale], str):
-            return descriptions[locale]
-        # Common fallbacks
-        for fallback in ('en_US', 'zh_CN', 'de_DE'):
-            val = descriptions.get(fallback)
-            if isinstance(val, str) and val:
-                return val
+    # 0) YAML-based i18n lookups (single source of truth)
+    #    Try multiple well-defined keys to ensure robustness across catalogs:
+    #    a) Tools -> "<ToolID>.Description" (preferred)
+    #    b) ToolDescriptions -> "<ToolID>"
+    #    c) ToolDescriptionsBySlug -> "<slug>" where slug is lowercase alnum of ToolID
+    try:
+        if get_i18n is not None:
+            raw_id = str(tool_data.get('id') or tool_data.get('name') or '').strip()
+            if raw_id:
+                # Normalize whitespace -> single spaces
+                tool_id = ' '.join(raw_id.split())
+                slug = ''.join(ch.lower() for ch in tool_id if ch.isalnum())
+                i18n = get_i18n()
 
-    # 2) Variant fields like description_en/zh/de
-    variant = _from_variant_fields(tool_data, locale)
-    if variant:
-        return variant
+                # a) Tools/<ToolID>.Description
+                key_a = f"{tool_id}.Description"
+                val_a = i18n.translate(key_a, context='Tools')
+                if isinstance(val_a, str) and val_a and val_a != key_a:
+                    return val_a
 
-    # 3) Plain description
-    desc = tool_data.get('description')
-    if isinstance(desc, str):
-        return desc
+                # b) ToolDescriptions/<ToolID>
+                key_b = tool_id
+                val_b = i18n.translate(key_b, context='ToolDescriptions')
+                if isinstance(val_b, str) and val_b and val_b != key_b:
+                    return val_b
 
-    # 4) Nothing available
+                # c) ToolDescriptionsBySlug/<slug>
+                key_c = slug
+                val_c = i18n.translate(key_c, context='ToolDescriptionsBySlug')
+                if isinstance(val_c, str) and val_c and val_c != key_c:
+                    return val_c
+    except Exception:
+        # YAML lookup only; if it fails, fall through and return '' below
+        pass
+
+    # YAML is the only accepted source. If no YAML entry is found, return empty string.
     return ''
-

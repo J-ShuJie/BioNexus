@@ -285,7 +285,7 @@ class ToolCardV3(QWidget):
             from utils.tool_localization import get_localized_tool_description
             description = get_localized_tool_description(self.tool_data)
         except Exception:
-            description = self.tool_data.get('description', '')
+            description = ''
         if not description:
             description = self.tr('No detailed description')
             
@@ -478,6 +478,8 @@ class ToolCardV3(QWidget):
             self.install_btn.setText(self.tr("Install"))
         if hasattr(self, 'detail_btn'):
             self.detail_btn.setText(self.tr("Details"))
+        # Redraw to refresh localized description text
+        self.update()
 
         # Trigger repaint to update any painted text
         self.update()

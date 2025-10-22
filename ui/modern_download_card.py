@@ -777,8 +777,8 @@ class ModernDownloadCard(QWidget):
         title_layout.setContentsMargins(0, 0, 0, 0)
         title_layout.setSpacing(2)
         
-        title = QLabel(self.tr("Download Manager"))
-        title.setStyleSheet("""
+        self.header_title = QLabel(self.tr("Download Manager"))
+        self.header_title.setStyleSheet("""
             font-size: 16px;
             font-weight: 600;
             color: #111827;

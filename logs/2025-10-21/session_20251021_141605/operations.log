@@ -1,6 +1,0 @@
-2025-10-21 14:16:07,906 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
-2025-10-21 14:16:08,077 - BioNexus.operations - INFO - 用户操作: 应用启动 - {"窗口": "已显示"}
-2025-10-21 14:16:09,977 - BioNexus.operations - INFO - 用户操作: 视图切换 - {"function": "_on_view_changed"}
-2025-10-21 14:16:09,980 - BioNexus.operations - INFO - 视图切换: all-tools → settings - 成功
-2025-10-21 14:16:24,802 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}
-2025-10-21 14:16:24,830 - BioNexus.operations - INFO - 用户操作: 应用关闭 - {"关闭方式": "窗口关闭按钮"}

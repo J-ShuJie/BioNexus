@@ -285,7 +285,7 @@ class ToolManager(QObject):
         try:
             desc = get_localized_tool_description(td)
         except Exception:
-            desc = td.get('description', '')
+            desc = ''
         td['display_description'] = desc
         td['description'] = desc
         return td

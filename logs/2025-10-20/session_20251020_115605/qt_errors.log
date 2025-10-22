@@ -1,5 +1,0 @@
-[2025-10-20 11:56:06] [2025-10-20 11:56:06] INFO: Could not load the Qt platform plugin "xcb" in "" even though it was found.
-[2025-10-20 11:56:06] [2025-10-20 11:56:06] FATAL: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
-
-Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx, webgl, xcb.
-

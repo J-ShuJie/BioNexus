@@ -511,8 +511,8 @@ class ModernFilterCard(QWidget):
             title_row.setContentsMargins(0, 0, 0, 0)
             title_row.setSpacing(0)
             
-            main_title = SmartTextWidget(self.tr("筛选工具"), font_size=12, color="#111827")  # 主标题: 12px加粗
-            title_row.addWidget(main_title)
+            self.main_title = SmartTextWidget(self.tr("筛选工具"), font_size=12, color="#111827")  # 主标题: 12px加粗
+            title_row.addWidget(self.main_title)
             title_row.addStretch()
             
             # 关闭按钮
@@ -589,8 +589,8 @@ class ModernFilterCard(QWidget):
         layout.setSpacing(12)
         
         # 🎯 区域标题 - 使用智能标题组件
-        title = SmartTitleWidget(self.tr("工具分类"))
-        layout.addWidget(title)
+        self.category_title = SmartTitleWidget(self.tr("工具分类"))
+        layout.addWidget(self.category_title)
         
         # 卡片容器 - 自适应网格布局
         cards_container = QWidget()
@@ -629,8 +629,8 @@ class ModernFilterCard(QWidget):
         layout.setSpacing(12)
         
         # 🎯 区域标题 - 使用智能标题组件
-        title = SmartTitleWidget(self.tr("安装状态"))
-        layout.addWidget(title)
+        self.status_title = SmartTitleWidget(self.tr("安装状态"))
+        layout.addWidget(self.status_title)
         
         # 卡片容器 - 自适应网格布局
         cards_container = QWidget()
@@ -669,10 +669,10 @@ class ModernFilterCard(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)  # 🎯 按钮区域不设独立边距，由主容器统一控制
         layout.setSpacing(12)
         
-        # 重置按钮 - 融合式设计
-        reset_btn = QPushButton(self.tr("重置"))
-        reset_btn.setFixedHeight(30)  # 适应小字体，降低高度
-        reset_btn.setStyleSheet("""
+        # 重置按钮 - 与应用按钮并列
+        self.reset_btn = QPushButton(self.tr("重置"))
+        self.reset_btn.setFixedHeight(30)  # 适应小字体，降低高度
+        self.reset_btn.setStyleSheet("""
             QPushButton {
                 background-color: #f8fafc;
                 color: #64748b;
@@ -698,9 +698,9 @@ class ModernFilterCard(QWidget):
         layout.addStretch()
         
         # 应用按钮 - 绿色主题，融合式设计
-        apply_btn = QPushButton(self.tr("应用筛选"))
-        apply_btn.setFixedHeight(30)  # 与重置按钮相同高度
-        apply_btn.setStyleSheet("""
+        self.apply_btn = QPushButton(self.tr("应用筛选"))
+        self.apply_btn.setFixedHeight(30)  # 与重置按钮相同高度
+        self.apply_btn.setStyleSheet("""
             QPushButton {
                 background-color: #22c55e;
                 color: white;

@@ -1023,23 +1023,9 @@ class MainWindow(QMainWindow):
         print(f"【下载状态链路-P3.5】✅ 详情页面检查完成，准备更新下载面板")
         logger.info(f"【下载状态链路-P3.5】✅ 详情页面检查完成，准备更新下载面板")
         
-        # 更新下载状态面板（旧版）
-        if hasattr(self, 'download_status_panel'):
-            print(f"【下载状态链路-P4】更新旧版下载状态面板")
-            logger.info(f"【下载状态链路-P4】更新旧版下载状态面板")
-            try:
-                self.download_status_panel.add_or_update_download(tool_name, progress, status_text)
-                print(f"【下载状态链路-P4.1】✅ 旧版下载状态面板更新成功")
-                logger.info(f"【下载状态链路-P4.1】✅ 旧版下载状态面板更新成功")
-            except Exception as e:
-                print(f"【下载状态链路-P4.1】❌ 旧版下载状态面板更新异常: {e}")
-                logger.error(f"【下载状态链路-P4.1】❌ 旧版下载状态面板更新异常: {e}")
-        else:
-            print(f"【下载状态链路-P4】⚠️ 旧版下载状态面板不存在")
-            logger.warning(f"【下载状态链路-P4】⚠️ 旧版下载状态面板不存在")
-        
-        print(f"【下载状态链路-P4.5】✅ 旧版下载面板检查完成，现在检查现代化下载卡片")
-        logger.info(f"【下载状态链路-P4.5】✅ 旧版下载面板检查完成，现在检查现代化下载卡片")
+        # 统一更新现代化下载卡片
+        print(f"【下载状态链路-P4】✅ 现在检查现代化下载卡片")
+        logger.info(f"【下载状态链路-P4】✅ 现在检查现代化下载卡片")
         
         # 🎯 更新现代化下载卡片（现在预创建了，始终存在）
         if self.modern_download_card:
@@ -1085,9 +1071,6 @@ class MainWindow(QMainWindow):
             print(f"[安装错误-详情页面] 清除详情页面安装状态: {tool_name}")
             if hasattr(self.current_detail_page, 'set_installing_state'):
                 self.current_detail_page.set_installing_state(False)
-        
-        # 更新下载状态面板为失败状态
-        self.download_status_panel.mark_download_failed(tool_name, error_message)
         
         # 更新现代化下载卡片为失败状态
         if self.modern_download_card:
@@ -1507,22 +1490,16 @@ class MainWindow(QMainWindow):
     
     def _on_tool_update_status_changed(self, tool_name: str, status: str):
         """处理工具更新状态变化"""
-        # 在下载状态面板显示更新进度
-        if hasattr(self, 'download_status_panel'):
+        # 在现代化下载卡片显示更新进度（旧面板已停用）
+        if hasattr(self, 'modern_download_card') and self.modern_download_card:
+            title = self.tr("{0} 更新").format(tool_name)
             if status == "更新中":
-                self.download_status_panel.add_or_update_download(
-                    self.tr("{0} 更新").format(tool_name), 0, self.tr("准备更新...")
-                )
+                self.modern_download_card.add_or_update_download(title, 0, self.tr("准备更新..."))
             elif status == "更新成功":
-                self.download_status_panel.add_or_update_download(
-                    self.tr("{0} 更新").format(tool_name), 100, self.tr("更新完成")
-                )
-                # 刷新工具显示
+                self.modern_download_card.add_or_update_download(title, 100, self.tr("更新完成"))
                 self._update_tools_display()
             elif status == "更新失败":
-                self.download_status_panel.add_or_update_download(
-                    self.tr("{0} 更新").format(tool_name), -1, self.tr("更新失败")
-                )
+                self.modern_download_card.add_or_update_download(title, 0, self.tr("更新失败"))
         
         # 重置更新按钮状态（如果是手动触发）
         if hasattr(self, 'update_btn'):
@@ -1585,31 +1562,7 @@ class MainWindow(QMainWindow):
         print(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数执行完成 ===")
         logger.info(f"【MAIN WINDOW DEBUG】=== _toggle_download_status_panel 函数执行完成 ===")
     
-    def _show_download_status_panel(self):
-        """显示下载状态面板"""
-        # 隐藏筛选面板（相互排斥）
-        if self.filter_panel.isVisible():
-            self.filter_panel.hide()
-        
-        # 强制重新应用圆角样式（每次显示时都重新设置）
-        self.download_status_panel.setWindowFlags(Qt.FramelessWindowHint)
-        self.download_status_panel.setAttribute(Qt.WA_TranslucentBackground, True)
-        import logging
-        logger = logging.getLogger('BioNexus.ui_operations')
-        logger.info(f"[主窗口] 强制重新应用下载面板圆角样式")
-        print(f"【DOWNLOAD PANEL DEBUG】强制重新应用下载面板圆角样式")
-        
-        # 悬浮面板定位：右侧边距20px，顶部边距100px
-        panel_x = self.width() - self.download_status_panel.width() - 20
-        panel_y = 100
-        self.download_status_panel.move(panel_x, panel_y)
-        print(f"【DOWNLOAD PANEL DEBUG】下载面板定位到: ({panel_x}, {panel_y})")
-        
-        self.download_status_panel.show()
-        
-        # 现代化工具栏不需要手动更新样式
-    
-    # def _close_download_status_panel(self):  # 旧系统方法，已不再使用
+    # 旧版下载状态面板方法已移除，统一使用现代化下载卡片
     
     def _show_modern_download_card(self):
         """显示现代化下载状态卡片"""

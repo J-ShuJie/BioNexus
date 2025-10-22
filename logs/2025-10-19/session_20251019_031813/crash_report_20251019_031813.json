@@ -1,7 +1,0 @@
-{
-  "timestamp": "2025-10-19T03:18:13.186188",
-  "exception_type": "SyntaxError",
-  "exception_message": "expected 'except' or 'finally' block (main_window.py, line 1702)",
-  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.19\\main.py\", line 151, in <module>\n    from ui.main_window import MainWindow\n  File \"C:\\Users\\15052\\Desktop\\BioNexus\\BioNexus_1.2.19\\ui\\main_window.py\", line 1702\n    def check_all_tools_status(self):\nSyntaxError: expected 'except' or 'finally' block\n",
-  "session_id": "20251019_031813"
-}

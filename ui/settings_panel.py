@@ -1048,66 +1048,62 @@ class SettingsPanel(QWidget):
             elif isinstance(control, QComboBox):
                 # 下拉框使用setCurrentText或setCurrentIndex
                 if setting_name == 'language' and hasattr(settings, 'language'):
-                    # 语言设置特殊处理
-                    language_map = {
-                        'zh_CN': self.tr('简体中文'),
-                        'en_US': 'English'
-                    }
+                    # 语言设置：根据保存的locale匹配itemData，避免回退到中文
                     current_lang = getattr(settings, 'language', 'zh_CN')
-                    display_text = language_map.get(current_lang, self.tr('简体中文'))
-                    control.setCurrentText(display_text)
+                    matched = False
+                    for i in range(control.count()):
+                        if control.itemData(i) == current_lang:
+                            control.setCurrentIndex(i)
+                            matched = True
+                            break
+                    if not matched:
+                        # 未找到则回退到第一项（zh_CN）
+                        control.setCurrentIndex(0)
                 elif setting_name == 'update_mode':
                     # 工具更新模式设置（使用索引避免翻译差异）
                     if hasattr(settings, 'tool_update') and settings.tool_update:
-                        mode_value = settings.tool_update.get('mode', 'manual')
-                        display_text = self.tr('自动更新') if mode_value == 'auto' else self.tr('手动更新')
-                        control.setCurrentText(display_text)
+                        mode_value = settings.tool_update.get('update_mode', 'auto')
+                        control.setCurrentIndex(0 if mode_value == 'auto' else 1)
                     else:
-                        control.setCurrentText(self.tr('手动更新'))  # 默认手动模式
+                        control.setCurrentIndex(0)  # 默认自动
                 elif setting_name == 'check_frequency':
                     # 检查频率设置（整数天数到索引映射）
                     if hasattr(settings, 'tool_update') and settings.tool_update:
-                        frequency = settings.tool_update.get('check_frequency', 'weekly')
-                        frequency_map = {
-                            'daily': self.tr('每天'),
-                            'every_3_days': self.tr('每3天'),
-                            'weekly': self.tr('每周'),
-                            'bi_weekly': self.tr('每2周')
-                        }
-                        display_text = frequency_map.get(frequency, self.tr('每周'))
-                        control.setCurrentText(display_text)
+                        try:
+                            freq_days = int(settings.tool_update.get('check_frequency', 1))
+                        except Exception:
+                            freq_days = 1
+                        index_map = {1: 0, 3: 1, 7: 2, 14: 3}
+                        control.setCurrentIndex(index_map.get(freq_days, 0))
                     else:
-                        control.setCurrentText(self.tr('每周'))  # 默认每周
+                        control.setCurrentIndex(0)  # 默认每天
             elif isinstance(control, QSpinBox):
                 # 数字输入框使用setValue
                 if hasattr(settings, setting_name):
                     value = getattr(settings, setting_name, 10)
                     control.setValue(value)
         
-        # 更新语言选择
-        if hasattr(self, 'language_combo'):
-            language_map = {
-                'zh_CN': self.tr('中文'),
-                'en_US': 'English',
-                'ja_JP': self.tr('日本語'),
-                'es_ES': 'Español',
-                'fr_FR': 'Français'
-            }
+        # 更新语言选择（基于locale匹配，避免显示错误）
+        if hasattr(self, 'language_combo') and hasattr(settings, 'language'):
             current_lang = getattr(settings, 'language', 'zh_CN')
-            display_lang = language_map.get(current_lang, self.tr('中文'))
-            self.language_combo.setCurrentText(display_lang)
+            matched = False
+            for i in range(self.language_combo.count()):
+                if self.language_combo.itemData(i) == current_lang:
+                    self.language_combo.setCurrentIndex(i)
+                    matched = True
+                    break
+            if not matched:
+                self.language_combo.setCurrentIndex(0)
         
         # 更新工具更新设置
         if hasattr(self, 'update_mode_combo') and hasattr(settings, 'tool_update'):
             update_mode = settings.tool_update.get('update_mode', 'auto')
-            mode_text = self.tr('自动更新') if update_mode == 'auto' else self.tr('手动更新')
-            self.update_mode_combo.setCurrentText(mode_text)
+            self.update_mode_combo.setCurrentIndex(0 if update_mode == 'auto' else 1)
 
-            # 更新检查频率
-            frequency_map = {1: self.tr('每天'), 3: self.tr('每3天'), 7: self.tr('每周'), 14: self.tr('每2周')}
+            # 更新检查频率（按索引设置）
             check_freq = settings.tool_update.get('check_frequency', 1)
-            freq_text = frequency_map.get(check_freq, self.tr('每天'))
-            self.check_frequency_combo.setCurrentText(freq_text)
+            index_map = {1: 0, 3: 1, 7: 2, 14: 3}
+            self.check_frequency_combo.setCurrentIndex(index_map.get(int(check_freq), 0))
     
     def refresh_settings(self):
         """刷新设置显示"""

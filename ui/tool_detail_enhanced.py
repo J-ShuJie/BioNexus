@@ -416,7 +416,9 @@ class EnhancedDetailPage(QWidget):
             from utils.tool_localization import get_localized_tool_description
             desc_text = get_localized_tool_description(self.tool_data)
         except Exception:
-            desc_text = self.tool_data.get('description', self.tr('No detailed description'))
+            desc_text = ''
+        if not desc_text:
+            desc_text = self.tr('No detailed description')
         description = QLabel(desc_text)
         description.setWordWrap(True)  # 自动换行
         description.setStyleSheet("""

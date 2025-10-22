@@ -650,6 +650,10 @@ ModernDownloadCard:
   No download tasks: 暂无下载任务
   Download progress will appear when installing tools: 开始安装工具时会显示下载进度
   Download Manager: 下载管理器
+  "Install: {0}": "安装：{0}"
+  "Uninstall: {0}": "卸载：{0}"
+  Unknown: 未知
+  Completed: 已完成
   Clear Completed: 清空已完成
   "Total: 0 tasks": "总计：0 个任务"
   "{0} in progress": "{0} 个下载中"
@@ -674,9 +678,6 @@ ToolDetailDialog:
   "Usage Guide": "使用说明"
   "Version History": "版本历史"
 
-ModernFilterCard:
-  Reset: 重置
-  Apply Filter: 应用筛选
 
 ToolCardV3:
   Launch: 启动
@@ -698,3 +699,27 @@ ToolDescriptionsBySlug:
   hisat2: "用于 RNA‑seq 等的超快速、灵敏的读段比对程序。"
   iqtree: "高效的系统发育树构建工具，支持模型选择与超快速自助法。"
   igv: "交互式基因组浏览器，可视化 BAM/VCF 等多种基因组数据格式。"
+Tools:
+  FastQC.Description: '高通量测序数据质量控制工具，提供详细的质量报告和可视化图表。支持 FASTQ、SAM、BAM 等格式。'
+  BLAST.Description: '基本局部比对搜索工具，用于寻找序列相似性；支持核酸与蛋白质序列检索。'
+  BWA.Description: 'Burrows–Wheeler 变换比对器，用于将短 DNA 序列比对到大型参考基因组；对 Illumina 数据高效。'
+  SAMtools.Description: '用于处理高通量测序比对数据的工具集，支持 SAM/BAM/CRAM 格式，包含排序、索引与统计等功能。'
+  IGV.Description: '功能强大的基因组可视化工具，支持 BAM、VCF、BED 等多种格式；可同时查看比对、变异与注释等多层数据。'
+  HISAT2.Description: '快速且内存高效的 RNA‑seq 读段比对工具，支持可变剪接位点，比对转录组数据表现出色。'
+  IQ-TREE.Description: '高效的系统发育分析软件，基于最大似然法构建进化树；支持多种模型选择与 Bootstrap 分析。'
+ModernFilterCard:
+  筛选工具: 筛选工具
+  工具分类: 工具分类
+  序列分析: 序列分析
+  进化分析: 进化分析
+  基因组学: 基因组学
+  序列比对: 序列比对
+  结构分析: 结构分析
+  基因注释: 基因注释
+  安装状态: 安装状态
+  已安装: 已安装
+  可安装: 可安装
+  需要更新: 需要更新
+  重置: 重置
+  取消: 取消
+  应用筛选: 应用筛选

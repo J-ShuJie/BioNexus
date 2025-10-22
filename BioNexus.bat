@@ -5,6 +5,14 @@ title BioNexus Launcher
 :: Change to the directory where this batch file is located
 cd /d "%~dp0"
 
+:: Ensure logs directory and define launcher log file
+if not exist "logs" mkdir logs
+set "LAUNCHER_LOG=logs\launcher_debug.log"
+
+:: Force UTF-8 for Python stdout/stderr to avoid GBK encoding errors
+set "PYTHONIOENCODING=utf-8"
+set "PYTHONUTF8=1"
+
 echo ==========================================
 echo    BioNexus Launcher v1.2.17
 echo    Bioinformatics Tools Manager
@@ -37,7 +45,7 @@ if errorlevel 1 (
             echo [ERROR] Failed to download Python
             echo Please install Python manually from: https://www.python.org/downloads/
             echo.
-            pause
+            echo [ERROR] Failed to download Python >> "%LAUNCHER_LOG%"
             exit /b 1
         )
 
@@ -78,12 +86,12 @@ python -c "import PyQt5" >nul 2>&1
 if errorlevel 1 (
     echo [WARNING] PyQt5 not found, installing dependencies...
     echo [INFO] Installing dependencies, please wait...
-    pip install -r requirements.txt
+    pip install -r requirements.txt >> "%LAUNCHER_LOG%" 2>&1
     if errorlevel 1 (
         echo [ERROR] Failed to install dependencies
         echo Please run manually: pip install -r requirements.txt
         echo.
-        pause
+        echo [ERROR] Dependency installation failed >> "%LAUNCHER_LOG%"
         exit /b 1
     )
     echo [SUCCESS] Dependencies installed successfully
@@ -95,15 +103,10 @@ echo.
 echo [INFO] Starting BioNexus...
 echo.
 
-:: Launch application
-python main.py
+:: Launch application (log stdout/stderr)
+python main.py >> "%LAUNCHER_LOG%" 2>&1
 
-:: If program exits with error, show error info and wait for user
-if errorlevel 1 (
-    echo.
-    echo [ERROR] Program exited with error code: %errorlevel%
-    echo Please check log files in the logs folder
-    pause
-)
-
-:: On successful exit, do not pause so hidden consoles close automatically
+:: Record exit code to log and exit without pause so console always closes
+set "APP_EXIT=%ERRORLEVEL%"
+echo [INFO] Program exited with code %APP_EXIT% >> "%LAUNCHER_LOG%"
+exit /b %APP_EXIT%
