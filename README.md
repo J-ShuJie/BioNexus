@@ -6,6 +6,8 @@
 
 ## English
 
+Last updated: 2025-10-22
+
 ### About BioNexus
 
 **BioNexus** is a modern bioinformatics tool manager designed to simplify the workflow of using various bioinformatics tools for researchers. No need to manually configure environments, download installation packages, or manage complex dependencies - BioNexus provides an intuitive graphical interface to handle all of this.
@@ -48,11 +50,16 @@ Double-click `BioNexus.bat` to launch the application.
 - Tool installation and launch functionality
 - Search and filtering features
 - Graphical user interface
-- Chinese language interface
+- Multilingual UI available (English, Simplified Chinese, German)
 
 #### In Development
-- **Multilingual Support** - Currently only Chinese interface is complete, English and German interfaces are in development
+- **UI adaptation for English and German** – The UI is fully tuned for Chinese. English and German are functional but may show minor layout/clipping issues in some views. We are iterating on adaptive layout for these languages.
 - Automatic tool update functionality
+
+### Localization Notes
+- Languages available: English (en_US), Simplified Chinese (zh_CN), German (de_DE).
+- First-run selection: BioNexus automatically picks your OS language if supported; otherwise it falls back to English. After you change language in Settings, the choice is remembered. Auto-selection happens only on first launch.
+- Documentation freshness: This README is not updated on every single release and may lag behind the latest development state.
 
 #### Planned Features
 - Integrated tool tutorials
@@ -87,6 +94,8 @@ This project is open source. Feel free to use, modify, and share.
 ---
 
 ## 中文
+
+本次修改时间：2025年10月22日
 
 ### 关于 BioNexus
 
@@ -130,11 +139,16 @@ BioNexus 支持多种常用的生物信息学工具，包括：
 - 工具安装和启动功能
 - 搜索和筛选功能
 - 图形用户界面
-- 中文界面适配
+- 多语言界面可用（简体中文、英语、德语）
 
 #### 正在开发
-- **多语言支持** - 目前仅完成中文界面，英语和德语界面正在开发中
+- **英语与德语的 UI 适配优化** —— 中文界面已完整适配；英语/德语可正常使用，但部分界面可能存在轻微布局/截断问题，我们将持续优化响应式布局与文本适配。
 - 工具自动更新功能
+
+### 本地化说明
+- 可用语言：简体中文（zh_CN）、英语（en_US）、德语（de_DE）。
+- 首次启动会根据系统语言自动选择；如不支持则默认英语。用户在“设置”中手动切换语言后将被永久记住，自动选择仅发生在首次启动。
+- 文档更新频率：README 不会伴随每次发布同步更新，内容可能滞后于实际开发进度。
 
 #### 计划开发
 - 工具使用教程集成
@@ -169,6 +183,8 @@ BioNexus 支持多种常用的生物信息学工具，包括：
 ---
 
 ## Deutsch
+
+Zuletzt aktualisiert: 2025-10-22
 
 ### Über BioNexus
 
@@ -212,11 +228,16 @@ Doppelklicken Sie auf `BioNexus.bat`, um die Anwendung zu starten.
 - Tool-Installation und Startfunktionalität
 - Such- und Filterfunktionen
 - Grafische Benutzeroberfläche
-- Chinesische Sprachoberfläche
+- Mehrsprachige Oberfläche verfügbar (Deutsch, Englisch, Vereinfachtes Chinesisch)
 
 #### In Entwicklung
-- **Mehrsprachige Unterstützung** - Derzeit ist nur die chinesische Oberfläche vollständig, englische und deutsche Oberflächen sind in Entwicklung
+- **UI-Anpassungen für Deutsch und Englisch** – Die Oberfläche ist für Chinesisch vollständig optimiert. Deutsch und Englisch sind funktionsfähig, können aber in einigen Ansichten kleinere Layout-/Abschneideprobleme zeigen. Wir arbeiten an einer besseren adaptiven Gestaltung.
 - Automatische Tool-Update-Funktion
+
+### Hinweise zur Lokalisierung
+- Verfügbare Sprachen: Englisch (en_US), Vereinfachtes Chinesisch (zh_CN), Deutsch (de_DE).
+- Erstauswahl: Beim ersten Start wählt BioNexus automatisch die Systemsprache (falls unterstützt), andernfalls Englisch. Nach manueller Auswahl in den Einstellungen wird die Sprache dauerhaft gespeichert. Die Autoauswahl erfolgt nur beim ersten Start.
+- Aktualität der Dokumentation: Diese README wird nicht mit jeder Veröffentlichung aktualisiert und kann dem tatsächlichen Entwicklungsstand hinterherhinken.
 
 #### Geplante Funktionen
 - Integrierte Tool-Tutorials

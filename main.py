@@ -83,7 +83,7 @@ except ImportError:
 
 try:
     from PyQt5.QtWidgets import QApplication, QMessageBox
-    from PyQt5.QtCore import Qt, QTimer
+    from PyQt5.QtCore import Qt, QTimer, QLocale
     from PyQt5.QtGui import QIcon, QFont
 except ImportError as e:
     # 写入启动错误日志

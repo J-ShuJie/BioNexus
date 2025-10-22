@@ -363,6 +363,8 @@ class SettingsPanel(QWidget):
             language_card
         )
         language_card.add_setting_item(language_item)
+        # 持有引用，便于其他方法直接访问
+        self.language_combo = language_combo
         self.setting_switches["language"] = language_combo
     
     def _create_responsive_environment_settings(self, content_container: QWidget):
@@ -846,7 +848,9 @@ class SettingsPanel(QWidget):
                 border-color: #3b82f6;
             }
         """)
-        
+        # 变更时同步发出设置变更
+        self.check_frequency_combo.currentTextChanged.connect(self._on_check_frequency_changed)
+
         check_frequency_item = ResponsiveSettingsItem(
             self.tr("Check Frequency"),
             self.check_frequency_combo,
@@ -1053,7 +1057,7 @@ class SettingsPanel(QWidget):
                     display_text = language_map.get(current_lang, self.tr('简体中文'))
                     control.setCurrentText(display_text)
                 elif setting_name == 'update_mode':
-                    # 工具更新模式设置
+                    # 工具更新模式设置（使用索引避免翻译差异）
                     if hasattr(settings, 'tool_update') and settings.tool_update:
                         mode_value = settings.tool_update.get('mode', 'manual')
                         display_text = self.tr('自动更新') if mode_value == 'auto' else self.tr('手动更新')
@@ -1061,7 +1065,7 @@ class SettingsPanel(QWidget):
                     else:
                         control.setCurrentText(self.tr('手动更新'))  # 默认手动模式
                 elif setting_name == 'check_frequency':
-                    # 检查频率设置
+                    # 检查频率设置（整数天数到索引映射）
                     if hasattr(settings, 'tool_update') and settings.tool_update:
                         frequency = settings.tool_update.get('check_frequency', 'weekly')
                         frequency_map = {
@@ -1220,11 +1224,40 @@ class SettingsPanel(QWidget):
             if notification_item:
                 notification_item.setVisible(is_manual)
         
-        # 更新配置
+        # 更新配置并广播（使用索引避免翻译差异导致判断错误）
         mode_value = "manual" if is_manual else "auto"
         if hasattr(self.config_manager.settings, 'tool_update'):
             self.config_manager.settings.tool_update['update_mode'] = mode_value
             self.config_manager.save_settings()
+        # 通知主窗口/控制器同步内部服务设置
+        try:
+            self.setting_changed.emit("tool_update_update_mode", mode_value)
+        except Exception:
+            pass
+
+    def _on_check_frequency_changed(self, text: str):
+        """处理检查频率变更，保存为天数（1/3/7/14）并广播"""
+        try:
+            idx = self.check_frequency_combo.currentIndex() if hasattr(self, 'check_frequency_combo') else 0
+            days_map = {0: 1, 1: 3, 2: 7, 3: 14}
+            days = days_map.get(idx, 1)
+
+            # 若无变化则不广播
+            current = 1
+            if hasattr(self.config_manager.settings, 'tool_update') and self.config_manager.settings.tool_update:
+                try:
+                    current = int(self.config_manager.settings.tool_update.get('check_frequency', 1))
+                except Exception:
+                    current = 1
+
+            if days != current:
+                # 保存到配置
+                self.config_manager.settings.tool_update['check_frequency'] = days
+                self.config_manager.save_settings()
+                # 广播给主窗口/更新控制器
+                self.setting_changed.emit("tool_update_check_frequency", days)
+        except Exception:
+            pass
     
     def _clean_cache(self):
         """清理下载缓存"""

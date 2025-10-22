@@ -201,15 +201,21 @@ class ModernDownloadItem(QWidget):
         self.is_failed = False
         self.progress_value = 0
         
-        # 解析任务类型和显示格式
-        if "(卸载)" in tool_name:
-            self.task_type = "卸载"
-            self.clean_name = tool_name.replace(" (卸载)", "")
-            self.display_title = f"卸载：{self.clean_name}"
-        else:
-            self.task_type = "安装"
+        # 解析任务类型和显示格式（多语言支持）
+        # 支持识别 "(卸载)", "(Uninstall)", "(Deinstallieren)" 后缀
+        uninstall_markers = [" (卸载)", " (Uninstall)", " (Deinstallieren)"]
+        is_uninstall = any(m in tool_name for m in uninstall_markers)
+        if is_uninstall:
+            # 清理后缀，得到纯工具名
             self.clean_name = tool_name
-            self.display_title = f"安装：{self.clean_name}"
+            for m in uninstall_markers:
+                self.clean_name = self.clean_name.replace(m, "")
+            self.task_type = "uninstall"
+            self.display_title = self.tr("Uninstall: {0}").format(self.clean_name)
+        else:
+            self.task_type = "install"
+            self.clean_name = tool_name
+            self.display_title = self.tr("Install: {0}").format(self.clean_name)
         
         print(f"🎨 [UI格式] 任务显示: {self.display_title} (原始: {tool_name})")
         
@@ -234,6 +240,13 @@ class ModernDownloadItem(QWidget):
         self._init_ui()
         self._setup_animations()
         self.setMouseTracking(True)
+
+        # 连接语言切换信号，支持运行时切换
+        try:
+            from utils.translator import get_translator
+            get_translator().languageChanged.connect(self.retranslateUi)
+        except Exception:
+            pass
         
     def _init_ui(self):
         """初始化UI - 现代卡片设计"""
@@ -555,6 +568,16 @@ class ModernDownloadItem(QWidget):
         
         self.timestamp_label.setText(display_time)
 
+    def retranslateUi(self, locale: str = None):
+        """语言变更时，更新标题等可见文本"""
+        try:
+            title = (self.tr("Uninstall: {0}") if getattr(self, 'task_type', '') == 'uninstall'
+                     else self.tr("Install: {0}")).format(self.clean_name)
+            if hasattr(self, 'tool_label'):
+                self.tool_label.setText(title)
+        except Exception:
+            pass
+
 
 class EmptyStateWidget(QWidget):
     """
@@ -624,8 +647,35 @@ class ModernDownloadCard(QWidget):
         self._setup_widget()
         self._init_ui()
         
+        # 连接语言切换
+        try:
+            from utils.translator import get_translator
+            get_translator().languageChanged.connect(self.retranslateUi)
+        except Exception:
+            pass
+
         # 加载历史任务记录
         self._load_tasks_from_file()
+
+    def retranslateUi(self, locale: str = None):
+        """语言变更时更新可见文本"""
+        try:
+            if hasattr(self, 'header_title'):
+                self.header_title.setText(self.tr("Download Manager"))
+            if not self.download_items:
+                if hasattr(self, 'status_label'):
+                    self.status_label.setText(self.tr("No download tasks"))
+                # 重建空态内容
+                if hasattr(self, 'content_layout'):
+                    self._show_empty_state()
+            if hasattr(self, 'stats_label'):
+                total = len(self.download_items)
+                self.stats_label.setText(self.tr("Total: {0} tasks").format(total))
+            for item in self.download_items.values():
+                if hasattr(item, 'retranslateUi'):
+                    item.retranslateUi(locale)
+        except Exception:
+            pass
     
     def _setup_widget(self):
         """设置控件属性"""
@@ -733,7 +783,7 @@ class ModernDownloadCard(QWidget):
             font-weight: 600;
             color: #111827;
         """)
-        title_layout.addWidget(title)
+        title_layout.addWidget(self.header_title)
         
         # 状态计数
         self.status_label = QLabel(self.tr("No download tasks"))
@@ -889,8 +939,14 @@ class ModernDownloadCard(QWidget):
     
     def _generate_task_key(self, tool_name: str, status: str):
         """生成任务键 - 同一操作流程使用相同键，不同操作创建新键"""
-        # 识别任务类型
-        is_uninstall = "卸载" in status or "删除" in status or "清理" in status or "停止" in status
+        # 识别任务类型（多语言关键字 + 工具名后缀）
+        name_markers = [" (卸载)", " (Uninstall)", " (Deinstallieren)"]
+        status_keywords = [
+            "卸载","删除","清理","停止",
+            "Uninstall","Delete","Remove","Cleanup","Stop",
+            "Deinstallieren","Löschen","Entfernen","Bereinigen","Anhalten"
+        ]
+        is_uninstall = any(m in tool_name for m in name_markers) or any(k in (status or '') for k in status_keywords)
         base_key = f"{tool_name} (卸载)" if is_uninstall else tool_name
         
         # 检查是否已存在相同类型的任务
@@ -1084,7 +1140,7 @@ class ModernDownloadCard(QWidget):
                     'tool_name': item.tool_name,  # 保存原始工具名
                     'task_key': task_key,         # 也保存键用于恢复
                     'progress': item.progress_value,
-                    'status': item.status_label.text() if hasattr(item, 'status_label') else '未知',
+                    'status': item.status_label.text() if hasattr(item, 'status_label') else self.tr('Unknown'),
                     'is_completed': item.is_completed,
                     'is_failed': item.is_failed,
                     'start_time': item.start_time.isoformat() if hasattr(item, 'start_time') else datetime.now().isoformat()
@@ -1136,7 +1192,7 @@ class ModernDownloadCard(QWidget):
                 tool_name = task_data['tool_name']
                 task_key = task_data.get('task_key', tool_name)  # 向后兼容旧数据
                 progress = task_data.get('progress', 100)
-                status = task_data.get('status', '已完成')
+                status = task_data.get('status', self.tr('Completed'))
                 is_completed = task_data.get('is_completed', True)
                 is_failed = task_data.get('is_failed', False)
                 

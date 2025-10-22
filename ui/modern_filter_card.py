@@ -182,6 +182,16 @@ class FilterOptionCard(QWidget):
         # 鼠标跟踪和悬停状态
         self.setMouseTracking(True)
         self.is_hovered = False
+
+    def set_option_text(self, text: str):
+        """更新显示文本并重绘"""
+        self.option_text = text
+        # 重新计算最小宽度以适应新文本
+        font = QFont("微软雅黑", 8, QFont.Normal)
+        metrics = QFontMetrics(font)
+        text_width = metrics.horizontalAdvance(self.option_text)
+        self.setMinimumWidth(max(80, text_width + 24))
+        self.update()
         
     def _init_ui(self):
         """🎯 初始化UI - 使用paintEvent绘制文字"""
@@ -457,6 +467,12 @@ class ModernFilterCard(QWidget):
             self._setup_shadow()
             
             print("【DEBUG】ModernFilterCard 初始化完成 - 已启用圆角支持和卡片化设计")
+            # 连接语言切换
+            try:
+                from utils.translator import get_translator
+                get_translator().languageChanged.connect(self.retranslateUi)
+            except Exception:
+                pass
         except Exception as e:
             log_error("ModernFilterCard.__init__", e)
             print(f"ModernFilterCard初始化错误: {e}")
@@ -675,8 +691,8 @@ class ModernFilterCard(QWidget):
                 background-color: #e2e8f0;
             }
         """)
-        reset_btn.clicked.connect(self._on_reset_clicked)
-        layout.addWidget(reset_btn)
+        self.reset_btn.clicked.connect(self._on_reset_clicked)
+        layout.addWidget(self.reset_btn)
         
         # 弹性空间
         layout.addStretch()
@@ -701,8 +717,53 @@ class ModernFilterCard(QWidget):
                 background-color: #15803d;
             }
         """)
-        apply_btn.clicked.connect(self._on_apply_clicked)
-        layout.addWidget(apply_btn)
+        self.apply_btn.clicked.connect(self._on_apply_clicked)
+        layout.addWidget(self.apply_btn)
+        
+        # 绑定布局并返回footer
+        footer.setLayout(layout)
+        return footer
+    
+    def retranslateUi(self, locale: str = None):
+        """语言变更时，更新标题与选项文本"""
+        try:
+            if hasattr(self, 'main_title'):
+                self.main_title.setText(self.tr("筛选工具"))
+            if hasattr(self, 'category_title'):
+                self.category_title.setText(self.tr("工具分类"))
+            if hasattr(self, 'status_title'):
+                self.status_title.setText(self.tr("安装状态"))
+            if hasattr(self, 'reset_btn'):
+                self.reset_btn.setText(self.tr("重置"))
+            if hasattr(self, 'apply_btn'):
+                self.apply_btn.setText(self.tr("应用筛选"))
+
+            # 更新分类卡片文本
+            category_map = {
+                'sequence_analysis': self.tr('序列分析'),
+                'phylogenetics': self.tr('进化分析'),
+                'genomics': self.tr('基因组学'),
+                'alignment': self.tr('序列比对'),
+                'structure': self.tr('结构分析'),
+                'annotation': self.tr('基因注释'),
+            }
+            for cid, card in getattr(self, 'category_cards', {}).items():
+                if cid in category_map and hasattr(card, 'set_option_text'):
+                    card.set_option_text(category_map[cid])
+
+            # 更新状态卡片文本
+            status_map = {
+                'installed': self.tr('已安装'),
+                'available': self.tr('可安装'),
+                'update': self.tr('需要更新'),
+            }
+            for sid, card in getattr(self, 'status_cards', {}).items():
+                if sid in status_map and hasattr(card, 'set_option_text'):
+                    card.set_option_text(status_map[sid])
+        except Exception as e:
+            log_error("ModernFilterCard.retranslateUi", e)
+
+    # _on_reset_clicked 已存在：清空选择并关闭面板
         
         footer.setLayout(layout)
         return footer

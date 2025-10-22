@@ -287,7 +287,7 @@ class ToolCardV3(QWidget):
         except Exception:
             description = self.tool_data.get('description', '')
         if not description:
-            return
+            description = self.tr('No detailed description')
             
         metrics = QFontMetrics(desc_font)
         
