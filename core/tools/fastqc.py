@@ -70,10 +70,12 @@ class FastQC(ToolInterface):
         """
         current_time = time.time()
         
-        # 检查缓存是否有效
+        # 检查缓存是否有效（但状态字段始终实时计算，避免安装后状态不刷新）
         if (self._cached_metadata and 
             current_time - self._cache_timestamp < self._cache_duration):
-            return self._cached_metadata
+            md = dict(self._cached_metadata)
+            md['status'] = 'installed' if self.verify_installation() else 'available'
+            return md
         
         # 构建基础元数据（不依赖网络）
         base_metadata = {
@@ -99,7 +101,10 @@ class FastQC(ToolInterface):
         self._cached_metadata = base_metadata
         self._cache_timestamp = current_time
         
-        return base_metadata
+        # 返回时确保状态为实时值
+        ret = dict(base_metadata)
+        ret['status'] = 'installed' if self.verify_installation() else 'available'
+        return ret
     
     def _async_update_metadata(self, base_metadata: Dict[str, Any]):
         """异步更新元数据中的版本信息"""

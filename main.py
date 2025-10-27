@@ -32,7 +32,7 @@ BioNexus Launcher 主程序入口 v1.2.13 Enhanced
 """
 
 # BioNexus版本信息
-__version__ = "1.2.13"
+__version__ = "1.2.26"
 
 import sys
 import os
@@ -291,7 +291,7 @@ class BioNexusLauncher:
             
             # 设置应用程序属性
             self.app.setApplicationName("BioNexus Launcher")
-            self.app.setApplicationVersion("1.2.9")
+            self.app.setApplicationVersion("1.2.26")
             self.app.setOrganizationName("BioNexus")
             self.app.setApplicationDisplayName("BioNexus Launcher")
             
@@ -399,7 +399,7 @@ class BioNexusLauncher:
                 return False
             
             # 检查配置目录权限
-            config_dir = Path.home() / ".bionexus"
+            config_dir = Path(os.getcwd()) / "config_data"
             try:
                 config_dir.mkdir(exist_ok=True)
                 test_file = config_dir / "test_write.tmp"
@@ -737,7 +737,7 @@ def main():
             print(__doc__)
             return 0
         elif sys.argv[1] in ['-v', '--version']:
-            print("BioNexus Launcher v1.1.12")
+            print("BioNexus Launcher v1.2.26")
             print("生物信息学工具管理器 - Python版本")
             return 0
 

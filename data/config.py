@@ -85,17 +85,20 @@ class ConfigManager:
     def __init__(self, config_dir: Optional[str] = None):
         """
         初始化配置管理器
-        
+
         Args:
             config_dir: 配置文件目录，如果为None则使用默认位置
         """
         # 初始化日志记录器
         self.logger = logging.getLogger(__name__)
-        
+
         if config_dir is None:
-            # 默认配置目录：用户家目录下的.bionexus文件夹
-            config_dir = Path.home() / ".bionexus"
-        
+            # 🔥 修改：默认配置目录改为工作目录下的 config_data 文件夹
+            # 不再使用用户家目录，所有配置都在程序目录内
+            import os
+            work_dir = Path(os.getcwd())
+            config_dir = work_dir / "config_data"
+
         self.config_dir = Path(config_dir)
         self.config_dir.mkdir(exist_ok=True)
         

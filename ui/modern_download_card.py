@@ -1002,6 +1002,58 @@ class ModernDownloadCard(QWidget):
         
         # 保存到持久化存储
         self._save_tasks_to_file()
+
+    def mark_download_failed(self, tool_name: str, error_message: str):
+        """将指定工具的当前任务标记为失败。
+
+        - 优先匹配正在进行中的同名任务（包含“(卸载)”等后缀的显示名也能匹配）。
+        - 若未找到对应任务，则创建一个新的失败任务，确保用户能看到错误原因。
+        """
+        try:
+            candidate_key = None
+
+            # 1) 精确键匹配
+            if tool_name in self.download_items:
+                candidate_key = tool_name
+            else:
+                # 2) 逆序查找最近的相关任务（包含卸载键、带时间戳键等）
+                for key, item in reversed(list(self.download_items.items())):
+                    try:
+                        clean = getattr(item, 'clean_name', item.tool_name)
+                        if clean == tool_name or tool_name in key or tool_name in getattr(item, 'tool_name', ''):
+                            candidate_key = key
+                            break
+                    except Exception:
+                        continue
+
+            if candidate_key is not None:
+                item = self.download_items[candidate_key]
+                item.mark_failed(error_message)
+            else:
+                # 未找到历史任务，创建一个新的失败任务项
+                new_key = tool_name
+                item = ModernDownloadItem(tool_name)
+                item.mark_failed(error_message)
+
+                # 如果当前为空视图，切换到列表
+                if len(self.download_items) == 0:
+                    self._show_download_list()
+                # 将新失败项插入到顶部
+                if self.content_layout.count() > 0:
+                    stretch_item = self.content_layout.takeAt(self.content_layout.count() - 1)
+                self.content_layout.insertWidget(0, item)
+                if 'stretch_item' in locals() and stretch_item:
+                    self.content_layout.addItem(stretch_item)
+                self.download_items[new_key] = item
+
+            # 出错时应当可见，并刷新统计与持久化
+            if not self.isVisible():
+                self.show()
+            self._update_stats()
+            self._save_tasks_to_file()
+        except Exception:
+            # 忽略 UI 标记失败过程中的异常，避免再次打断主流程
+            pass
     
     def _remove_download_item(self, task_key: str):
         """移除下载项"""

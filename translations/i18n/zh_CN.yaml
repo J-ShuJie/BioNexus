@@ -691,6 +691,7 @@ ToolDescriptions:
   HISAT2: "用于 RNA‑seq 等的超快速、灵敏的读段比对程序。"
   IQ-TREE: "高效的系统发育树构建工具，支持模型选择与超快速自助法。"
   IGV: "交互式基因组浏览器，可视化 BAM/VCF 等多种基因组数据格式。"
+  Cytoscape: "用于生物分子相互作用网络与通路的可视化与分析平台（GUI）。"
 ToolDescriptionsBySlug:
   fastqc: "用于高通量测序数据的质量控制，生成完整的 HTML 报告。"
   blast: "在大型数据库中进行序列相似性搜索，支持核酸与蛋白质序列。"
@@ -699,6 +700,7 @@ ToolDescriptionsBySlug:
   hisat2: "用于 RNA‑seq 等的超快速、灵敏的读段比对程序。"
   iqtree: "高效的系统发育树构建工具，支持模型选择与超快速自助法。"
   igv: "交互式基因组浏览器，可视化 BAM/VCF 等多种基因组数据格式。"
+  cytoscape: "用于生物分子相互作用网络与通路的可视化与分析平台（GUI）。"
 Tools:
   FastQC.Description: '高通量测序数据质量控制工具，提供详细的质量报告和可视化图表。支持 FASTQ、SAM、BAM 等格式。'
   BLAST.Description: '基本局部比对搜索工具，用于寻找序列相似性；支持核酸与蛋白质序列检索。'
@@ -707,6 +709,7 @@ Tools:
   IGV.Description: '功能强大的基因组可视化工具，支持 BAM、VCF、BED 等多种格式；可同时查看比对、变异与注释等多层数据。'
   HISAT2.Description: '快速且内存高效的 RNA‑seq 读段比对工具，支持可变剪接位点，比对转录组数据表现出色。'
   IQ-TREE.Description: '高效的系统发育分析软件，基于最大似然法构建进化树；支持多种模型选择与 Bootstrap 分析。'
+  Cytoscape.Description: '用于相互作用数据与通路的网络可视化平台（GUI），支持丰富的应用与多种数据格式。'
 ModernFilterCard:
   筛选工具: 筛选工具
   工具分类: 工具分类

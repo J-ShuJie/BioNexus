@@ -92,7 +92,8 @@ def check_system_requirements() -> Tuple[bool, str]:
         # 检查磁盘空间（至少需要100MB）
         try:
             import shutil
-            free_space = shutil.disk_usage(Path.home()).free
+            import os
+            free_space = shutil.disk_usage(os.getcwd()).free
             if free_space < 100 * 1024 * 1024:  # 100MB
                 return False, "磁盘空间不足，至少需要100MB可用空间"
         except Exception:
@@ -289,10 +290,11 @@ def create_desktop_shortcut(app_path: str, shortcut_name: str = "BioNexus Launch
             
         elif system == "Linux":
             # Linux桌面文件
-            desktop_dir = Path.home() / "Desktop"
-            if not desktop_dir.exists():
-                desktop_dir = Path.home() / ".local" / "share" / "applications"
-                desktop_dir.mkdir(parents=True, exist_ok=True)
+            # 🔥 注意：创建桌面快捷方式是用户主动请求的功能，需要访问用户桌面
+            import os
+            work_dir = Path(os.getcwd())
+            desktop_dir = work_dir / "shortcuts"  # 改为在工作目录创建
+            desktop_dir.mkdir(parents=True, exist_ok=True)
             
             desktop_file = desktop_dir / f"{shortcut_name.replace(' ', '_')}.desktop"
             
@@ -314,7 +316,10 @@ Categories=Science;Biology;
             
         elif system == "Darwin":  # macOS
             # macOS别名（简化实现）
-            desktop_dir = Path.home() / "Desktop"
+            import os
+            work_dir = Path(os.getcwd())
+            desktop_dir = work_dir / "shortcuts"  # 改为在工作目录创建
+            desktop_dir.mkdir(parents=True, exist_ok=True)
             alias_path = desktop_dir / f"{shortcut_name}.command"
             
             script_content = f"""#!/bin/bash

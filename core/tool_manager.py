@@ -10,7 +10,7 @@ import time
 import logging
 from pathlib import Path
 from typing import Callable, Optional, Dict, Any, List
-from PyQt5.QtCore import QObject, pyqtSignal, QThread
+from PyQt5.QtCore import QObject, pyqtSignal, QThread, pyqtSlot
 from data.models import Tool, ToolStatus, DownloadTask, DownloadStatus
 from data.config import ConfigManager
 from .tool_registry import ToolRegistry
@@ -97,17 +97,72 @@ class ToolManager(QObject):
     tool_status_changed = pyqtSignal(str, str)  # 工具状态变化 (工具名, 新状态)
     installation_progress = pyqtSignal(str, int, str)  # 安装进度 (工具名, 进度%, 状态文本)
     error_occurred = pyqtSignal(str, str)       # 错误发生 (工具名, 错误信息)
+    usage_time_updated = pyqtSignal(str, int)   # 工具使用时间更新 (工具名, 总使用时间秒数)
     
     def __init__(self, config_manager: ConfigManager):
         super().__init__()
         self.config_manager = config_manager
         self.logger = logging.getLogger(__name__)
-        
+
         # 初始化工具注册中心
         self.registry = ToolRegistry()
-        
+
         self.install_workers: Dict[str, InstallWorker] = {}  # 正在安装的工具
         self.running_processes: Dict[str, subprocess.Popen] = {}  # 正在运行的工具进程
+
+        # 初始化工具使用时间跟踪器
+        self.usage_tracker = None
+        try:
+            from utils.tool_usage_tracker import get_tool_usage_tracker
+            self.usage_tracker = get_tool_usage_tracker(config_manager)
+
+            # 🔥 关键修复：使用线程安全的信号连接，而不是回调函数！
+            # Qt会自动将信号从后台线程排队到主线程
+            self.usage_tracker.usage_updated.connect(self._on_usage_time_updated)
+            self.logger.info("✅ [ToolManager-初始化] 工具使用时间跟踪器已初始化")
+            self.logger.info("✅ [ToolManager-初始化] 已连接线程安全的usage_updated信号到槽函数")
+
+            # 🔥 保留旧的回调设置以兼容（但信号是主要方式）
+            self.usage_tracker.on_usage_updated = self._on_usage_time_updated_callback
+            self.logger.info(f"✅ [ToolManager-初始化] 回调函数已设置（兼容模式）")
+        except Exception as e:
+            self.logger.warning(f"❌ [ToolManager-初始化] 工具使用时间跟踪器初始化失败: {e}")
+            import traceback
+            self.logger.warning(traceback.format_exc())
+
+    @pyqtSlot(str, int)
+    def _on_usage_time_updated(self, tool_name: str, total_runtime: int):
+        """
+        工具使用时间更新槽函数（线程安全）
+        通过Qt信号/槽机制从ToolUsageTracker接收更新，Qt自动处理线程切换
+
+        🔥 使用 @pyqtSlot 装饰器确保跨线程信号正确传递
+
+        Args:
+            tool_name: 工具名称
+            total_runtime: 总使用时间（秒）
+        """
+        self.logger.info(f"📡 [ToolManager-槽函数] 在主线程中收到usage_updated信号: {tool_name}, 总计: {total_runtime}秒")
+        # 发出信号通知UI更新（现在已经在主线程中了）
+        try:
+            self.logger.info(f"📡 [ToolManager-信号发射] 准备发射 usage_time_updated 信号...")
+            self.usage_time_updated.emit(tool_name, total_runtime)
+            self.logger.info(f"✅ [ToolManager-信号发射] 信号发射成功: {tool_name}, {total_runtime}秒")
+        except Exception as e:
+            self.logger.error(f"❌ [ToolManager-信号发射] 信号发射失败: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+
+    def _on_usage_time_updated_callback(self, tool_name: str, total_runtime: int):
+        """
+        工具使用时间更新回调（兼容模式，不应再使用）
+        这是旧的回调函数接口，保留以兼容旧代码，但实际上信号机制已经处理了
+
+        Args:
+            tool_name: 工具名称
+            total_runtime: 总使用时间（秒）
+        """
+        self.logger.info(f"⚠️ [ToolManager-旧回调] 收到回调调用（兼容模式）: {tool_name}, 但信号已经处理了")
     
     def install_tool(self, tool_name: str) -> bool:
         """
@@ -258,10 +313,21 @@ class ToolManager(QObject):
             
             # 启动工具
             success = tool_instance.launch()
-            
+
             if success:
                 self.logger.info(f"工具 {tool_name} 启动成功")
                 self.tool_launched.emit(tool_name)
+
+                # 开始跟踪工具使用时间
+                if self.usage_tracker:
+                    try:
+                        # 尝试获取工具进程PID（如果可能）
+                        pid = self._get_tool_process_pid(tool_name)
+                        self.usage_tracker.start_tracking(tool_name, pid)
+                        self.logger.info(f"开始跟踪工具使用时间: {tool_name}, PID: {pid or '未知'}")
+                    except Exception as e:
+                        self.logger.warning(f"启动工具使用跟踪失败: {e}")
+
                 return True
             else:
                 error_msg = f"工具 {tool_name} 启动失败"
@@ -358,10 +424,73 @@ class ToolManager(QObject):
         """检查工具是否正在安装"""
         return tool_name in self.install_workers
     
+    def _get_tool_process_pid(self, tool_name: str) -> Optional[int]:
+        """
+        尝试获取工具进程的PID
+
+        Args:
+            tool_name: 工具名称
+
+        Returns:
+            进程PID，如果找不到则返回None
+        """
+        try:
+            import psutil
+            import time
+
+            # 等待一小段时间让进程完全启动
+            time.sleep(0.5)
+
+            # 常见工具的进程名映射
+            process_name_map = {
+                'Cytoscape': ['cytoscape.exe', 'Cytoscape.exe', 'java.exe', 'javaw.exe'],
+                'IGV': ['igv.exe', 'IGV.exe', 'java.exe', 'javaw.exe'],
+                'FastQC': ['fastqc.exe', 'FastQC.exe', 'java.exe', 'javaw.exe'],
+                'BLAST': ['blastn.exe', 'blastp.exe', 'blastx.exe'],
+                'BWA': ['bwa.exe'],
+                'SAMtools': ['samtools.exe'],
+            }
+
+            possible_names = process_name_map.get(tool_name, [f"{tool_name.lower()}.exe"])
+
+            # 查找最近启动的匹配进程
+            candidates = []
+            current_time = time.time()
+
+            for proc in psutil.process_iter(['pid', 'name', 'create_time']):
+                try:
+                    proc_name = proc.info['name']
+                    if proc_name and any(name.lower() in proc_name.lower() for name in possible_names):
+                        # 只考虑最近10秒内启动的进程
+                        if current_time - proc.info['create_time'] < 10:
+                            candidates.append((proc.info['pid'], proc.info['create_time']))
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+
+            # 返回最新启动的进程
+            if candidates:
+                candidates.sort(key=lambda x: x[1], reverse=True)
+                pid = candidates[0][0]
+                self.logger.info(f"找到工具进程: {tool_name}, PID: {pid}")
+                return pid
+
+        except Exception as e:
+            self.logger.warning(f"获取工具进程PID失败: {tool_name}, 错误: {e}")
+
+        return None
+
     def cleanup(self):
         """清理资源，应用退出时调用"""
+        # 停止所有工具使用跟踪
+        if self.usage_tracker:
+            try:
+                self.usage_tracker.stop_all_tracking()
+                self.logger.info("已停止所有工具使用跟踪")
+            except Exception as e:
+                self.logger.error(f"停止工具使用跟踪失败: {e}")
+
         # 取消所有正在进行的安装
         for tool_name in list(self.install_workers.keys()):
             self.cancel_installation(tool_name)
-        
+
         self.logger.info("ToolManager cleanup completed")

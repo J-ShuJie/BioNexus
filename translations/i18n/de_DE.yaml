@@ -724,6 +724,7 @@ ToolDescriptions:
   HISAT2: "Sehr schneller, sensitiver Aligner für Next‑Generation‑Reads (z. B. RNA‑seq)."
   IQ-TREE: "Effiziente phylogenetische Bauminferenz mit Modellauswahl und sehr schnellem Bootstrap."
   IGV: "Interaktiver Genombrowser zur Visualisierung von BAM/VCF und vielen weiteren Formaten."
+  Cytoscape: "Plattform zur Visualisierung und Analyse von Netzwerken und Signalwegen (GUI)."
 ToolDescriptionsBySlug:
   fastqc: "Qualitätskontrolle für Hochdurchsatz‑Sequenzierungsdaten; erstellt umfassende HTML‑Berichte."
   blast: "Sequenzähnlichkeitssuche in großen Datenbanken; unterstützt Nukleotid‑ und Proteinsequenzen."
@@ -732,6 +733,7 @@ ToolDescriptionsBySlug:
   hisat2: "Sehr schneller, sensitiver Aligner für Next‑Generation‑Reads (z. B. RNA‑seq)."
   iqtree: "Effiziente phylogenetische Bauminferenz mit Modellauswahl und sehr schnellem Bootstrap."
   igv: "Interaktiver Genombrowser zur Visualisierung von BAM/VCF und vielen weiteren Formaten."
+  cytoscape: "Plattform zur Visualisierung und Analyse von Netzwerken und Signalwegen (GUI)."
 Tools:
   FastQC.Description: 'Ein Qualitätssicherungswerkzeug für Hochdurchsatz‑Sequenzdaten mit detaillierten Berichten und Visualisierungen. Unterstützt die Formate FASTQ, SAM und BAM.'
   BLAST.Description: 'Basic Local Alignment Search Tool zur Suche nach Sequenzähnlichkeiten; unterstützt Nukleotid‑ und Protein‑Suchen.'
@@ -740,6 +742,7 @@ Tools:
   IGV.Description: 'Leistungsstarkes Genom‑Visualisierungstool mit Unterstützung vieler Formate (BAM, VCF, BED usw.). Zeigt Alignments, Varianten und Annotationen gemeinsam an.'
   HISAT2.Description: 'Ein schneller und speichereffizienter RNA‑seq‑Aligner mit Unterstützung für gespleißte Alignments; geeignet für Transkriptom‑Analysen.'
   IQ-TREE.Description: 'Effiziente Software zur phylogenetischen Inferenz mittels Maximum‑Likelihood; unterstützt vielfältige Modelle und Bootstrap‑Analysen.'
+  Cytoscape.Description: 'GUI‑Plattform zur Visualisierung und Analyse von Netzwerken und Signalwegen; unterstützt zahlreiche Apps und Datenformate.'
 ModernFilterCard:
   筛选工具: Tools filtern
   工具分类: Toolkategorien

@@ -377,7 +377,13 @@ class ToolDetailPage(QWidget):
             
             # 🎮 Steam风格：按钮下方显示使用时长
             # v1.2.6 FIX: 优化时间统计样式，使其更紧凑且不会截断
-            usage_time_label = QLabel(self.tr("Used {0}").format(self._get_usage_time_display()))
+            usage_time = self._get_usage_time_display()
+            # 智能显示：如果是"暂未使用"，直接显示；否则显示"已使用 X小时"
+            if usage_time == self.tr("暂未使用"):
+                usage_time_text = usage_time
+            else:
+                usage_time_text = self.tr("已使用 {0}").format(usage_time)
+            usage_time_label = QLabel(usage_time_text)
             usage_time_label.setFixedHeight(24)  # 固定高度避免布局问题
             usage_time_label.setStyleSheet("""
                 color: #6B7280;
@@ -863,19 +869,20 @@ class ToolDetailPage(QWidget):
         return tool_specs.get(self.tool_data['name'], default_specs)
     
     def _get_usage_time_display(self):
-        """获取工具使用时间的显示文本"""
-        tool_name = self.tool_data['name']
+        """获取工具使用时间的显示文本（使用智能格式化）"""
+        # 使用真实的使用时间数据
+        total_runtime = self.tool_data.get('total_runtime', 0)
 
-        mock_usage_times = {
-            "FastQC": self.tr("2.5小时"),
-            "BLAST": self.tr("1.2小时"),
-            "BWA": self.tr("45分钟"),
-            "SAMtools": self.tr("3.8小时"),
-            "HISAT2": self.tr("1小时15分"),
-            "IQ-TREE": self.tr("8小时30分")
-        }
+        if total_runtime == 0:
+            return self.tr("暂未使用")
 
-        return mock_usage_times.get(tool_name, self.tr("未使用"))
+        # 使用智能时间格式化：
+        # < 60秒: 显示秒
+        # 60-7199秒 (1-120分钟): 显示分钟
+        # >= 7200秒 (120分钟+): 显示小时
+        from utils.time_formatter import format_runtime
+        return format_runtime(total_runtime, language='zh_CN')
+
 
     def create_description_section(self):
         """创建工具详细介绍区域 - 使用AutoResizingTextEdit实现高度自适应"""

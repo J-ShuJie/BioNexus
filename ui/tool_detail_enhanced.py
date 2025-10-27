@@ -33,13 +33,18 @@ class EnhancedDetailPage(QWidget):
         super().__init__(parent)
         self.tool_data = tool_data
         self.logger = logging.getLogger(f"BioNexus.EnhancedDetail.{tool_data.get('name', 'Unknown')}")
-        
+
         # 存储按钮引用用于进度更新
         self.install_btn = None
         self.launch_btn = None
         self.uninstall_btn = None
         self.favorite_btn = None  # 收藏按钮引用
-        
+        self.is_tool_running = False  # 工具运行状态
+
+        # 记录实例ID用于调试
+        self.instance_id = id(self)
+        self.logger.info(f"🆔 [EnhancedDetailPage-创建] 实例ID: {self.instance_id}, tool_data['total_runtime']: {tool_data.get('total_runtime', 0)}")
+
         self.init_ui()
 
         # Connect to global language change to support runtime localization
@@ -57,7 +62,12 @@ class EnhancedDetailPage(QWidget):
                 background-color: #f8f9fa;
             }
         """)
-        
+
+        # 确保没有旧布局（防御性编程）
+        existing_layout = self.layout()
+        if existing_layout:
+            self.logger.warning(f"[init_ui] 发现已存在的布局，这不应该发生！")
+
         # 主布局
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -281,27 +291,49 @@ class EnhancedDetailPage(QWidget):
             button_layout.setSpacing(10)
             
             # 启动按钮
-            self.launch_btn = QPushButton(self.tr("🚀 Launch"))
+            self.launch_btn = QPushButton(self.tr("启动"))
             self.launch_btn.setFixedSize(80, 32)
-            self.launch_btn.setStyleSheet("""
-                QPushButton {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 #10b981, stop:1 #059669);
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 12px;
-                    font-weight: bold;
-                }
-                QPushButton:hover {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 #34d399, stop:1 #10b981);
-                }
-                QPushButton:pressed {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                        stop:0 #047857, stop:1 #065f46);
-                }
-            """)
+
+            # 根据运行状态设置按钮初始状态
+            if self.is_tool_running:
+                # 运行中状态
+                self.launch_btn.setText(self.tr("运行中"))
+                self.launch_btn.setEnabled(False)
+                self.launch_btn.setStyleSheet("""
+                    QPushButton {
+                        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 #f59e0b, stop:1 #d97706);
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: bold;
+                    }
+                """)
+                self.logger.info(f"[init_ui] 按钮初始化为运行中状态")
+            else:
+                # 正常状态
+                self.launch_btn.setStyleSheet("""
+                    QPushButton {
+                        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 #10b981, stop:1 #059669);
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: bold;
+                    }
+                    QPushButton:hover {
+                        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 #34d399, stop:1 #10b981);
+                    }
+                    QPushButton:pressed {
+                        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 #047857, stop:1 #065f46);
+                    }
+                """)
+                self.logger.info(f"[init_ui] 按钮初始化为正常状态（启动）")
+
             self.launch_btn.clicked.connect(lambda: self.launch_requested.emit(self.tool_data['name']))
             
             # 卸载按钮
@@ -338,14 +370,23 @@ class EnhancedDetailPage(QWidget):
             
             # 使用时间信息（移到按钮下方）
             usage_time = self._get_usage_time()
-            time_label = QLabel(self.tr("Used {0}").format(usage_time))
-            time_label.setStyleSheet("""
+            self.logger.info(f"📊 [使用时间显示-1] _get_usage_time() 返回: '{usage_time}'")
+            # 智能显示：如果是"Not used yet"，直接显示；否则显示"Used X hours"
+            if usage_time == self.tr("Not used yet"):
+                time_text = usage_time
+                self.logger.info(f"📊 [使用时间显示-2] 显示未使用: '{time_text}'")
+            else:
+                time_text = self.tr("Used {0}").format(usage_time)
+                self.logger.info(f"📊 [使用时间显示-2] 显示已使用: '{time_text}'")
+            self.usage_time_label = QLabel(time_text)  # 保存为实例变量，可以后续更新
+            self.usage_time_label.setStyleSheet("""
                 font-size: 11px;
                 color: #95a5a6;
                 margin-top: 8px;
             """)
-            time_label.setAlignment(Qt.AlignCenter)
-            right_layout.addWidget(time_label)
+            self.usage_time_label.setAlignment(Qt.AlignCenter)
+            right_layout.addWidget(self.usage_time_label)
+            self.logger.info(f"📊 [使用时间显示-3] 使用时间标签已添加到UI，文本: '{time_text}'")
         else:
             # 安装按钮（简洁居中）
             self.install_btn = QPushButton(self.tr("📥 Install Tool"))
@@ -554,14 +595,23 @@ class EnhancedDetailPage(QWidget):
     
     
     def _get_usage_time(self):
-        """获取使用时间"""
-        mock_times = {
-            "FastQC": self.tr("2.5 hours"),
-            "BLAST": self.tr("1.2 hours"),
-            "BWA": self.tr("45 minutes"),
-            "SAMtools": self.tr("3.8 hours")
-        }
-        return mock_times.get(self.tool_data['name'], self.tr("Not Used"))
+        """获取使用时间（使用智能格式化）"""
+        # 使用真实的使用时间数据
+        total_runtime = self.tool_data.get('total_runtime', 0)
+
+        self.logger.info(f"🕐 [使用时间获取-1] 读取 tool_data['total_runtime']: {total_runtime}秒")
+        self.logger.info(f"🕐 [使用时间获取-2] tool_data 完整内容: name={self.tool_data.get('name')}, status={self.tool_data.get('status')}, total_runtime={total_runtime}")
+
+        if total_runtime == 0:
+            self.logger.info(f"🕐 [使用时间获取-3] total_runtime=0，返回 'Not used yet'")
+            return self.tr("Not used yet")
+
+        # 使用智能时间格式化
+        from utils.time_formatter import format_runtime
+        # TODO: 从配置中获取语言设置
+        formatted_time = format_runtime(total_runtime, language='en_US')
+        self.logger.info(f"🕐 [使用时间获取-4] 格式化后的时间: {formatted_time}")
+        return formatted_time
     
     def _get_tech_specs(self):
         """获取技术规格"""
@@ -748,31 +798,180 @@ class EnhancedDetailPage(QWidget):
     
     def update_ui(self):
         """更新UI显示，通常在工具状态改变后调用"""
+        self.logger.info(f"🆔 [详情页面更新-0] 实例ID: {self.instance_id}")
         self.logger.info(f"[详情页面更新-1] 开始更新UI: {self.tool_data['name']}")
         self.logger.info(f"[详情页面更新-2] 当前状态: {self.tool_data.get('status', 'unknown')}")
-        
+
         # 清理现有布局
         self.logger.info(f"[详情页面更新-3] 清理现有布局")
         old_layout = self.layout()
         if old_layout is not None:
-            # 清理所有子widget
+            self.logger.info(f"[详情页面更新-3.1] 删除所有子widget (同步删除)")
+            # 清理所有子widget - 完全删除，不用deleteLater
+            widgets_to_delete = []
             while old_layout.count():
                 child = old_layout.takeAt(0)
                 if child.widget():
-                    child.widget().deleteLater()
-            # 删除旧布局
-            QWidget().setLayout(old_layout)
-        
+                    widget = child.widget()
+                    self.logger.info(f"[详情页面更新-3.2] 删除widget: {type(widget).__name__}")
+                    widget.setParent(None)  # 立即从父widget移除
+                    widget.hide()           # 立即隐藏
+                    widgets_to_delete.append(widget)
+
+            # 立即删除所有widget，不等待
+            for widget in widgets_to_delete:
+                widget_type = type(widget).__name__
+
+                # 特殊处理 QScrollArea - 清理其内部widget
+                if isinstance(widget, QScrollArea):
+                    self.logger.info(f"[详情页面更新-3.2.0] 检测到QScrollArea，清理内部widget")
+                    inner_widget = widget.widget()
+                    if inner_widget:
+                        try:
+                            import sip
+                            inner_widget.setParent(None)
+                            inner_widget.hide()
+                            if not sip.isdeleted(inner_widget):
+                                sip.delete(inner_widget)
+                                self.logger.info(f"[详情页面更新-3.2.0.1] QScrollArea内部widget已删除: {type(inner_widget).__name__}")
+                        except Exception as e:
+                            self.logger.warning(f"[详情页面更新-3.2.0.2] 删除内部widget失败: {e}")
+
+                    # 清空viewport
+                    widget.setWidget(None)
+                    widget.takeWidget()
+                    self.logger.info(f"[详情页面更新-3.2.0.3] QScrollArea viewport已清空")
+
+                # 删除主widget
+                try:
+                    import sip
+                    if not sip.isdeleted(widget):
+                        sip.delete(widget)
+                        self.logger.info(f"[详情页面更新-3.2.1] widget已同步删除: {widget_type}")
+                except Exception as e:
+                    widget.deleteLater()  # 如果sip.delete失败，回退到异步
+                    self.logger.info(f"[详情页面更新-3.2.2] widget使用异步删除: {widget_type}, 原因: {e}")
+
+            # 处理事件，确保所有删除操作完成
+            QApplication.processEvents()
+            self.logger.info(f"[详情页面更新-3.2.3] 所有widget删除完成，事件已处理")
+
+            self.logger.info(f"[详情页面更新-3.3] 删除旧布局")
+            # 删除旧布局 - 使用安全方式
+            try:
+                import sip
+                if sip.isdeleted(old_layout):
+                    self.logger.info(f"[详情页面更新-3.4] 布局已被删除，跳过")
+                else:
+                    self.logger.info(f"[详情页面更新-3.4] 使用sip.delete()删除布局")
+                    sip.delete(old_layout)
+                    self.logger.info(f"[详情页面更新-3.5] sip.delete()成功")
+            except Exception as e:
+                self.logger.warning(f"[详情页面更新-3.4] sip.delete()失败: {e}，使用备用方案")
+                # 备用方案：只清除引用
+                old_layout.deleteLater()
+
+        # ⚠️ 不要调用 setLayout(None)！Qt 不允许设置空布局
+        # Qt警告: "QWidget::setLayout: Cannot set layout to 0"
+        # 直接调用 init_ui() 创建新布局即可
+
         # 重新初始化UI以反映新的工具状态
         self.logger.info(f"[详情页面更新-4] 重新初始化UI")
-        self.init_ui()
-        
+        self.logger.info(f"[详情页面更新-4.0] 当前 tool_data['total_runtime']: {self.tool_data.get('total_runtime', 'N/A')}")
+        try:
+            self.init_ui()
+            self.logger.info(f"[详情页面更新-4.1] init_ui()成功")
+
+            # 立即处理事件，确保新UI被渲染
+            QApplication.processEvents()
+            self.logger.info(f"[详情页面更新-4.2] 第一次事件处理完成")
+        except Exception as e:
+            self.logger.error(f"[详情页面更新-4.1] init_ui()失败: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+
+        # 强制布局重新计算几何尺寸
+        self.logger.info(f"[详情页面更新-5] 强制布局重新计算")
+        new_layout = self.layout()
+        if new_layout:
+            new_layout.invalidate()  # 标记布局无效，需要重新计算
+            new_layout.activate()     # 激活布局，强制重新计算
+            self.logger.info(f"[详情页面更新-5.1] 布局已激活")
+
+        # 强制widget重新计算尺寸
+        self.adjustSize()
+        self.logger.info(f"[详情页面更新-5.2] widget尺寸已重新计算")
+
         # 强制刷新显示
-        self.logger.info(f"[详情页面更新-5] 强制刷新显示")
+        self.logger.info(f"[详情页面更新-5.3] 强制刷新显示")
         self.update()
         self.repaint()
-        QApplication.processEvents()
-        
+
+        # 多次处理事件，确保Qt完全渲染
+        for i in range(3):
+            QApplication.processEvents()
+            self.logger.info(f"[详情页面更新-5.{i+1}] 事件处理循环 {i+1}/3")
+
+        # 刷新父容器（如果存在）
+        if self.parent():
+            # 也强制父容器重新布局
+            parent_layout = self.parent().layout()
+            if parent_layout:
+                parent_layout.invalidate()
+                parent_layout.activate()
+                self.logger.info(f"[详情页面更新-5.4] 父容器布局已激活")
+
+            self.parent().update()
+            self.parent().repaint()
+            self.logger.info(f"[详情页面更新-5.5] 父容器已刷新")
+
+            # 🔥 如果父容器是QStackedWidget，强制重新设置当前页面
+            from PyQt5.QtWidgets import QStackedWidget
+            if isinstance(self.parent(), QStackedWidget):
+                stacked = self.parent()
+                # 保存当前索引
+                current_index = stacked.indexOf(self)
+                if current_index != -1:
+                    # 强制切换（先切到其他页面再切回来）
+                    # 但这样会闪烁，所以只强制setCurrentWidget
+                    stacked.setCurrentWidget(self)
+                    self.logger.info(f"[详情页面更新-5.6] StackedWidget已强制切换到当前页面")
+
+                    # 强制StackedWidget更新
+                    stacked.update()
+                    stacked.repaint()
+                    self.logger.info(f"[详情页面更新-5.7] StackedWidget已强制刷新")
+
+        # 最后再刷新一次
+        self.update()
+        self.repaint()
+        self.logger.info(f"[详情页面更新-5.6] 最终刷新完成")
+
+        # 🔍 诊断日志：检查widget状态
+        self.logger.info(f"[详情页面更新-诊断] 开始诊断widget状态")
+        self.logger.info(f"[详情页面更新-诊断] self.isVisible(): {self.isVisible()}")
+        self.logger.info(f"[详情页面更新-诊断] self.isHidden(): {self.isHidden()}")
+        self.logger.info(f"[详情页面更新-诊断] self.width() x self.height(): {self.width()} x {self.height()}")
+
+        if hasattr(self, 'usage_time_label') and self.usage_time_label:
+            self.logger.info(f"[详情页面更新-诊断] usage_time_label存在")
+            self.logger.info(f"[详情页面更新-诊断] usage_time_label.text(): '{self.usage_time_label.text()}'")
+            self.logger.info(f"[详情页面更新-诊断] usage_time_label.isVisible(): {self.usage_time_label.isVisible()}")
+            self.logger.info(f"[详情页面更新-诊断] usage_time_label.parent(): {self.usage_time_label.parent()}")
+        else:
+            self.logger.warning(f"[详情页面更新-诊断] usage_time_label不存在！")
+
+        if hasattr(self, 'launch_btn') and self.launch_btn:
+            self.logger.info(f"[详情页面更新-诊断] launch_btn.text(): '{self.launch_btn.text()}'")
+            self.logger.info(f"[详情页面更新-诊断] launch_btn.isVisible(): {self.launch_btn.isVisible()}")
+
+        if self.parent():
+            stacked = self.parent()
+            current_widget = stacked.currentWidget() if hasattr(stacked, 'currentWidget') else None
+            self.logger.info(f"[详情页面更新-诊断] 父容器的currentWidget是self: {current_widget is self}")
+            if current_widget and current_widget is not self:
+                self.logger.warning(f"[详情页面更新-诊断] ⚠️ 父容器显示的不是self！显示的是: {type(current_widget).__name__}")
+
         self.logger.info(f"[详情页面更新-6] UI更新完成: {self.tool_data['name']}")
     
     def set_installing_state(self, is_installing: bool, progress: int = -1, status_text: str = ""):
@@ -826,7 +1025,94 @@ class EnhancedDetailPage(QWidget):
                         
         except Exception as e:
             self.logger.error(f"[详情页面进度-ERROR] 设置安装状态时发生异常: {e}")
-    
+
+    def update_running_state(self, is_running: bool):
+        """更新工具运行状态，在启动按钮上显示"""
+        self.logger.info(f"[工具运行状态] 更新状态: {self.tool_data['name']}, running={is_running}")
+        self.is_tool_running = is_running
+
+        try:
+            if self.launch_btn:
+                if is_running:
+                    # 运行中 - 更新启动按钮
+                    self.launch_btn.setText(self.tr("运行中"))
+                    self.launch_btn.setEnabled(False)  # 禁用按钮
+                    self.launch_btn.setStyleSheet("""
+                        QPushButton {
+                            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f59e0b, stop:1 #d97706);
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+                    """)
+                    self.launch_btn.update()
+                    self.launch_btn.repaint()
+                    QApplication.processEvents()
+                    self.logger.info(f"[工具运行状态] 启动按钮已设置为运行中")
+                else:
+                    # 停止 - 恢复启动按钮
+                    self.launch_btn.setText(self.tr("启动"))
+                    self.launch_btn.setEnabled(True)
+                    self.launch_btn.setStyleSheet("""
+                        QPushButton {
+                            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #10b981, stop:1 #059669);
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+                        QPushButton:hover {
+                            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #34d399, stop:1 #10b981);
+                        }
+                        QPushButton:pressed {
+                            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #047857, stop:1 #065f46);
+                        }
+                    """)
+                    self.launch_btn.update()
+                    self.launch_btn.repaint()
+                    QApplication.processEvents()
+                    self.logger.info(f"[工具运行状态] 启动按钮已恢复正常状态")
+        except Exception as e:
+            self.logger.error(f"[工具运行状态-ERROR] 更新运行状态时发生异常: {e}")
+
+    def update_usage_time(self, total_runtime: int):
+        """更新使用时间显示"""
+        self.logger.info(f"⏱️ [使用时间更新] 开始更新: {total_runtime}秒")
+
+        try:
+            # 更新tool_data
+            self.tool_data['total_runtime'] = total_runtime
+            self.logger.info(f"⏱️ [使用时间更新] tool_data已更新: {total_runtime}秒")
+
+            # 🎯 尝试简单方案：直接修改label文本（像启动时一样）
+            if hasattr(self, 'usage_time_label') and self.usage_time_label:
+                usage_time = self._get_usage_time()
+                if usage_time == self.tr("Not used yet"):
+                    time_text = usage_time
+                else:
+                    time_text = self.tr("Used {0}").format(usage_time)
+
+                self.logger.info(f"📝 [使用时间更新] 直接设置文本: '{time_text}'")
+                self.usage_time_label.setText(time_text)
+                self.usage_time_label.update()
+                self.usage_time_label.repaint()
+                self.logger.info(f"✅ [使用时间更新] 标签文本已更新并强制刷新")
+            else:
+                self.logger.warning(f"⚠️ [使用时间更新] usage_time_label不存在，使用update_ui()重建")
+                self.update_ui()
+
+        except Exception as e:
+            self.logger.error(f"❌ [使用时间更新-ERROR] 更新使用时间时发生异常: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+
     def _update_favorite_button(self):
         """更新收藏按钮的显示状态"""
         if not self.favorite_btn:

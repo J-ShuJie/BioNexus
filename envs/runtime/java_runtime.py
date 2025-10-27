@@ -82,6 +82,19 @@ class JavaRuntime:
         return {
             "supported_versions": [
                 {
+                    "version": "22",
+                    "lts": False,
+                    "recommended": True,
+                    "download_sources": [
+                        {
+                            "provider": "eclipse-temurin",
+                            "url_template": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.{patch}+{build}/OpenJDK22U-jdk_{arch}_{os}_hotspot_22.0.{patch}_{build}.{ext}",
+                            "latest_info_url": "https://api.github.com/repos/adoptium/temurin22-binaries/releases/latest",
+                            "priority": 1
+                        }
+                    ]
+                },
+                {
                     "version": "8",
                     "lts": True,
                     "eol": "2030-12",
@@ -103,7 +116,7 @@ class JavaRuntime:
                     "download_sources": [
                         {
                             "provider": "eclipse-temurin",
-                            "url_template": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.{patch}+{build}/OpenJDK11U-jre_{arch}_{os}_hotspot_11.0.{patch}_{build}.{ext}",
+                            "url_template": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.{patch}+{build}/OpenJDK11U-jdk_{arch}_{os}_hotspot_11.0.{patch}_{build}.{ext}",
                             "latest_info_url": "https://api.github.com/repos/adoptium/temurin11-binaries/releases/latest",
                             "priority": 1
                         }
@@ -117,7 +130,7 @@ class JavaRuntime:
                     "download_sources": [
                         {
                             "provider": "eclipse-temurin",
-                            "url_template": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.{patch}+{build}/OpenJDK17U-jre_{arch}_{os}_hotspot_17.0.{patch}_{build}.{ext}",
+                            "url_template": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.{patch}+{build}/OpenJDK17U-jdk_{arch}_{os}_hotspot_17.0.{patch}_{build}.{ext}",
                             "latest_info_url": "https://api.github.com/repos/adoptium/temurin17-binaries/releases/latest",
                             "priority": 1
                         }
@@ -474,10 +487,11 @@ class JavaRuntime:
                         
                         self.logger.info(f"✅ 下载URL验证成功，文件大小: {size_mb:.1f}MB")
                         
+                        from pathlib import Path as _P
                         return {
                             'version': tag_name,
                             'download_url': download_url,
-                            'file_name': f"openjdk-{version_config['version']}-jre-{platform_info['os']}-{platform_info['arch']}.{file_ext}",
+                            'file_name': _P(download_url).name,
                             'estimated_size': int(size_mb * 1024 * 1024)
                         }
                         
@@ -495,7 +509,7 @@ class JavaRuntime:
     def _parse_version_tag(self, tag_name: str, major_version: str) -> Optional[Dict[str, str]]:
         """解析GitHub版本标签"""
         try:
-            if major_version == '11' and tag_name.startswith('jdk-'):
+            if major_version in ('11','17','22') and tag_name.startswith('jdk-'):
                 # 格式: jdk-11.0.28+6
                 version_part = tag_name[4:]  # 去掉 'jdk-'
                 if '+' in version_part:

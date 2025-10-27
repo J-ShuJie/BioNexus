@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import (
     QStackedWidget, QScrollArea, QFrame, QPushButton,
     QLabel, QGridLayout, QMessageBox, QApplication
 )
-from PyQt5.QtCore import Qt, pyqtSignal, QTimer
+from PyQt5.QtCore import Qt, pyqtSignal, QTimer, pyqtSlot
 from PyQt5.QtGui import QFont, QIcon
 
 # 获取logger
@@ -335,6 +335,26 @@ class MainWindow(QMainWindow):
         print("[系统初始化] installation_progress 信号已连接到 _on_installation_progress")
         self.tool_manager.error_occurred.connect(self._on_tool_error)
         print("[系统初始化] error_occurred 信号已连接到 _on_tool_error")
+        # 新增：统一处理工具状态变化（installed/available/update等）
+        try:
+            self.tool_manager.tool_status_changed.connect(self._on_tool_status_changed)
+            print("[系统初始化] tool_status_changed 信号已连接到 _on_tool_status_changed")
+        except Exception as e:
+            print(f"[系统初始化] 警告：无法连接 tool_status_changed 信号: {e}")
+        # 新增：工具使用时间更新信号
+        try:
+            self.tool_manager.usage_time_updated.connect(self._on_usage_time_updated)
+            print("[系统初始化] ✅ usage_time_updated 信号已连接到 _on_usage_time_updated")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.info("✅ [MainWindow-初始化] usage_time_updated 信号已连接到 _on_usage_time_updated")
+        except Exception as e:
+            print(f"[系统初始化] ❌ 警告：无法连接 usage_time_updated 信号: {e}")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"❌ [MainWindow-初始化] 无法连接 usage_time_updated 信号: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
         print("[系统初始化] 所有工具管理器信号连接完成")
         
         # 设置面板信号连接
@@ -874,15 +894,37 @@ class MainWindow(QMainWindow):
         print(msg)
         logger.info(msg)
     
+    @pyqtSlot(str)
     def _on_tool_launched(self, tool_name: str):
-        """工具启动完成处理"""
+        """工具启动完成处理
+
+        🔥 使用 @pyqtSlot 装饰器确保信号正确传递
+        """
         # 记录工具启动到监控系统
         if self.monitor:
             self.monitor.log_tool_operation(tool_name, "启动", True)
-        
+
         # 更新最近使用列表
         self.config_manager.update_recent_tools(tool_name)
         self.sidebar.update_recent_tools(self.config_manager.recent_tools)
+
+        # 更新详情页运行状态（如果当前显示的是该工具）
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'update_running_state') and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data.get('name') == tool_name):
+            self.current_detail_page.update_running_state(True)
+            logger.info(f"✅ [MainWindow-工具启动] 已更新详情页运行状态: {tool_name}")
+
+            # 🔥 与关闭时保持一致：在父容器上也调用update()和repaint()
+            self.current_detail_page.update()
+            self.current_detail_page.repaint()
+            # 修复：使用正确的堆栈部件引用
+            if self.main_content_stack:
+                self.main_content_stack.update()
+                self.main_content_stack.repaint()
+            QApplication.processEvents()
+            logger.info(f"🎨 [MainWindow-强制刷新] 已强制刷新父容器和QStackedWidget")
     
     def _on_tool_uninstalled(self, tool_name: str):
         """工具卸载完成处理"""
@@ -981,6 +1023,31 @@ class MainWindow(QMainWindow):
         
         print(f"[日志-D10] *** UI刷新完成 ***: {tool_name}")
         logger.info(f"[日志-D10] *** UI刷新完成 ***: {tool_name}")
+
+    def _on_tool_status_changed(self, tool_name: str, new_status: str):
+        """统一处理工具状态变化（包括installed/available/update等）。"""
+        import logging
+        logger = logging.getLogger(__name__)
+        print(f"[状态变更] 工具状态变化: {tool_name} -> {new_status}")
+        logger.info(f"[状态变更] 工具状态变化: {tool_name} -> {new_status}")
+
+        # 更新卡片状态
+        card = self.tools_grid.get_card_by_name(tool_name)
+        if card:
+            # 清除任何进行中的安装/卸载进度显示
+            if hasattr(card, 'set_installing_state'):
+                card.set_installing_state(False, 0, "")
+            if hasattr(card, 'tool_data'):
+                card.tool_data['status'] = new_status
+                card.update(); card.repaint()
+            elif hasattr(card, 'update_tool_status'):
+                card.update_tool_status(new_status)
+        else:
+            logger.info(f"[状态变更] 未找到卡片: {tool_name}，刷新整个工具网格")
+
+        # 刷新列表并重应用筛选，确保所有视图（包括收藏、筛选视图）立即反映新状态
+        self._update_tools_display()
+        self._apply_current_filters()
     
     def _on_installation_progress(self, tool_name: str, progress: int, status_text: str):
         """安装/卸载进度更新处理（接收 ToolManager 的进度信号）"""
@@ -1078,7 +1145,199 @@ class MainWindow(QMainWindow):
         
         # 更新下载按钮状态
         self._update_download_button_state()
-    
+
+    @pyqtSlot(str, int)
+    def _on_usage_time_updated(self, tool_name: str, total_runtime: int):
+        """
+        工具使用时间更新处理（工具停止时触发）
+
+        🔥 使用 @pyqtSlot 装饰器确保跨线程信号正确传递
+
+        Args:
+            tool_name: 工具名称
+            total_runtime: 总使用时间（秒）
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"🎯 [MainWindow-信号接收] 工具={tool_name}, 时间={total_runtime}秒")
+
+        # 🔥 关键修复：像启动时一样，直接同步调用！不用异步！
+        # 更新详情页运行状态为停止（如果当前显示的是该工具）
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'update_running_state') and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data.get('name') == tool_name):
+
+            self.current_detail_page.update_running_state(False)
+            logger.info(f"✅ [MainWindow-工具停止] 已更新详情页运行状态: {tool_name}")
+
+            # 更新使用时间
+            if hasattr(self.current_detail_page, 'update_usage_time'):
+                self.current_detail_page.update_usage_time(total_runtime)
+                logger.info(f"✅ [MainWindow-工具停止] 已更新使用时间")
+
+            # 🔥 网上查到的关键解决方案：update()不会更新子widget！
+            # 需要在父容器上也调用update()和repaint()
+            self.current_detail_page.update()
+            self.current_detail_page.repaint()
+            # 修复：使用正确的堆栈部件引用
+            if self.main_content_stack:
+                self.main_content_stack.update()
+                self.main_content_stack.repaint()
+            QApplication.processEvents()
+            logger.info(f"🎨 [MainWindow-强制刷新] 已强制刷新父容器和QStackedWidget")
+
+        # 检查当前详情页
+        logger.info(f"🔍 [MainWindow-详情页检查] current_detail_page: {self.current_detail_page}")
+
+        if not self.current_detail_page:
+            logger.info(f"⚠️ [MainWindow-详情页检查] 当前没有详情页，跳过刷新")
+            return
+
+        logger.info(f"🔍 [MainWindow-详情页检查] 详情页类型: {type(self.current_detail_page).__name__}")
+        logger.info(f"🔍 [MainWindow-详情页检查] 详情页是否有tool_data: {hasattr(self.current_detail_page, 'tool_data')}")
+
+        if hasattr(self.current_detail_page, 'tool_data'):
+            current_tool_name = self.current_detail_page.tool_data.get('name', 'Unknown')
+            logger.info(f"🔍 [MainWindow-详情页检查] 详情页显示的工具: {current_tool_name}")
+            logger.info(f"🔍 [MainWindow-详情页检查] 是否匹配: {current_tool_name == tool_name}")
+
+        # 如果当前详情页显示的是这个工具，直接更新UI（不重建页面）
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data['name'] == tool_name):
+
+            logger.info(f"✅ [MainWindow-直接更新UI] 匹配成功，开始更新: {tool_name}")
+
+            # 🎯 方案：直接调用update方法，像启动时一样
+            # 这个方法已经被证明能工作（启动按钮能立即变成"运行中"）
+
+            # 🔍 诊断：检查Qt事件循环状态（在update之前）
+            from PyQt5.QtCore import QThread, QCoreApplication
+            current_thread = QThread.currentThread()
+            main_thread = QCoreApplication.instance().thread()
+            logger.info(f"🔍 [MainWindow-诊断-BEFORE] 当前线程: {current_thread}")
+            logger.info(f"🔍 [MainWindow-诊断-BEFORE] 主线程: {main_thread}")
+            logger.info(f"🔍 [MainWindow-诊断-BEFORE] 是否在主线程: {current_thread == main_thread}")
+            logger.info(f"🔍 [MainWindow-诊断-BEFORE] hasPendingEvents: {QCoreApplication.hasPendingEvents()}")
+
+            # 1. 更新使用时间显示
+            if hasattr(self.current_detail_page, 'update_usage_time'):
+                QApplication.processEvents()
+                logger.info(f"⏱️ [MainWindow-直接更新UI] 调用 update_usage_time({total_runtime})")
+                self.current_detail_page.update_usage_time(total_runtime)
+                logger.info(f"✅ [MainWindow-直接更新UI] 使用时间已更新")
+
+                # 强制刷新时间标签
+                if hasattr(self.current_detail_page, 'usage_time_label') and self.current_detail_page.usage_time_label:
+                    self.current_detail_page.usage_time_label.update()
+                    self.current_detail_page.usage_time_label.repaint()
+                    logger.info(f"🔄 [MainWindow-直接更新UI] 已强制刷新时间标签")
+
+                QApplication.processEvents()
+            else:
+                logger.warning(f"⚠️ [MainWindow-直接更新UI] 详情页没有 update_usage_time 方法")
+
+            # 2. 强制刷新UI（确保渲染） - 多次处理事件
+            logger.info(f"🔄 [MainWindow-强制刷新] 开始多次强制刷新")
+
+            # 刷新详情页
+            self.current_detail_page.update()
+            self.current_detail_page.repaint()
+
+            # 刷新父容器（StackedWidget）
+            if self.current_detail_page.parent():
+                self.current_detail_page.parent().update()
+                self.current_detail_page.parent().repaint()
+
+            # 🔥 强制StackedWidget显示当前页面
+            if self.main_content_stack:
+                self.main_content_stack.setCurrentWidget(self.current_detail_page)
+                self.main_content_stack.update()
+                self.main_content_stack.repaint()
+                logger.info(f"🔄 [MainWindow-强制刷新] StackedWidget已强制刷新")
+
+            # 刷新整个窗口
+            self.update()
+            self.repaint()
+
+            # 多次处理事件（确保Qt完全渲染）
+            for i in range(5):
+                QApplication.processEvents()
+                logger.info(f"🔄 [MainWindow-强制刷新] 第{i+1}次处理事件")
+
+            logger.info(f"✅ [MainWindow-直接更新UI] UI已强制刷新（5次）")
+
+            # 3. 使用QTimer延迟再次刷新（确保在主事件循环中）
+            from PyQt5.QtCore import QTimer
+            QTimer.singleShot(100, lambda: self._delayed_ui_refresh())
+            logger.info(f"⏰ [MainWindow-延迟刷新] 已设置100ms延迟刷新")
+        else:
+            logger.info(f"⚠️ [MainWindow-详情页检查] 详情页不匹配，不刷新")
+
+        logger.info(f"🎯 [MainWindow-信号接收] ========== 使用时间更新处理完成 ==========")
+
+    def _delayed_ui_refresh(self):
+        """延迟刷新当前详情页UI（无参数版本）"""
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"⏰ [MainWindow-延迟刷新] 开始延迟刷新当前详情页")
+
+        if self.current_detail_page:
+            # 刷新详情页
+            self.current_detail_page.update()
+            self.current_detail_page.repaint()
+            logger.info(f"⏰ [MainWindow-延迟刷新] 详情页已刷新")
+
+            # 强制StackedWidget显示当前页面
+            if self.main_content_stack:
+                self.main_content_stack.setCurrentWidget(self.current_detail_page)
+                self.main_content_stack.update()
+                self.main_content_stack.repaint()
+                logger.info(f"⏰ [MainWindow-延迟刷新] StackedWidget已刷新")
+
+            # 刷新父容器
+            if self.current_detail_page.parent():
+                self.current_detail_page.parent().update()
+                self.current_detail_page.parent().repaint()
+
+            # 刷新整个窗口
+            self.update()
+            self.repaint()
+
+            # 处理事件
+            QApplication.processEvents()
+            logger.info(f"✅ [MainWindow-延迟刷新] 延迟刷新完成")
+
+    def _delayed_refresh(self, tool_name: str):
+        """延迟刷新UI（确保Qt完全渲染）"""
+        logger.info(f"⏰ [MainWindow-延迟刷新] 开始延迟刷新: {tool_name}")
+
+        # 再次刷新详情页和父容器
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data.get('name') == tool_name):
+
+            # 刷新详情页
+            self.current_detail_page.update()
+            self.current_detail_page.repaint()
+            logger.info(f"⏰ [MainWindow-延迟刷新] 详情页已刷新")
+
+            # 刷新父容器
+            if self.main_content_stack:
+                self.main_content_stack.update()
+                self.main_content_stack.repaint()
+                logger.info(f"⏰ [MainWindow-延迟刷新] 父容器已刷新")
+
+            # 刷新整个窗口
+            self.update()
+            self.repaint()
+            logger.info(f"⏰ [MainWindow-延迟刷新] 主窗口已刷新")
+
+            # 处理事件
+            QApplication.processEvents()
+            logger.info(f"⏰ [MainWindow-延迟刷新] 延迟刷新完成")
+
     def _on_setting_changed(self, setting_name: str, value):
         """设置变更处理"""
         # 记录设置变更到监控系统
@@ -1111,6 +1370,25 @@ class MainWindow(QMainWindow):
     
     def _on_card_selected(self, tool_name: str):
         """处理卡片选中事件（现在改为显示详情页面）"""
+        import logging
+        logger = logging.getLogger(__name__)
+
+        # 🔥 关键修复：如果当前已经显示该工具的详情页，不要重建！
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data.get('name') == tool_name):
+            logger.info(f"✅ [_on_card_selected] 已在显示 {tool_name} 详情页，跳过重建")
+            # 只刷新数据（重新加载total_runtime）
+            self.config_manager.load_tools()
+            for tool in self.config_manager.tools:
+                if tool.get('name') == tool_name:
+                    self.current_detail_page.tool_data['total_runtime'] = tool.get('total_runtime', 0)
+                    if hasattr(self.current_detail_page, 'update_usage_time'):
+                        self.current_detail_page.update_usage_time(tool.get('total_runtime', 0))
+                    logger.info(f"✅ [_on_card_selected] 已刷新 {tool_name} 数据")
+                    break
+            return
+
         # 获取工具数据
         tool_data = self.tool_manager.get_tool_info(tool_name)
         if tool_data:
@@ -1416,24 +1694,102 @@ class MainWindow(QMainWindow):
     
     def show_tool_detail_page(self, tool_data: dict):
         """显示工具详情页面"""
+        import logging
+        logger = logging.getLogger(__name__)
+
+        # 🔥 关键修复：每次显示详情页前，从文件重新加载tools.json，确保数据最新
+        # 解决问题：内存缓存可能过期，导致显示旧数据
+        self.config_manager.load_tools()
+        logger.info(f"🔄 [show_tool_detail_page] 已从文件重新加载tools.json")
+
         # 确保工具数据包含收藏状态
         tool_data['is_favorite'] = self.config_manager.is_tool_favorite(tool_data['name'])
+
+        # 从 config_manager.tools 加载最新的使用时间（关键修复！）
+        # usage_tracker将数据保存到config_manager.tools中
+        if self.config_manager and self.config_manager.tools:
+            for tool in self.config_manager.tools:
+                if tool.get('name') == tool_data['name']:
+                    total_runtime = tool.get('total_runtime', 0)
+                    tool_data['total_runtime'] = total_runtime
+                    logger.info(f"📊 [show_tool_detail_page] 从config加载使用时间: {total_runtime}秒")
+                    break
+
+        # 确保有默认值
+        if 'total_runtime' not in tool_data:
+            tool_data['total_runtime'] = 0
+            logger.info(f"📊 [show_tool_detail_page] 使用默认时间: 0秒")
+
+        # 🔥 关键修复：如果当前已经显示该工具的详情页，不要重建！
+        if (self.current_detail_page and
+            hasattr(self.current_detail_page, 'tool_data') and
+            self.current_detail_page.tool_data.get('name') == tool_data['name']):
+            logger.info(f"⚠️ [show_tool_detail_page] 已在显示 {tool_data['name']} 详情页，跳过重建，只刷新数据")
+            # 更新数据到当前页面
+            self.current_detail_page.tool_data['total_runtime'] = tool_data.get('total_runtime', 0)
+            # 刷新显示
+            if hasattr(self.current_detail_page, 'update_usage_time'):
+                self.current_detail_page.update_usage_time(tool_data.get('total_runtime', 0))
+            return  # 直接返回，不重建
+
         print(f"[详情页面] 创建详情页面: {tool_data['name']}, 收藏状态: {'收藏' if tool_data['is_favorite'] else '未收藏'}")
-        
+        logger.info(f"📄 [show_tool_detail_page] 准备创建详情页: {tool_data['name']}, total_runtime: {tool_data.get('total_runtime', 0)}")
+
         # 创建详情页面
         detail_page = ToolDetailPage(tool_data, self)
-        
+        detail_page_id = id(detail_page)
+        logger.info(f"🆔 [show_tool_detail_page] 新详情页已创建，实例ID: {detail_page_id}")
+
+        # 🔧 方案3：检查工具是否正在运行，保持运行状态
+        if self.tool_manager and hasattr(self.tool_manager, 'usage_tracker'):
+            # 检查工具是否有活跃的监控会话
+            tool_name = tool_data['name']
+            is_running = False
+            if self.tool_manager.usage_tracker and hasattr(self.tool_manager.usage_tracker, 'active_sessions'):
+                is_running = tool_name in self.tool_manager.usage_tracker.active_sessions
+
+            if is_running:
+                logger.info(f"🔧 [show_tool_detail_page] 检测到工具正在运行: {tool_name}，调用update_running_state")
+                # 🔥 关键修复：使用统一的update_running_state方法，避免样式冲突
+                detail_page.update_running_state(True)
+                logger.info(f"✅ [show_tool_detail_page] 运行状态已设置为运行中")
+
+        # 🔥 关键修复：删除旧的详情页，防止阴阳代码
+        if self.current_detail_page:
+            old_page_id = id(self.current_detail_page)
+            logger.info(f"🗑️ [show_tool_detail_page] 删除旧详情页，实例ID: {old_page_id}")
+
+            # 从StackedWidget中移除
+            self.main_content_stack.removeWidget(self.current_detail_page)
+
+            # 立即删除（不用deleteLater）
+            try:
+                import sip
+                if not sip.isdeleted(self.current_detail_page):
+                    sip.delete(self.current_detail_page)
+                    logger.info(f"✅ [show_tool_detail_page] 旧详情页已同步删除")
+            except Exception as e:
+                self.current_detail_page.deleteLater()
+                logger.info(f"⚠️ [show_tool_detail_page] 旧详情页使用异步删除: {e}")
+
+            self.current_detail_page = None
+
+            # 处理事件，确保删除完成
+            QApplication.processEvents()
+            logger.info(f"✅ [show_tool_detail_page] 旧详情页删除完成")
+
         # 连接返回信号（现在返回按钮在工具栏上，但保留这个以兼容）
         detail_page.back_requested.connect(self.go_back_to_main)
         detail_page.install_requested.connect(self._on_install_tool)
         detail_page.launch_requested.connect(self._on_launch_tool)
         detail_page.uninstall_requested.connect(self._on_uninstall_tool)
         detail_page.favorite_toggled.connect(self._on_tool_favorite_toggled)
-        
+
         # 添加到堆栈并切换
         self.main_content_stack.addWidget(detail_page)
         self.main_content_stack.setCurrentWidget(detail_page)
         self.current_detail_page = detail_page
+        logger.info(f"✅ [show_tool_detail_page] 新详情页已设置为当前widget，实例ID: {detail_page_id}")
         
         # 切换工具栏到详情页模式
         self.toolbar.switch_to_detail_mode()

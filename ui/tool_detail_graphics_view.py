@@ -186,8 +186,12 @@ class TimeStatisticsItem(QGraphicsItem):
         font.setPointSize(10)
         font.setWeight(QFont.Medium)
         painter.setFont(font)
-        
-        text = f"已使用 {self.usage_time}"
+
+        # 智能显示：如果是"暂未使用"，直接显示；否则显示"已使用 X小时"
+        if self.usage_time in ["暂未使用", "Not used yet"]:
+            text = self.usage_time
+        else:
+            text = f"已使用 {self.usage_time}"
         painter.drawText(self.boundingRect(), Qt.AlignCenter, text)
 
 
@@ -274,16 +278,16 @@ class OperationGroup(QGraphicsItemGroup):
         self.buttons.append(install_btn)
     
     def _get_usage_time(self) -> str:
-        """获取使用时间"""
-        mock_times = {
-            "FastQC": "2.5小时",
-            "BLAST": "1.2小时",
-            "BWA": "45分钟",
-            "SAMtools": "3.8小时",
-            "HISAT2": "1小时15分",
-            "IQ-TREE": "8小时30分"
-        }
-        return mock_times.get(self.tool_data['name'], "未使用")
+        """获取使用时间（使用智能格式化）"""
+        # 使用真实的使用时间数据
+        total_runtime = self.tool_data.get('total_runtime', 0)
+
+        if total_runtime == 0:
+            return "暂未使用"
+
+        # 使用智能时间格式化
+        from utils.time_formatter import format_runtime
+        return format_runtime(total_runtime, language='zh_CN')
 
 
 class OperationSignalEmitter(QObject):

@@ -19,7 +19,8 @@ class UpdateManager:
     
     def __init__(self, env_manager=None):
         self.logger = logging.getLogger(__name__)
-        self.temp_dir = Path(tempfile.gettempdir()) / "BioNexus_Update"
+        import os
+        self.temp_dir = Path(os.getcwd()) / "temp" / "BioNexus_Update"
         self.current_exe = Path(sys.executable if getattr(sys, 'frozen', False) else __file__)
         
         # 环境管理器集成

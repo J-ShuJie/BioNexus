@@ -604,10 +604,10 @@ class SettingsPanel(QWidget):
         """打开文件夹选择对话框"""
         current_path = path_input.text() or ""
         
-        # 如果当前路径不存在，使用用户主目录
+        # 如果当前路径不存在，使用工作目录
         import os
         if not os.path.exists(current_path):
-            current_path = os.path.expanduser("~")
+            current_path = os.getcwd()
         
         # 打开文件夹选择对话框
         selected_dir = QFileDialog.getExistingDirectory(
