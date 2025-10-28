@@ -1046,9 +1046,24 @@ class ModernDownloadCard(QWidget):
                     self.content_layout.addItem(stretch_item)
                 self.download_items[new_key] = item
 
-            # 出错时应当可见，并刷新统计与持久化
+            # 出错时应当可见，并正确定位到工具栏下方（而不是(0,0)）
             if not self.isVisible():
-                self.show()
+                try:
+                    mw = self.parent()
+                    if mw and hasattr(mw, 'toolbar') and hasattr(mw.toolbar, 'download_rect'):
+                        toolbar_rect = mw.toolbar.geometry()
+                        button_rect = mw.toolbar.download_rect
+                        self.show_aligned_to_toolbar(
+                            toolbar_bottom=toolbar_rect.bottom(),
+                            button_rect=button_rect,
+                            window_rect=mw.rect()
+                        )
+                        self.raise_()
+                    else:
+                        # 兜底：至少显示出来
+                        self.show()
+                except Exception:
+                    self.show()
             self._update_stats()
             self._save_tasks_to_file()
         except Exception:

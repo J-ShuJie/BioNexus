@@ -140,7 +140,8 @@ class IGV(ToolInterface):
                     self.unified_logger.log_runtime(f"IGV版本信息已异步更新: {version}")
                 
         except Exception as e:
-            self.unified_logger.log_error("IGV版本更新", f"异步更新失败: {e}")
+            # 网络失败不应作为错误刷屏，降级为运行日志
+            self.unified_logger.log_runtime(f"IGV版本更新: 异步更新失败: {e}")
     
     def get_download_sources(self) -> List[Dict[str, Any]]:
         """

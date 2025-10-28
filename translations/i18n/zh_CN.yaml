@@ -142,6 +142,14 @@ MainWindow:
   '{0} Error': '{0} 错误'
   '{0} Update': '{0} 更新'
   '{0} has been successfully uninstalled': '{0} 已成功卸载'
+  工具管理: 工具管理
+  提示: 提示
+  '{0} 已安装，是否同时卸载？\n\n是：从工作流移除并卸载工具\n否：仅从工作流移除\n取消：不执行操作': '{0} 已安装，是否同时卸载？\n\n是：从工作流移除并卸载工具\n否：仅从工作流移除\n取消：不执行操作'
+  Workflows: 工作流
+  New Workflow: 新建工作流
+  Add Tool: 添加工具
+  Edit Order: 编辑排序
+  Done: 完成
 ModernSidebar:
   All Tools: 全部工具
   My Tools: 我的工具
@@ -150,6 +158,7 @@ ModernSidebar:
   🕒 Recently Used: 🕒 最近使用
 ModernToolbar:
   ← Back: ← 返回
+  Back: 返回
 PathMigrationDialog:
   'Auto-update to: {0}': '自动更新为: {0}'
   Conda Environment Path: Conda环境路径
@@ -500,11 +509,6 @@ SettingsPanel:
   'Failed to delete tools:': '删除失败的工具:'
   'An error occurred while deleting tools:': '删除工具时发生错误:'
   Translation files are not available, please check the installation: 翻译文件不可用，请检查安装
-ToolCardV3:
-  Details: 详情
-  Install: 安装
-  Launch: 启动
-  '{0}%': '{0}%'
 ToolDetailPage:
   1 hour 15 min: 1小时15分
   1.2 hours: 1.2小时
@@ -566,9 +570,12 @@ EnhancedDetailPage:
   "Version {0}": "版本 {0}"
   "Installed": "已安装"
   "Not Installed": "未安装"
+  "Open in Browser": "在浏览器中打开"
+  "No installation required": "无需安装"
   "🚀 Launch": "🚀 启动"
   "Uninstall": "卸载"
   "Used {0}": "已使用 {0}"
+  "Used {count} times": "已使用 {count} 次"
   "📥 Install Tool": "📥 安装工具"
   "📖 Usage Guide": "📖 使用说明"
   "No usage instructions yet": "暂无使用说明"
@@ -577,6 +584,7 @@ EnhancedDetailPage:
   "45 minutes": "45分钟"
   "3.8 hours": "3.8小时"
   "Not Used": "未使用"
+  "Not used yet": "暂未使用"
   "📝 Tool Overview": "📝 工具介绍"
   "No detailed description": "暂无详细介绍"
   "🔧 Technical Specs": "🔧 技术规格"
@@ -683,6 +691,8 @@ ToolCardV3:
   Launch: 启动
   Install: 安装
   Details: 详情
+  '{0}%': '{0}%'
+  Open in Browser: 打开网页
 ToolDescriptions:
   FastQC: "用于高通量测序数据的质量控制，生成完整的 HTML 报告。"
   BLAST: "在大型数据库中进行序列相似性搜索，支持核酸与蛋白质序列。"

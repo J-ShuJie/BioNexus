@@ -183,6 +183,7 @@ class ModernSidebar(QWidget):
         nav_items = [
             ("all-tools", "📋", self.tr("All Tools")),
             ("my-tools", "⭐", self.tr("My Tools")),
+            ("workflows", "🧩", self.tr("Workflows")),
             ("settings", "⚙️", self.tr("Settings"))
         ]
         
@@ -198,6 +199,15 @@ class ModernSidebar(QWidget):
             is_hover = self.hover_item == view_name
             
             self._draw_nav_button(painter, item_rect, icon, text, is_active, is_hover)
+
+        # 记录导航区域的底部位置，供最近使用区域动态定位
+        if self.nav_rects:
+            try:
+                self._nav_bottom_y = max(r.bottom() for r in self.nav_rects.values())
+            except Exception:
+                self._nav_bottom_y = y_offset + len(nav_items) * 40
+        else:
+            self._nav_bottom_y = y_offset
     
     def _draw_nav_button(self, painter, rect, icon, text, is_active, is_hover):
         """绘制单个导航按钮"""
@@ -249,12 +259,11 @@ class ModernSidebar(QWidget):
         """绘制最近使用工具区域"""
         if not self.recent_tools:
             return
-        
-        # 分割线
-        separator_y = 205
+        # 动态计算分割线位置：紧随导航区域之后留出间距
+        base_y = getattr(self, '_nav_bottom_y', 70 + 3 * 40)
+        separator_y = base_y + 20
         painter.setPen(QPen(self.colors['border'], 1))
         painter.drawLine(15, separator_y, 235, separator_y)
-        
         # 标题
         title_y = separator_y + 20
         font = QFont()

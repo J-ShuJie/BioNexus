@@ -59,6 +59,7 @@ class SmartDownloader:
         # 按优先级排序
         sorted_sources = sorted(sources, key=lambda x: x.get('priority', 999))
         
+        self.unified_logger.log_runtime(f"下载候选源数量: {len(sorted_sources)}")
         for source in sorted_sources:
             source_name = source.get('name', '未知源')
             source_url = source.get('url')
@@ -71,6 +72,16 @@ class SmartDownloader:
             if progress_callback:
                 progress_callback(f"正在从 {source_name} 下载...", 0)
             
+            # 详细日志：记录尝试的源
+            try:
+                self.unified_logger.log_installation(source_name, '下载尝试', '开始', {
+                    'url': source_url,
+                    'timeout': timeout,
+                    'output': str(output_path)
+                })
+            except Exception:
+                pass
+
             success = self._download_from_source(
                 source_url, 
                 output_path, 
@@ -98,6 +109,13 @@ class SmartDownloader:
         # 所有源都失败
         if progress_callback:
             progress_callback("所有下载源均失败", -1)
+        # 统一日志：所有源失败
+        try:
+            self.unified_logger.log_error('下载失败', '所有下载源均失败', {
+                'targets': [s.get('url') for s in sorted_sources]
+            })
+        except Exception:
+            pass
         return False
     
     def _download_from_source(
@@ -167,6 +185,7 @@ class SmartDownloader:
             
             # 发送请求
             request_start = time.time()
+            self.unified_logger.log_runtime(f"HTTP GET: {url} (timeout={timeout}, resume_pos={resume_pos})")
             response = self.session.get(
                 url, 
                 headers=headers, 
@@ -181,12 +200,14 @@ class SmartDownloader:
             
             # 检查响应状态
             if response.status_code not in [200, 206]:  # 206是断点续传状态码
-                error_msg = f"HTTP {response.status_code}: {response.reason if hasattr(response, 'reason') else '未知错误'}"
+                error_msg = f"HTTP {response.status_code}: {getattr(response, 'reason', '未知错误')}"
                 self.logger.warning(f"源 {source_name} 返回状态码: {response.status_code}")
                 self.unified_logger.log_error('下载失败', error_msg, {
                     "source": source_name, 
-                    "url": url, 
-                    "status_code": response.status_code
+                    "url": url,
+                    "final_url": getattr(response, 'url', url),
+                    "status_code": response.status_code,
+                    "headers": dict(response.headers or {})
                 })
                 return False
             
@@ -199,6 +220,13 @@ class SmartDownloader:
             else:
                 total_size = 0
                 self.logger.warning(f"无法获取文件大小: {url}")
+            # 详细记录响应头与内容长度
+            try:
+                self.unified_logger.log_runtime(
+                    f"HTTP响应: status={response.status_code}, final_url={getattr(response,'url',url)}, content_length={content_length}, accept_ranges={response.headers.get('accept-ranges','')}"
+                )
+            except Exception:
+                pass
             
             # 开始下载
             downloaded_size = resume_pos
@@ -250,15 +278,15 @@ class SmartDownloader:
             
         except requests.exceptions.Timeout as e:
             self.logger.warning(f"源 {source_name} 连接超时")
-            self.unified_logger.log_error('下载超时', str(e), {"source": source_name, "url": url, "timeout": timeout})
+            self.unified_logger.log_error('下载超时', repr(e), {"source": source_name, "url": url, "timeout": timeout})
             return False
         except requests.exceptions.ConnectionError as e:
             self.logger.warning(f"源 {source_name} 连接失败")
-            self.unified_logger.log_error('下载连接失败', str(e), {"source": source_name, "url": url})
+            self.unified_logger.log_error('下载连接失败', repr(e), {"source": source_name, "url": url})
             return False
         except Exception as e:
             self.logger.error(f"从 {source_name} 下载失败: {e}")
-            self.unified_logger.log_error('下载异常', str(e), {"source": source_name, "url": url})
+            self.unified_logger.log_error('下载异常', repr(e), {"source": source_name, "url": url})
             return False
     
     def _format_speed(self, bytes_per_second: float) -> str:

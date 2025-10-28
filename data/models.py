@@ -87,17 +87,14 @@ class AppState:
 
 # 预定义的工具数据，对应JavaScript中的toolsData数组
 DEFAULT_TOOLS = [
+    # 默认均为“未安装”状态（首次运行的干净状态）
     Tool(
         name="FastQC",
         category=ToolCategory.QUALITY,
-        status=ToolStatus.INSTALLED,
+        status=ToolStatus.AVAILABLE,
         description="高通量测序数据质量控制工具，提供详细的质量报告和可视化图表。",
         version="0.11.9",
-        install_source="bioconda",
-        executable_path="C:\\Users\\User\\miniconda3\\envs\\biotools\\bin\\fastqc.exe",
-        disk_usage="25.6 MB",
-        last_used=datetime.fromisoformat("2025-01-15T10:30:00"),
-        total_runtime=3600
+        install_source="bioconda"
     ),
     Tool(
         name="BLAST",
@@ -118,14 +115,10 @@ DEFAULT_TOOLS = [
     Tool(
         name="SAMtools",
         category=ToolCategory.GENOMICS,
-        status=ToolStatus.INSTALLED,
+        status=ToolStatus.AVAILABLE,
         description="处理高通量测序比对数据的工具集，支持SAM/BAM/CRAM格式。",
         version="1.16.1",
-        install_source="bioconda",
-        executable_path="C:\\Users\\User\\miniconda3\\envs\\biotools\\bin\\samtools.exe",
-        disk_usage="12.3 MB",
-        last_used=datetime.fromisoformat("2025-01-14T16:45:00"),
-        total_runtime=7200
+        install_source="bioconda"
     ),
     Tool(
         name="HISAT2",

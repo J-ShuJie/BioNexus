@@ -101,6 +101,57 @@ class ToolUsageTracker(QObject):
         self.logger.info(f"🎯 [Tracker-主线程发射] 在主线程中发射usage_updated信号: {tool_name}, {total_runtime}秒")
         self.usage_updated.emit(tool_name, total_runtime)
 
+    def record_launch(self, tool_name: str):
+        """
+        记录工具启动（仅计数，不跟踪使用时长）
+
+        专用于Web启动器等无法跟踪进程的工具
+
+        Args:
+            tool_name: 工具名称
+        """
+        try:
+            # 获取当前工具数据
+            tools = self.config_manager.tools
+            tool_data = None
+
+            for tool in tools:
+                if tool.get('name') == tool_name:
+                    tool_data = tool
+                    break
+
+            if not tool_data:
+                self.logger.warning(f"未找到工具数据: {tool_name}")
+                return
+
+            # 更新 last_used
+            tool_data['last_used'] = datetime.now().isoformat()
+
+            # 累加 launch_count
+            current_count = tool_data.get('launch_count', 0)
+            new_count = current_count + 1
+            tool_data['launch_count'] = new_count
+
+            # 保存到配置文件
+            self.config_manager.save_tools()
+
+            self.logger.info(f"记录工具启动: {tool_name}, 启动次数: {new_count}")
+
+            # 发射启动次数更新信号（可选，用于UI刷新）
+            try:
+                QMetaObject.invokeMethod(
+                    self,
+                    "_emit_usage_updated",
+                    Qt.QueuedConnection,
+                    Q_ARG(str, tool_name),
+                    Q_ARG(int, new_count)
+                )
+            except Exception as e:
+                self.logger.warning(f"发射启动次数信号失败: {e}")
+
+        except Exception as e:
+            self.logger.error(f"记录工具启动失败: {tool_name}, 错误: {e}")
+
     def start_tracking(self, tool_name: str, pid: Optional[int] = None):
         """
         开始跟踪工具使用
@@ -125,7 +176,7 @@ class ToolUsageTracker(QObject):
             if not self.is_monitoring:
                 self._start_monitor_thread()
 
-        # 如果拿到了有效的 PID，则并行启动“等待线程”，实现退出即刻刷新
+        # 如果拿到了有效的 PID，则并行启动"等待线程"，实现退出即刻刷新
         if pid is not None:
             try:
                 self._start_pid_wait_thread(tool_name, pid)
@@ -177,12 +228,31 @@ class ToolUsageTracker(QObject):
                             # 如果有PID，检查该进程是否存在
                             if not self._is_process_running(session.pid):
                                 self.logger.info(f"检测到工具进程结束: {tool_name} (PID: {session.pid})")
-                                ended_tools.append(tool_name)
+                                # 尝试“重连”：部分GUI会在启动后切换为新的主进程
+                                new_pid = self._find_tool_pid_by_name(tool_name, within_last_seconds=60)
+                                if new_pid:
+                                    self.logger.info(f"尝试重连到新进程: {tool_name} (PID: {new_pid})")
+                                    try:
+                                        session.pid = new_pid
+                                    except Exception:
+                                        pass
+                                    # 成功重连则不结束会话
+                                else:
+                                    ended_tools.append(tool_name)
                         else:
                             # 如果没有PID，通过进程名检查（不太准确）
                             if not self._is_tool_process_running(tool_name):
                                 self.logger.info(f"检测到工具进程结束: {tool_name}")
                                 ended_tools.append(tool_name)
+                            else:
+                                # 尝试补获PID，便于随后使用精确的PID监控
+                                new_pid = self._find_tool_pid_by_name(tool_name, within_last_seconds=120)
+                                if new_pid:
+                                    try:
+                                        session.pid = new_pid
+                                        self.logger.info(f"为 {tool_name} 附加PID: {new_pid}")
+                                    except Exception:
+                                        pass
 
                     # 结束已停止的会话
                     for tool_name in ended_tools:
@@ -226,10 +296,15 @@ class ToolUsageTracker(QObject):
             # 交由轮询兜底
             return
 
-        # 进程已退出，尝试立即结束会话（避免与轮询线程冲突，按现有流程幂等）
+        # 进程已退出，尝试立即结束会话，但仅当当前会话仍绑定该PID（避免重连后被旧PID误杀）
         try:
-            self.logger.info(f"检测到进程退出（PID等待线程）: {tool_name}, PID={pid}")
-            self._end_session(tool_name)
+            with self._lock:
+                current = self.active_sessions.get(tool_name)
+                if current and current.is_active and current.pid == pid:
+                    self.logger.info(f"检测到进程退出（PID等待线程）: {tool_name}, PID={pid}，结束会话")
+                    self._end_session(tool_name)
+                else:
+                    self.logger.info(f"PID等待线程忽略：会话已更新为其他PID或已结束: {tool_name}, 旧PID={pid}, 当前PID={getattr(current,'pid',None) if current else None}")
         except Exception as e:
             self.logger.error(f"PID等待线程结束会话失败: {tool_name}, 错误: {e}")
 
@@ -260,6 +335,7 @@ class ToolUsageTracker(QObject):
                 'BLAST': ['blastn.exe', 'blastp.exe', 'blastx.exe'],
                 'BWA': ['bwa.exe'],
                 'SAMtools': ['samtools.exe'],
+                'UGENE': ['ugeneui.exe', 'ugenedesktop.exe', 'ugene.exe', 'ugenem.exe', 'ugenecl.exe'],
             }
 
             possible_names = process_name_map.get(tool_name, [f"{tool_name.lower()}.exe"])
@@ -276,6 +352,47 @@ class ToolUsageTracker(QObject):
         except Exception as e:
             self.logger.error(f"检查工具进程时发生错误: {e}")
             return False
+
+    def _find_tool_pid_by_name(self, tool_name: str, within_last_seconds: int = 30) -> Optional[int]:
+        """根据工具名尝试找到最近启动的匹配进程PID。
+
+        - 用于原PID终止但工具切换到新进程的场景（例如 splash → 主进程）。
+        - within_last_seconds 控制“最近”窗口，默认30秒以覆盖GUI冷启动较慢的情况。
+        """
+        try:
+            import time as _time
+            import psutil as _psutil
+
+            process_name_map = {
+                'Cytoscape': ['cytoscape.exe', 'java.exe', 'javaw.exe'],
+                'IGV': ['igv.exe', 'java.exe', 'javaw.exe'],
+                'FastQC': ['fastqc.exe', 'java.exe', 'javaw.exe'],
+                'BLAST': ['blastn.exe', 'blastp.exe', 'blastx.exe'],
+                'BWA': ['bwa.exe'],
+                'SAMtools': ['samtools.exe'],
+                'UGENE': ['ugeneui.exe', 'ugenedesktop.exe', 'ugene.exe', 'ugenem.exe', 'ugenecl.exe'],
+            }
+
+            possible = [n.lower() for n in process_name_map.get(tool_name, [f"{tool_name.lower()}.exe"]) ]
+            candidates = []
+            now = _time.time()
+
+            for proc in _psutil.process_iter(['pid', 'name', 'create_time']):
+                try:
+                    pname = (proc.info.get('name') or '').lower()
+                    if pname and any(n in pname for n in possible):
+                        ctime = proc.info.get('create_time') or 0
+                        if now - ctime < within_last_seconds:
+                            candidates.append((proc.info['pid'], ctime))
+                except (_psutil.NoSuchProcess, _psutil.AccessDenied):
+                    continue
+
+            if candidates:
+                candidates.sort(key=lambda x: x[1], reverse=True)
+                return candidates[0][0]
+        except Exception as e:
+            self.logger.warning(f"通过名称查找PID失败: {tool_name}, 错误: {e}")
+        return None
 
     def _end_session(self, tool_name: str):
         """

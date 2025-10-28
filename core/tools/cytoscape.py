@@ -720,10 +720,13 @@ class Cytoscape(ToolInterface):
                 sample = [p.name for p in self.install_dir.iterdir()][:10] if self.install_dir.exists() else []
             except Exception:
                 sample = []
-            self.unified_logger.log_error('Cytoscape验证', '未找到可执行文件', {
-                'install_dir': str(self.install_dir),
-                'sample': sample
-            })
+            # 为避免启动时刷屏，仅首次记录一次，并降级为运行时日志
+            if not getattr(self, '_missing_reported', False):
+                self.unified_logger.log_runtime(f"Cytoscape未安装: 路径={self.install_dir}, sample={sample}")
+                try:
+                    self._missing_reported = True
+                except Exception:
+                    pass
             return False
         except Exception as e:
             self.unified_logger.log_error('Cytoscape验证', f'异常: {e}')

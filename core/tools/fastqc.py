@@ -137,7 +137,7 @@ class FastQC(ToolInterface):
                     self.unified_logger.log_runtime(f"FastQC版本信息已异步更新: {version}")
                 
         except Exception as e:
-            self.unified_logger.log_error("FastQC版本更新", f"异步更新失败: {e}")
+            self.unified_logger.log_runtime(f"FastQC版本更新: 异步更新失败: {e}")
     
     def get_download_sources(self) -> List[Dict[str, Any]]:
         """

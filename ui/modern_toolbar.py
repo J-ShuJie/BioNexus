@@ -5,7 +5,7 @@
 采用相同的设计语言，保持界面统一性
 """
 
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton
 from PyQt5.QtCore import Qt, pyqtSignal, QRect, QRectF, QPropertyAnimation, QEasingCurve, pyqtProperty
 from PyQt5.QtGui import (
     QPainter, QLinearGradient, QColor, QBrush, QPen,
@@ -23,6 +23,8 @@ class ModernToolbar(QWidget):
     filter_clicked = pyqtSignal()
     download_status_clicked = pyqtSignal()
     back_clicked = pyqtSignal()  # 新增：返回按钮信号
+    action_clicked = pyqtSignal(str)  # 自定义动作按钮点击（非切换类）
+    action_toggled = pyqtSignal(str, bool)  # 自定义动作切换
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -33,8 +35,13 @@ class ModernToolbar(QWidget):
         self.filter_active = False  # 筛选是否激活
         self.download_active = False  # 下载是否激活
         self.is_detail_mode = False  # 新增：是否在详情页模式
+        self.back_label = ""  # 返回目标文本（为空则使用默认）
+        self._default_buttons_visible = True  # 控制筛选/下载是否显示
         self.back_pressed = False  # 新增：返回按钮是否被按下
-        
+        # 自定义动作按钮
+        self._actions = []  # type: list
+        self._action_defs = []  # type: list
+
         # 按钮区域
         self.download_rect = QRect()
         self.filter_rect = QRect()
@@ -146,8 +153,12 @@ class ModernToolbar(QWidget):
         download_y = filter_y
         self.download_rect = QRect(download_x, download_y, button_size, button_size)
         
-        # 返回按钮位置（左侧）
-        back_width = 80  # 返回按钮更宽，包含文字
+        # 返回按钮位置（左侧）- 动态宽度基于文本
+        f = QFont(); f.setPointSize(13); f.setBold(True)
+        fm = QFontMetrics(f)
+        text = self._get_back_text()
+        text_w = fm.boundingRect(text).width() + 24  # 左右内边距
+        back_width = max(80, min(200, text_w))
         back_x = left_margin
         back_y = (self.height() - button_size) // 2
         self.back_rect = QRect(back_x, back_y, back_width, button_size)
@@ -162,18 +173,18 @@ class ModernToolbar(QWidget):
             self._draw_back_button(painter, self.back_rect, 
                                   self.hover_button == "back")
         else:
-            # 列表模式：显示筛选和下载按钮
+            # 列表模式：默认显示筛选和下载按钮（可关闭）
             # 设置透明度（用于淡入淡出效果）
             if self.fade_animation.state() == QPropertyAnimation.Running:
                 painter.setOpacity(self.fade_progress)
-            
-            self._draw_button(painter, self.download_rect, "📥", "download", 
-                             self.hover_button == "download", self.download_active)
-            self._draw_button(painter, self.filter_rect, "🔧", "filter",
-                             self.hover_button == "filter", self.filter_active)
+            if self._default_buttons_visible:
+                self._draw_button(painter, self.download_rect, "📥", "download", 
+                                 self.hover_button == "download", self.download_active)
+                self._draw_button(painter, self.filter_rect, "🔧", "filter",
+                                 self.hover_button == "filter", self.filter_active)
             
             # 如果有下载，绘制数字徽章
-            if self.download_count > 0:
+            if self._default_buttons_visible and self.download_count > 0:
                 self._draw_badge(painter, self.download_rect, str(self.download_count))
             
             painter.setOpacity(1.0)  # 恢复透明度
@@ -349,6 +360,74 @@ class ModernToolbar(QWidget):
         """设置下载数量"""
         self.download_count = count
         self.update()
+
+    # =========================
+    # 公共API：外部控制默认按钮/动作按钮
+    # =========================
+    def set_default_buttons_visible(self, visible: bool):
+        self._default_buttons_visible = bool(visible)
+        # 自定义动作按钮布局可能要占据右侧，该方法只负责隐藏默认绘制
+        self.update()
+
+    def clear_actions(self):
+        for b in self._actions:
+            try:
+                b.deleteLater()
+            except Exception:
+                pass
+        self._actions.clear()
+        self._action_defs.clear()
+        self.update()
+
+    def set_actions(self, actions):
+        """
+        设置右侧自定义动作按钮。
+        actions: [{ 'id': str, 'text': str, 'type': 'normal'|'toggle' }]
+        """
+        # 清理旧按钮
+        self.clear_actions()
+        if not actions:
+            return
+        self._action_defs = actions[:]
+        # 创建按钮（右对齐，从右往左排）
+        for act in actions:
+            btn = QPushButton(self.tr(act.get('text', '')), self)
+            t = (act.get('type') or 'normal').lower()
+            if t == 'toggle':
+                btn.setCheckable(True)
+                btn.toggled.connect(lambda state, aid=act.get('id',''): self.action_toggled.emit(aid, state))
+            else:
+                btn.clicked.connect(lambda _, aid=act.get('id',''): self.action_clicked.emit(aid))
+            self._style_action_button(btn)
+            btn.show()
+            self._actions.append(btn)
+        # 初次布局
+        self._layout_action_buttons()
+        self.update()
+
+    def _style_action_button(self, btn: QPushButton):
+        btn.setCursor(Qt.PointingHandCursor)
+        btn.setFixedHeight(28)
+        btn.setStyleSheet("""
+            QPushButton { background-color: #3b82f6; color: #ffffff; border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: bold; }
+            QPushButton:hover { background-color: #2563eb; }
+            QPushButton:pressed { background-color: #1d4ed8; }
+            QPushButton:checked { background-color: #10b981; }
+        """)
+
+    def _layout_action_buttons(self):
+        if not self._actions:
+            return
+        right_margin = 20
+        spacing = 8
+        x = self.width() - right_margin
+        y = (self.height() - 28) // 2
+        # 右对齐，从右往左排
+        for btn in reversed(self._actions):
+            w = max(80, btn.sizeHint().width())
+            x = x - w
+            btn.setGeometry(x, y, w, 28)
+            x = x - spacing
     
     def set_filter_active(self, active):
         """设置筛选激活状态 - 蓝色高亮效果"""
@@ -463,10 +542,13 @@ class ModernToolbar(QWidget):
         
         painter.setPen(QPen(text_color))
         
-        # 绘制箭头和文字
-        text = self.tr("← Back")
+        # 绘制箭头和文字（应用省略号以适配宽度）
+        full_text = self._get_back_text()
         fm = QFontMetrics(font)
-        text_rect = fm.boundingRect(text)
+        # 为了避免绘制区域溢出，给左右各预留6px内边距
+        available_w = max(0, int(draw_rect.width()) - 12)
+        elided_text = fm.elidedText(full_text, Qt.ElideRight, available_w)
+        text_rect = fm.boundingRect(elided_text)
         text_x = int(draw_rect.x() + (draw_rect.width() - text_rect.width()) // 2)
         text_y = int(draw_rect.y() + (draw_rect.height() + text_rect.height()) // 2 - 2)
         
@@ -474,15 +556,15 @@ class ModernToolbar(QWidget):
         if self.back_pressed:
             # 点击时：深色阴影
             painter.setPen(QPen(QColor(0, 0, 0, 120)))
-            painter.drawText(text_x + 1, text_y + 1, text)
+            painter.drawText(text_x + 1, text_y + 1, elided_text)
             painter.setPen(QPen(text_color))
         elif is_hover:
             # 悬停时：白色高光
             painter.setPen(QPen(QColor(255, 255, 255, 100)))
-            painter.drawText(text_x - 1, text_y - 1, text)
+            painter.drawText(text_x - 1, text_y - 1, elided_text)
             painter.setPen(QPen(text_color))
         
-        painter.drawText(text_x, text_y, text)
+        painter.drawText(text_x, text_y, elided_text)
         
         # 恢复画家状态
         painter.restore()
@@ -520,6 +602,7 @@ class ModernToolbar(QWidget):
         """窗口大小改变事件 - 确保按钮位置正确"""
         super().resizeEvent(event)
         self._update_button_rects()
+        self._layout_action_buttons()
         self.update()
 
     def _connect_language_change(self):
@@ -535,3 +618,20 @@ class ModernToolbar(QWidget):
         """Retranslate toolbar text - for language switching"""
         # Toolbar text is drawn in paintEvent, so just trigger a repaint
         self.update()
+
+    # ============== 公共API：设置返回目标文本 ==============
+    def set_back_target(self, text: str):
+        try:
+            self.back_label = text or ""
+        except Exception:
+            self.back_label = ""
+        # 更新按钮区域以适配新文本
+        self._update_button_rects()
+        self.update()
+
+    def _get_back_text(self) -> str:
+        label = self.back_label.strip()
+        if not label:
+            label = self.tr("Back")
+        # 使用左箭头 + 空格 + 目标
+        return f"← {label}"

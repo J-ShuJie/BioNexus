@@ -1,29 +1,32 @@
 """
-BLAST工具占位符实现
-⚠️ 注意：这是一个占位符，仅用于UI展示，不具备实际功能
-实际的BLAST安装功能将在后续版本中实现
+NCBI BLAST Web启动器
+打开NCBI BLAST在线版网页，用于序列比对分析
 """
-from .placeholder_base import PlaceholderTool
+from .web_launcher_base import WebLauncherTool
 
 
-class BLAST(PlaceholderTool):
+class BLAST(WebLauncherTool):
     """
-    BLAST (Basic Local Alignment Search Tool) 占位符
-    未来将实现：
-    - 从NCBI官网下载
-    - 自动配置数据库
-    - 支持多种BLAST变体（blastn, blastp, blastx等）
+    NCBI BLAST (在线版)
+
+    功能：
+    - 打开NCBI BLAST官方网站
+    - 支持各种BLAST变体（blastn, blastp, blastx等）
+    - 无需本地安装，直接使用在线服务
+    - 只记录启动次数（无法记录使用时长）
     """
-    
+
     METADATA = {
-        'name': 'BLAST',
-        'version': '2.13.0',
+        'name': 'BLAST NCBI',
+        'version': 'Online',
         'category': 'sequence',
-        'description': '基本局部比对搜索工具，用于寻找序列相似性的标准工具。支持核酸和蛋白质序列比对。',
-        'size': '约 200 MB',
+        'description': 'NCBI官方在线BLAST工具，用于核酸和蛋白质序列相似性搜索。支持blastn、blastp、blastx等多种比对方式。',
+        'url': 'https://blast.ncbi.nlm.nih.gov/Blast.cgi',
+        'size': 'N/A',
         'requires': [],
         'status': 'available',
         'homepage': 'https://blast.ncbi.nlm.nih.gov/',
-        'documentation': 'https://www.ncbi.nlm.nih.gov/books/NBK279690/',
-        'license': 'Public Domain'
+        'documentation': 'https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs',
+        'license': 'Public Domain',
+        'tool_type': 'web_launcher'
     }

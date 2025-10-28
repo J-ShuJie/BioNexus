@@ -236,9 +236,15 @@ class CardGridContainer(QWidget):
     
     def get_card_by_name(self, tool_name: str) -> ToolCardV2:
         """根据工具名称获取卡片对象"""
+        if tool_name is None:
+            return None
+        target = tool_name.lower()
         for card in self.cards:
-            if card.tool_data['name'] == tool_name:
-                return card
+            try:
+                if str(card.tool_data.get('name', '')).lower() == target:
+                    return card
+            except Exception:
+                continue
         return None
     
     def paintEvent(self, event):

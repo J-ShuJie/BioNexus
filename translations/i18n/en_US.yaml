@@ -152,6 +152,15 @@ MainWindow:
   '{0} Error': '{0} Error'
   '{0} Update': '{0} Update'
   '{0} has been successfully uninstalled': '{0} has been successfully uninstalled'
+  工具管理: Manage Tools
+  提示: Prompt
+  '{0} 已安装，是否同时卸载？\n\n是：从工作流移除并卸载工具\n否：仅从工作流移除\n取消：不执行操作': '{0} is installed. Uninstall it as well?\n\nYes: Remove from workflow and uninstall\nNo: Remove from workflow only\nCancel: Do nothing'
+  工作流: Workflows
+  新建工作流: New Workflow
+  添加工具: Add Tool
+  编辑排序: Edit Order
+  完成: Done
+  添加: Add
 ModernSidebar:
   All Tools: All Tools
   My Tools: My Tools
@@ -160,6 +169,7 @@ ModernSidebar:
   🕒 Recently Used: 🕒 Recently Used
 ModernToolbar:
   ← Back: ← Back
+  Back: Back
 PathMigrationDialog:
   'Auto-update to: {0}': 'Auto-update to: {0}'
   Conda Environment Path: Conda Environment Path
@@ -429,6 +439,7 @@ ToolCardV3:
   Install: Install
   Launch: Launch
   '{0}%': '{0}%'
+  Open in Browser: Open
 ToolDetailPage:
   1 hour 15 min: 1 hour 15 min
   1.2 hours: 1.2 hours
@@ -589,9 +600,12 @@ EnhancedDetailPage:
   "Version {0}": "Version {0}"
   "Installed": "Installed"
   "Not Installed": "Not Installed"
+  "Open in Browser": "Open in Browser"
+  "No installation required": "No installation required"
   "🚀 Launch": "🚀 Launch"
   "Uninstall": "Uninstall"
   "Used {0}": "Used {0}"
+  "Used {count} times": "Used {count} times"
   "📥 Install Tool": "📥 Install Tool"
   "📖 Usage Guide": "📖 Usage Guide"
   "No usage instructions yet": "No usage instructions yet"
@@ -600,6 +614,8 @@ EnhancedDetailPage:
   "45 minutes": "45 minutes"
   "3.8 hours": "3.8 hours"
   "Not Used": "Not Used"
+  "Not used yet": "Not used yet"
+  "Not launched yet": "Not launched yet"
   "📝 Tool Overview": "📝 Tool Overview"
   "No detailed description": "No detailed description"
   "🔧 Technical Specs": "🔧 Technical Specs"

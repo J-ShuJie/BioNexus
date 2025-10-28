@@ -252,18 +252,37 @@ class EnhancedDetailPage(QWidget):
             color: #7f8c8d;
         """)
         
-        # 状态标签
-        status = self.tr("Installed") if self.tool_data['status'] == 'installed' else self.tr("Not Installed")
-        status_label = QLabel(status)
-        status_label.setStyleSheet(f"""
-            font-size: 12px;
-            font-weight: bold;
-            color: {'#27ae60' if self.tool_data['status'] == 'installed' else '#e74c3c'};
-            padding: 4px 12px;
-            background-color: {'#e8f5e9' if self.tool_data['status'] == 'installed' else '#ffebee'};
-            border-radius: 12px;
-            border: 1px solid {'#27ae60' if self.tool_data['status'] == 'installed' else '#e74c3c'};
-        """)
+        # 状态标签（支持 Web 启动器显示“无需安装”）
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = (tool_type == 'web_launcher') or (self.tool_data.get('install_source') == 'web') \
+            or (str(self.tool_data.get('version', '')).lower() == 'online')
+        if is_web_launcher:
+            status_text = self.tr("No installation required")
+            status_label = QLabel(status_text)
+            # 使用中性/信息色样式
+            status_label.setStyleSheet(
+                """
+                font-size: 12px;
+                font-weight: bold;
+                color: #2563eb;
+                padding: 4px 12px;
+                background-color: #eef2ff;
+                border-radius: 12px;
+                border: 1px solid #93c5fd;
+                """
+            )
+        else:
+            status = self.tr("Installed") if self.tool_data['status'] == 'installed' else self.tr("Not Installed")
+            status_label = QLabel(status)
+            status_label.setStyleSheet(f"""
+                font-size: 12px;
+                font-weight: bold;
+                color: {'#27ae60' if self.tool_data['status'] == 'installed' else '#e74c3c'};
+                padding: 4px 12px;
+                background-color: {'#e8f5e9' if self.tool_data['status'] == 'installed' else '#ffebee'};
+                border-radius: 12px;
+                border: 1px solid {'#27ae60' if self.tool_data['status'] == 'installed' else '#e74c3c'};
+            """)
         
         meta_layout.addWidget(version_label)
         meta_layout.addWidget(status_label)
@@ -283,7 +302,52 @@ class EnhancedDetailPage(QWidget):
         right_layout.setSpacing(8)
         right_layout.setAlignment(Qt.AlignCenter)
         
-        if self.tool_data['status'] == 'installed':
+        # Web 启动器：仅提供“在浏览器中打开”，不显示安装/卸载
+        if is_web_launcher:
+            button_container = QWidget()
+            button_layout = QHBoxLayout(button_container)
+            button_layout.setContentsMargins(0, 0, 0, 0)
+            button_layout.setSpacing(10)
+
+            self.launch_btn = QPushButton(self.tr("Open in Browser"))
+            self.launch_btn.setFixedSize(120, 32)
+            # 使用与"启动"一致的绿色样式
+            self.launch_btn.setStyleSheet("""
+                QPushButton {
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                        stop:0 #10b981, stop:1 #059669);
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                        stop:0 #34d399, stop:1 #10b981);
+                }
+                QPushButton:pressed {
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                        stop:0 #047857, stop:1 #065f46);
+                }
+            """)
+            self.launch_btn.clicked.connect(lambda: self.launch_requested.emit(self.tool_data['name']))
+
+            button_layout.addWidget(self.launch_btn)
+            right_layout.addWidget(button_container)
+
+            # 启动次数信息（未使用/已使用 N 次）
+            usage_text = self._get_usage_time()
+            self.usage_time_label = QLabel(usage_text)
+            self.usage_time_label.setStyleSheet("""
+                font-size: 11px;
+                color: #95a5a6;
+                margin-top: 8px;
+            """)
+            self.usage_time_label.setAlignment(Qt.AlignCenter)
+            right_layout.addWidget(self.usage_time_label)
+
+        elif self.tool_data['status'] == 'installed':
             # 按钮容器 - 水平排列启动和卸载按钮
             button_container = QWidget()
             button_layout = QHBoxLayout(button_container)
@@ -595,23 +659,37 @@ class EnhancedDetailPage(QWidget):
     
     
     def _get_usage_time(self):
-        """获取使用时间（使用智能格式化）"""
-        # 使用真实的使用时间数据
-        total_runtime = self.tool_data.get('total_runtime', 0)
+        """获取使用时间或启动次数（根据工具类型）"""
+        # 检查是否为Web启动器
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = tool_type == 'web_launcher'
 
-        self.logger.info(f"🕐 [使用时间获取-1] 读取 tool_data['total_runtime']: {total_runtime}秒")
-        self.logger.info(f"🕐 [使用时间获取-2] tool_data 完整内容: name={self.tool_data.get('name')}, status={self.tool_data.get('status')}, total_runtime={total_runtime}")
+        if is_web_launcher:
+            # Web工具：显示使用次数（未使用/已使用 N 次）
+            launch_count = int(self.tool_data.get('launch_count', 0) or 0)
+            self.logger.info(f"🌐 [Web工具统计] 读取 launch_count: {launch_count}次")
 
-        if total_runtime == 0:
-            self.logger.info(f"🕐 [使用时间获取-3] total_runtime=0，返回 'Not used yet'")
-            return self.tr("Not used yet")
+            if launch_count == 0:
+                return self.tr("Not used yet")
+            else:
+                return self.tr("Used {count} times").format(count=launch_count)
+        else:
+            # 本地工具：显示累计使用时长
+            total_runtime = self.tool_data.get('total_runtime', 0)
 
-        # 使用智能时间格式化
-        from utils.time_formatter import format_runtime
-        # TODO: 从配置中获取语言设置
-        formatted_time = format_runtime(total_runtime, language='en_US')
-        self.logger.info(f"🕐 [使用时间获取-4] 格式化后的时间: {formatted_time}")
-        return formatted_time
+            self.logger.info(f"🕐 [使用时间获取-1] 读取 tool_data['total_runtime']: {total_runtime}秒")
+            self.logger.info(f"🕐 [使用时间获取-2] tool_data 完整内容: name={self.tool_data.get('name')}, status={self.tool_data.get('status')}, total_runtime={total_runtime}")
+
+            if total_runtime == 0:
+                self.logger.info(f"🕐 [使用时间获取-3] total_runtime=0，返回 'Not used yet'")
+                return self.tr("Not used yet")
+
+            # 使用智能时间格式化
+            from utils.time_formatter import format_runtime
+            # TODO: 从配置中获取语言设置
+            formatted_time = format_runtime(total_runtime, language='en_US')
+            self.logger.info(f"🕐 [使用时间获取-4] 格式化后的时间: {formatted_time}")
+            return formatted_time
     
     def _get_tech_specs(self):
         """获取技术规格"""
@@ -1032,6 +1110,12 @@ class EnhancedDetailPage(QWidget):
         self.is_tool_running = is_running
 
         try:
+            # Web 启动器不改变按钮文案/样式，保持“在浏览器中打开”
+            tool_type = self.tool_data.get('tool_type', '')
+            if tool_type == 'web_launcher' or self.tool_data.get('install_source') == 'web' or str(self.tool_data.get('version','')).lower() == 'online':
+                self.logger.info("[工具运行状态] Web工具，忽略运行状态UI切换，保持‘在浏览器中打开’按钮")
+                return
+
             if self.launch_btn:
                 if is_running:
                     # 运行中 - 更新启动按钮
@@ -1082,34 +1166,57 @@ class EnhancedDetailPage(QWidget):
         except Exception as e:
             self.logger.error(f"[工具运行状态-ERROR] 更新运行状态时发生异常: {e}")
 
-    def update_usage_time(self, total_runtime: int):
-        """更新使用时间显示"""
-        self.logger.info(f"⏱️ [使用时间更新] 开始更新: {total_runtime}秒")
+    def update_usage_time(self, value: int):
+        """更新使用时间/启动次数显示
+
+        Args:
+            value: 对于本地工具是total_runtime（秒），对于Web工具是launch_count（次数）
+        """
+        # 检查工具类型
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = tool_type == 'web_launcher'
+
+        if is_web_launcher:
+            self.logger.info(f"🌐 [启动次数更新] 开始更新: {value}次")
+        else:
+            self.logger.info(f"⏱️ [使用时间更新] 开始更新: {value}秒")
 
         try:
-            # 更新tool_data
-            self.tool_data['total_runtime'] = total_runtime
-            self.logger.info(f"⏱️ [使用时间更新] tool_data已更新: {total_runtime}秒")
+            # 根据工具类型更新不同的字段
+            if is_web_launcher:
+                self.tool_data['launch_count'] = value
+                self.logger.info(f"🌐 [启动次数更新] tool_data已更新: {value}次")
+            else:
+                self.tool_data['total_runtime'] = value
+                self.logger.info(f"⏱️ [使用时间更新] tool_data已更新: {value}秒")
 
-            # 🎯 尝试简单方案：直接修改label文本（像启动时一样）
+            # 🎯 直接修改label文本
             if hasattr(self, 'usage_time_label') and self.usage_time_label:
                 usage_time = self._get_usage_time()
-                if usage_time == self.tr("Not used yet"):
-                    time_text = usage_time
-                else:
-                    time_text = self.tr("Used {0}").format(usage_time)
 
-                self.logger.info(f"📝 [使用时间更新] 直接设置文本: '{time_text}'")
+                # Web工具和本地工具使用不同的文本格式
+                if is_web_launcher:
+                    if usage_time == self.tr("Not launched yet"):
+                        time_text = usage_time
+                    else:
+                        time_text = usage_time  # 已经包含"Launched X times"
+                else:
+                    if usage_time == self.tr("Not used yet"):
+                        time_text = usage_time
+                    else:
+                        time_text = self.tr("Used {0}").format(usage_time)
+
+                self.logger.info(f"📝 [统计更新] 直接设置文本: '{time_text}'")
                 self.usage_time_label.setText(time_text)
                 self.usage_time_label.update()
                 self.usage_time_label.repaint()
-                self.logger.info(f"✅ [使用时间更新] 标签文本已更新并强制刷新")
+                self.logger.info(f"✅ [统计更新] 标签文本已更新并强制刷新")
             else:
-                self.logger.warning(f"⚠️ [使用时间更新] usage_time_label不存在，使用update_ui()重建")
+                self.logger.warning(f"⚠️ [统计更新] usage_time_label不存在，使用update_ui()重建")
                 self.update_ui()
 
         except Exception as e:
-            self.logger.error(f"❌ [使用时间更新-ERROR] 更新使用时间时发生异常: {e}")
+            self.logger.error(f"❌ [统计更新-ERROR] 更新统计信息时发生异常: {e}")
             import traceback
             self.logger.error(traceback.format_exc())
 

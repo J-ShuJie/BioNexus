@@ -498,6 +498,7 @@ ToolCardV3:
   Install: Installieren
   Launch: Starten
   '{0}%': '{0}%'
+  Open in Browser: Öffnen
 ToolDetailPage:
   1 hour 15 min: 1 Stunde 15 Min.
   1.2 hours: 1,2 Stunden
@@ -559,9 +560,15 @@ EnhancedDetailPage:
   "Version {0}": "Version {0}"
   "Installed": "Installiert"
   "Not Installed": "Nicht installiert"
+  "Open in Browser": "Im Browser öffnen"
+  "No installation required": "Keine Installation erforderlich"
   "🚀 Launch": "🚀 Starten"
   "Uninstall": "Deinstallieren"
   "Used {0}": "Verwendet {0}"
+  "Used {count} times": "{count} Mal verwendet"
+  "Not launched yet": "Noch nicht gestartet"
+  "Launched 1 time": "1 Mal gestartet"
+  "Launched {count} times": "{count} Mal gestartet"
   "📥 Install Tool": "📥 Tool installieren"
   "📖 Usage Guide": "📖 Benutzerhandbuch"
   "No usage instructions yet": "Noch keine Anweisungen"

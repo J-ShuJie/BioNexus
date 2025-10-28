@@ -215,12 +215,67 @@ class OperationGroup(QGraphicsItemGroup):
     
     def _build_group(self):
         """构建操作组"""
-        if self.tool_data['status'] == 'installed':
+        # Web 启动器：无需安装，直接提供“打开网页”按钮
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = (tool_type == 'web_launcher') or (self.tool_data.get('install_source') == 'web') \
+            or (str(self.tool_data.get('version', '')).lower() == 'online')
+        if is_web_launcher:
+            self._create_web_group()
+        elif self.tool_data['status'] == 'installed':
             # 已安装：显示启动和卸载按钮
             self._create_installed_group()
         else:
             # 未安装：显示安装按钮
             self._create_uninstalled_group()
+
+    def _create_web_group(self):
+        """创建Web工具操作组（仅打开网页 + 启动次数）"""
+        button_y = 0
+        # 打开网页按钮
+        try:
+            from utils.i18n import _ as tr_simple
+            open_text = f"🌐 {tr_simple('Open in Browser')}"
+        except Exception:
+            open_text = "🌐 Open in Browser"
+        launch_btn = GraphicsButton(
+            open_text, 128, 38,
+            color="#3b82f6",
+            hover_color="#60a5fa"
+        )
+        launch_btn.setPos(0, button_y)
+        launch_btn.set_click_callback(
+            lambda: self.signal_emitter.launch_requested.emit(self.tool_data['name'])
+        )
+        self.addToGroup(launch_btn)
+        self.buttons.append(launch_btn)
+
+        # 启动次数文本（在按钮下方）
+        launch_count = int(self.tool_data.get('launch_count', 0) or 0)
+        try:
+            from utils.i18n import _ as tr_simple
+            if launch_count <= 0:
+                usage_text = tr_simple("Not launched yet")
+            elif launch_count == 1:
+                usage_text = tr_simple("Launched 1 time")
+            else:
+                usage_text = tr_simple("Launched {count} times").format(count=launch_count)
+        except Exception:
+            if launch_count <= 0:
+                usage_text = "Not launched yet"
+            elif launch_count == 1:
+                usage_text = "Launched 1 time"
+            else:
+                usage_text = f"Launched {launch_count} times"
+
+        from PyQt5.QtWidgets import QGraphicsTextItem
+        from PyQt5.QtGui import QFont
+        usage_item = QGraphicsTextItem(usage_text)
+        font = QFont()
+        font.setPointSize(10)
+        usage_item.setFont(font)
+        usage_item.setDefaultTextColor(QColor("#64748b"))
+        usage_item.setPos(10, button_y + 38 + 10)
+        self.addToGroup(usage_item)
     
     def _create_installed_group(self):
         """创建已安装状态的操作组"""

@@ -33,6 +33,12 @@ from .modern_filter_card import ModernFilterCard
 from .modern_download_card import ModernDownloadCard
 from .overlay_widget import OverlayWidget
 from .settings_panel import SettingsPanel
+from .workflows_main_view import WorkflowsMainView
+from .workflows_detail_view import WorkflowsDetailView
+try:
+    from .tool_picker_page import ToolPickerPage
+except Exception:
+    ToolPickerPage = None
 from .card_grid_container import CardScrollArea
 # from .download_status_panel import DownloadStatusPanel  # 旧系统，已停用
 from core.tool_manager import ToolManager
@@ -40,6 +46,7 @@ from data.config import ConfigManager
 from data.models import AppState
 from utils.unified_logger import get_logger, performance_monitor, operation_logger
 from utils.path_resolver import PathResolver
+from utils.workflows_manager import WorkflowsManager
 # EnvironmentManager 延迟加载，不是启动必需的
 
 
@@ -84,11 +91,27 @@ class MainWindow(QMainWindow):
         self.sidebar = None
         self.tools_grid = None
         self.settings_panel = None
+        self.workflows_main_view = None
+        self.workflows_detail_view = None
+        self.tool_picker_page = None
+        self.workflows_manager = None
         self.filter_panel = None
         self.download_status_panel = None
         self.main_content_stack = None
         self.current_detail_page = None  # 当前详情页面
         self.overlay = None  # 遮罩层
+        # 当前工作流上下文（用于返回与标题显示）
+        self._current_workflow_name = None
+        # 运行状态轮询（兜底），用于个别工具无法正确回调停止时
+        from PyQt5.QtCore import QTimer
+        self._run_state_timer = QTimer(self)
+        self._run_state_timer.setInterval(1500)
+        self._run_state_timer.timeout.connect(self._poll_running_state)
+        self._running_tool_name = None
+        # 进度节流缓存：避免卡片在进度频繁更新时闪烁
+        self._progress_cache = {}  # {tool_name: { 'p': int, 's': str, 'ts': float }}
+        # 选择器详情上下文标记
+        self._in_picker_detail = False
         
         # 筛选状态
         self.current_search = ""
@@ -246,6 +269,17 @@ class MainWindow(QMainWindow):
         # 设置面板
         self.settings_panel = SettingsPanel(self.config_manager)
         self.main_content_stack.addWidget(self.settings_panel)
+
+        # 工作流管理器与页面
+        try:
+            self.workflows_manager = WorkflowsManager(self.config_manager.config_dir)
+            self.workflows_main_view = WorkflowsMainView(self.workflows_manager)
+            self.workflows_detail_view = WorkflowsDetailView()
+            self.main_content_stack.addWidget(self.workflows_main_view)
+            self.main_content_stack.addWidget(self.workflows_detail_view)
+            # 懒加载 ToolPickerPage（首次需要时再创建）
+        except Exception as e:
+            logger.error(f"初始化工作流视图失败: {e}")
         
         main_content_layout.addWidget(self.main_content_stack)
         main_content_widget.setLayout(main_content_layout)
@@ -297,8 +331,11 @@ class MainWindow(QMainWindow):
         print(f"【CONNECTION DEBUG】已连接 download_status_clicked -> _toggle_download_status_panel")
         
         # 连接返回按钮信号
-        self.toolbar.back_clicked.connect(self.go_back_to_main)
-        print(f"【CONNECTION DEBUG】已连接 back_clicked -> go_back_to_main")
+        # 统一入口：根据当前上下文决定返回目标
+        self._back_target = 'main'  # main | workflows
+        self._last_non_detail_view = 'all-tools'
+        self.toolbar.back_clicked.connect(self._on_toolbar_back)
+        print(f"【CONNECTION DEBUG】已连接 back_clicked -> _on_toolbar_back")
         
         main_content_layout.addWidget(self.toolbar)
         
@@ -317,11 +354,35 @@ class MainWindow(QMainWindow):
         self.sidebar.search_changed.connect(self._on_search_changed)
         self.sidebar.view_changed.connect(self._on_view_changed)
         self.sidebar.recent_tool_clicked.connect(self._on_recent_tool_clicked)
+
+        # 工作流视图连接
+        if self.workflows_main_view:
+            self.workflows_main_view.new_workflow_requested.connect(self._on_new_workflow)
+            self.workflows_main_view.open_workflow_requested.connect(self._on_open_workflow)
+            self.workflows_main_view.rename_workflow_requested.connect(self._on_rename_workflow)
+            self.workflows_main_view.duplicate_workflow_requested.connect(self._on_duplicate_workflow)
+            self.workflows_main_view.delete_workflow_requested.connect(self._on_delete_workflow)
+        if self.workflows_detail_view:
+            self.workflows_detail_view.back_requested.connect(self._on_back_from_workflow)
+            self.workflows_detail_view.add_tool_requested.connect(self._on_pick_tool_for_workflow)
+            self.workflows_detail_view.remove_tool_requested.connect(self._on_remove_tool_from_workflow)
+            self.workflows_detail_view.move_up_requested.connect(lambda idx: self._on_move_tool_in_workflow(idx, -1))
+            self.workflows_detail_view.move_down_requested.connect(lambda idx: self._on_move_tool_in_workflow(idx, +1))
+            # 详情请求（来自工作流中的工具卡）
+            self.workflows_detail_view.tool_detail_requested.connect(self._on_card_selected)
+            # 非管理模式下，卡片走标准安装/启动逻辑
+            try:
+                self.workflows_detail_view.cards.card_install_clicked.connect(self._on_install_tool)
+                self.workflows_detail_view.cards.card_launch_clicked.connect(self._on_launch_tool)
+            except Exception:
+                pass
         
         # 移除重复的筛选按钮连接 - 已在 _create_toolbar 中连接
         print(f"【CONNECTION DEBUG】跳过重复的筛选按钮连接，因为已在工具栏创建时连接")
         
         # 现代化卡片信号连接将在卡片创建时动态连接
+        # 顶栏动作通道
+        self._connect_toolbar_actions()
         
         # 工具管理器信号连接
         print("[系统初始化] 开始连接工具管理器信号")
@@ -513,7 +574,15 @@ class MainWindow(QMainWindow):
             self.monitor.log_user_operation("搜索工具", {"关键词": search_term})
         
         self.current_search = search_term.lower()
-        self._apply_current_filters()
+        # 在不同页面应用到对应网格
+        current_widget = self.main_content_stack.currentWidget() if self.main_content_stack else None
+        if current_widget is self.tools_grid:
+            self._apply_current_filters()
+        elif self.tool_picker_page and (current_widget is self.tool_picker_page):
+            try:
+                self.tool_picker_page.filter_cards(self.current_search, [], [])
+            except Exception:
+                pass
     
     @performance_monitor("视图切换")
     @operation_logger("视图切换")
@@ -532,6 +601,9 @@ class MainWindow(QMainWindow):
         
         self.app_state.current_view = view_name
         self.current_view = view_name  # 保存当前视图用于收藏刷新
+        # 记录最近的非详情视图
+        if view_name in ("all-tools", "my-tools", "settings", "workflows"):
+            self._last_non_detail_view = view_name
         
         if view_name == "all-tools":
             # 显示所有工具 - 重要：清除所有筛选条件显示全部工具
@@ -540,16 +612,47 @@ class MainWindow(QMainWindow):
             self.current_categories = []
             self.current_statuses = []
             self._update_tools_display()
+            # 顶栏：默认按钮
+            self.toolbar.set_default_buttons_visible(True)
+            self.toolbar.clear_actions()
+            self.toolbar.switch_to_list_mode()
+            self._back_target = 'main'
+            self.toolbar.set_back_target("")
             
         elif view_name == "my-tools":
             # 显示收藏的工具
             self.main_content_stack.setCurrentWidget(self.tools_grid)
             self._show_favorite_tools()
+            # 顶栏：默认按钮
+            self.toolbar.set_default_buttons_visible(True)
+            self.toolbar.clear_actions()
+            self.toolbar.switch_to_list_mode()
+            self._back_target = 'main'
+            self.toolbar.set_back_target("")
             
         elif view_name == "settings":
             # 显示设置页面
             self.main_content_stack.setCurrentWidget(self.settings_panel)
             self.settings_panel.refresh_settings()
+            # 顶栏：隐藏默认按钮（设置页不需要）
+            self.toolbar.set_default_buttons_visible(False)
+            self.toolbar.clear_actions()
+            self.toolbar.switch_to_list_mode()
+            self._back_target = 'main'
+            self.toolbar.set_back_target("")
+        elif view_name == "workflows":
+            # 显示工作流列表
+            if self.workflows_main_view:
+                self.workflows_main_view.refresh()
+                self.main_content_stack.setCurrentWidget(self.workflows_main_view)
+                # 顶栏：隐藏默认，显示“新建工作流”
+                self.toolbar.switch_to_list_mode()
+                self.toolbar.set_default_buttons_visible(False)
+                self.toolbar.set_actions([
+                    {'id': 'new_wf', 'text': '新建工作流', 'type': 'normal'}
+                ])
+                self._back_target = 'main'
+                self.toolbar.set_back_target("")
     
     def _on_recent_tool_clicked(self, tool_name: str):
         """
@@ -611,6 +714,331 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'monitor') and self.monitor:
             self.monitor.log_user_operation("筛选按钮点击", {"function": "_toggle_filter_panel"})
             print(f"【MAIN WINDOW DEBUG】已记录到监控日志")
+
+    # =========================
+    # 工作流视图 - 事件处理
+    # =========================
+    def _on_new_workflow(self):
+        from PyQt5.QtWidgets import QInputDialog
+        name, ok = QInputDialog.getText(self, self.tr("新建工作流"), self.tr("名称"))
+        if ok and name.strip():
+            self.workflows_manager.create_workflow(name.strip())
+            if self.workflows_main_view:
+                self.workflows_main_view.refresh()
+
+    def _on_open_workflow(self, workflow_id: str):
+        wf = self.workflows_manager.get_workflow(workflow_id)
+        if not wf:
+            return
+        self._current_workflow_id = workflow_id
+        try:
+            self._current_workflow_name = wf.name
+        except Exception:
+            self._current_workflow_name = None
+        self.workflows_detail_view.set_workflow(wf.id, wf.name, wf.tools)
+        self.main_content_stack.setCurrentWidget(self.workflows_detail_view)
+        # 顶栏：工作流详情（返回 + 添加工具 + 工具管理）
+        self.toolbar.switch_to_detail_mode()
+        self.toolbar.set_default_buttons_visible(False)
+        self.toolbar.set_actions([
+            {'id': 'add', 'text': '添加工具', 'type': 'normal'},
+            {'id': 'edit_toggle', 'text': '工具管理', 'type': 'toggle'}
+        ])
+        self._back_target = 'workflows'
+        try:
+            self.toolbar.set_back_target(self.tr("工作流"))
+        except Exception:
+            pass
+
+    def _on_back_from_workflow(self):
+        self._on_view_changed("workflows")
+
+    def _on_rename_workflow(self, workflow_id: str):
+        wf = self.workflows_manager.get_workflow(workflow_id)
+        if not wf:
+            return
+        from PyQt5.QtWidgets import QInputDialog
+        new_name, ok = QInputDialog.getText(self, self.tr("重命名工作流"), self.tr("新名称"), text=wf.name)
+        if ok and new_name.strip():
+            self.workflows_manager.rename_workflow(workflow_id, new_name.strip())
+            if self.workflows_main_view:
+                self.workflows_main_view.refresh()
+
+    def _on_duplicate_workflow(self, workflow_id: str):
+        self.workflows_manager.duplicate_workflow(workflow_id)
+        if self.workflows_main_view:
+            self.workflows_main_view.refresh()
+
+    def _on_delete_workflow(self, workflow_id: str):
+        from PyQt5.QtWidgets import QMessageBox
+        r = QMessageBox.question(self, self.tr("确认删除"), self.tr("删除工作流将移除其中的工具集合，且不可撤销。确认删除？"))
+        if r == QMessageBox.Yes:
+            self.workflows_manager.delete_workflow(workflow_id)
+            if self.workflows_main_view:
+                self.workflows_main_view.refresh()
+
+    def _on_pick_tool_for_workflow(self):
+        # 内嵌选择页：首次创建并加入堆栈
+        if (self.tool_picker_page is None) and ToolPickerPage:
+            self.tool_picker_page = ToolPickerPage(self.config_manager, self)
+            self.tool_picker_page.tool_selected.connect(self._on_tool_picked_in_page)
+            # 选择器内“详情”请求
+            try:
+                self.tool_picker_page.detail_requested.connect(self._on_picker_detail_requested)
+            except Exception:
+                pass
+            self.main_content_stack.addWidget(self.tool_picker_page)
+        # 切换到选择页
+        if self.tool_picker_page:
+            self.main_content_stack.setCurrentWidget(self.tool_picker_page)
+            # 顶栏进入“页面详情模式”，隐藏默认按钮，显示“完成”
+            self.toolbar.switch_to_detail_mode()
+            self.toolbar.set_default_buttons_visible(False)
+            self.toolbar.set_actions([
+                {'id': 'picker_done', 'text': '完成', 'type': 'normal'}
+            ])
+            # 返回目标：当前工作流名称（动态）
+            try:
+                wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+                if wf:
+                    self.toolbar.set_back_target(wf.name)
+                else:
+                    # 回退为“工作流”
+                    self.toolbar.set_back_target(self.tr("工作流"))
+            except Exception:
+                pass
+
+    def _on_remove_tool_from_workflow(self, index: int):
+        """从当前工作流移除工具；若工具已安装，询问是否同时卸载。"""
+        from PyQt5.QtWidgets import QMessageBox
+        wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+        if not wf:
+            return
+        # 获取工具名
+        try:
+            item = wf.tools[index]
+            tool_name = getattr(item, 'tool_name', None) or item.get('tool_name')
+        except Exception:
+            tool_name = None
+        # 判断是否安装
+        is_installed = False
+        if tool_name:
+            try:
+                info = self.tool_manager.get_tool_info(tool_name)
+                is_installed = (info.get('status') == 'installed') if info else False
+            except Exception:
+                # 回退到配置查询
+                try:
+                    for td in self.config_manager.tools:
+                        if td.get('name') == tool_name:
+                            is_installed = (td.get('status') == 'installed')
+                            break
+                except Exception:
+                    is_installed = False
+        # 已安装：询问是否同时卸载
+        if is_installed and tool_name:
+            reply = QMessageBox.question(
+                self,
+                self.tr("提示"),
+                self.tr("{0} 已安装，是否同时卸载？\n\n是：从工作流移除并卸载工具\n否：仅从工作流移除\n取消：不执行操作").format(tool_name),
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                QMessageBox.No
+            )
+            if reply == QMessageBox.Cancel:
+                return
+            elif reply == QMessageBox.Yes:
+                # 先发起卸载（异步），然后从工作流移除
+                try:
+                    self.tool_manager.uninstall_tool(tool_name)
+                except Exception:
+                    pass
+                # 继续移除
+        # 执行移除
+        self.workflows_manager.remove_tool(wf.id, index)
+        wf = self.workflows_manager.get_workflow(wf.id)
+        self.workflows_detail_view.set_workflow(wf.id, wf.name, wf.tools)
+
+    def _on_move_tool_in_workflow(self, index: int, direction: int):
+        wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+        if not wf:
+            return
+        if self.workflows_manager.move_tool(wf.id, index, direction):
+            wf = self.workflows_manager.get_workflow(wf.id)
+            self.workflows_detail_view.set_workflow(wf.id, wf.name, wf.tools)
+
+    def _on_toolbar_back(self):
+        from PyQt5.QtWidgets import QWidget
+        # 优先处理“选择器详情”返回：先回到选择器列表页
+        try:
+            if self._in_picker_detail:
+                self._return_to_picker_page()
+                return
+        except Exception:
+            pass
+        # 其次处理选择器列表页的返回：回到工作流详情页
+        try:
+            if self.tool_picker_page and self.main_content_stack.currentWidget() is self.tool_picker_page:
+                self._return_to_workflow_detail()
+                return
+        except Exception:
+            pass
+        # 根据当前页面与目标，决定返回行为
+        current = self.main_content_stack.currentWidget() if self.main_content_stack else None
+        if self._back_target == 'workflows':
+            # 如果当前是工具详情页，回到工作流详情；如果当前已在工作流详情，回到工作流列表
+            if current is self.workflows_detail_view:
+                self._on_back_from_workflow()  # 返回到工作流列表
+            else:
+                self._return_to_workflow_detail()  # 返回到当前工作流详情
+            return
+        # 其他情况，回到主工具列表
+        self.go_back_to_main()
+
+    # 统一处理顶栏动作
+    def _connect_toolbar_actions(self):
+        try:
+            self.toolbar.action_clicked.disconnect()
+        except Exception:
+            pass
+        try:
+            self.toolbar.action_toggled.disconnect()
+        except Exception:
+            pass
+        self.toolbar.action_clicked.connect(self._on_toolbar_action_clicked)
+        self.toolbar.action_toggled.connect(self._on_toolbar_action_toggled)
+
+    def _on_toolbar_action_clicked(self, action_id: str):
+        if action_id == 'new_wf':
+            self._on_new_workflow()
+        elif action_id == 'add':
+            self._on_pick_tool_for_workflow()
+        elif action_id == 'picker_done':
+            # 完成选择，返回到工作流详情
+            self._return_to_workflow_detail()
+        elif action_id == 'picker_add':
+            # 在“选择器详情页”中，添加当前详情工具
+            try:
+                if self.current_detail_page and hasattr(self.current_detail_page, 'tool_data'):
+                    tool_name = self.current_detail_page.tool_data.get('name')
+                    if tool_name:
+                        self._on_tool_picked_in_page(tool_name)
+            except Exception:
+                pass
+
+    def _on_toolbar_action_toggled(self, action_id: str, state: bool):
+        if action_id == 'edit_toggle':
+            # 切换详情页编辑模式
+            try:
+                self.workflows_detail_view.set_edit_mode(state)
+            except Exception:
+                pass
+
+    def _on_tool_picked_in_page(self, tool_name: str):
+        # 添加确认（今日不再提示）
+        from PyQt5.QtWidgets import QMessageBox, QCheckBox
+        if not self.workflows_manager.is_add_confirm_suppressed_today():
+            msg = QMessageBox(self)
+            msg.setWindowTitle(self.tr("确认添加"))
+            msg.setText(self.tr("确认将 {0} 添加到当前工作流？").format(tool_name))
+            cb = QCheckBox(self.tr("今日不再提示"))
+            msg.setCheckBox(cb)
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            if msg.exec() == QMessageBox.Ok:
+                if cb.isChecked():
+                    self.workflows_manager.suppress_add_confirm_today()
+            else:
+                return
+        # 实际添加
+        wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+        if wf:
+            self.workflows_manager.add_tool(wf.id, tool_name)
+            wf = self.workflows_manager.get_workflow(wf.id)
+            self.workflows_detail_view.set_workflow(wf.id, wf.name, wf.tools)
+
+    def _return_to_workflow_detail(self):
+        """返回到当前工作流详情页，并恢复工具栏动作"""
+        try:
+            wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+        except Exception:
+            wf = None
+        if wf and self.workflows_detail_view:
+            # 若正处于工具详情页，先移除旧详情页，避免后续点击被误判“已在显示”
+            try:
+                if self.current_detail_page:
+                    self.main_content_stack.removeWidget(self.current_detail_page)
+                    self.current_detail_page.deleteLater()
+                    self.current_detail_page = None
+            except Exception:
+                pass
+            # 切回详情视图
+            self.workflows_detail_view.set_workflow(wf.id, wf.name, wf.tools)
+            self.main_content_stack.setCurrentWidget(self.workflows_detail_view)
+            # 顶栏：恢复“添加工具 + 工具管理”，返回目标为“工作流”
+            self.toolbar.switch_to_detail_mode()
+            self.toolbar.set_default_buttons_visible(False)
+            self.toolbar.set_actions([
+                {'id': 'add', 'text': '添加工具', 'type': 'normal'},
+                {'id': 'edit_toggle', 'text': '工具管理', 'type': 'toggle'}
+            ])
+            self._back_target = 'workflows'
+            try:
+                self.toolbar.set_back_target(self.tr("工作流"))
+            except Exception:
+                pass
+        else:
+            # 回退到工作流列表
+            self._on_back_from_workflow()
+
+    def _return_to_picker_page(self):
+        """从选择器详情返回到选择器卡片列表页"""
+        self._in_picker_detail = False
+        try:
+            if self.tool_picker_page:
+                self.main_content_stack.setCurrentWidget(self.tool_picker_page)
+                # 顶栏：选择器列表模式（返回 {工作流名} + 完成）
+                self.toolbar.switch_to_detail_mode()
+                self.toolbar.set_default_buttons_visible(False)
+                self.toolbar.set_actions([
+                    {'id': 'picker_done', 'text': '完成', 'type': 'normal'}
+                ])
+                wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+                self.toolbar.set_back_target(wf.name if wf else self.tr('工作流'))
+        except Exception:
+            pass
+
+    def _on_picker_detail_requested(self, tool_name: str):
+        """在选择器中请求查看某个工具详情（特殊模式）"""
+        # 查找工具数据
+        tool_data = None
+        try:
+            tool_data = self.tool_manager.get_tool_info(tool_name)
+        except Exception:
+            tool_data = None
+        if not tool_data:
+            return
+        # 显示详情页（复用通用详情页）
+        self.show_tool_detail_page(tool_data)
+        # 进入选择器详情上下文：顶栏显示“添加 + 完成”，返回目标为工作流名
+        self._in_picker_detail = True
+        # 隐藏详情页内的启动/安装/卸载按钮，避免与“添加”语义冲突
+        try:
+            if self.current_detail_page:
+                for attr in ('launch_btn', 'install_btn', 'uninstall_btn'):
+                    btn = getattr(self.current_detail_page, attr, None)
+                    if btn:
+                        btn.hide()
+        except Exception:
+            pass
+        try:
+            self.toolbar.set_default_buttons_visible(False)
+            self.toolbar.set_actions([
+                {'id': 'picker_add', 'text': '添加', 'type': 'normal'},
+                {'id': 'picker_done', 'text': '完成', 'type': 'normal'}
+            ])
+            wf = self.workflows_manager.get_workflow(getattr(self, '_current_workflow_id', ''))
+            self.toolbar.set_back_target(wf.name if wf else self.tr('工作流'))
+        except Exception:
+            pass
     
     def _open_filter_panel(self):
         """打开筛选面板 - 1.2.1版本"""
@@ -811,6 +1239,7 @@ class MainWindow(QMainWindow):
         msg = f"[日志-I3] 开始更新工具卡片状态: {tool_name}"
         print(msg)
         logger.info(msg)
+        # 主工具网格
         card = self.tools_grid.get_card_by_name(tool_name)
         if card:
             msg = f"[日志-I4] 找到工具卡片({type(card).__name__})，更新状态: {tool_name}"
@@ -822,21 +1251,18 @@ class MainWindow(QMainWindow):
             print(msg)
             logger.info(msg)
             
-            # 更新工具数据状态（适配ToolCardV3）
-            if hasattr(card, 'tool_data'):
+            # 优先使用卡片API切换按钮与状态
+            if hasattr(card, 'update_tool_status'):
+                card.update_tool_status("installed", 
+                                       executable_path=f"/path/to/{tool_name.lower()}",
+                                       disk_usage="15.2 MB")
+                msg = f"[日志-I6] 已通过update_tool_status切换为已安装: {tool_name}"
+            elif hasattr(card, 'tool_data'):
                 card.tool_data['status'] = 'installed'
                 card.tool_data['executable_path'] = f"/path/to/{tool_name.lower()}"
                 card.tool_data['disk_usage'] = "15.2 MB"
-                # 强制重绘卡片
-                card.update()
-                card.repaint()
+                card.update(); card.repaint()
                 msg = f"[日志-I6] 已更新ToolCardV3数据并重绘: {tool_name}"
-            elif hasattr(card, 'update_tool_status'):
-                # 兼容老版本ToolCard
-                card.update_tool_status("installed", 
-                                      executable_path=f"/path/to/{tool_name.lower()}",
-                                      disk_usage="15.2 MB")
-                msg = f"[日志-I6] 已更新ToolCard状态: {tool_name}"
             else:
                 msg = f"[日志-I6] 警告：未知的卡片类型，无法更新状态: {tool_name}"
             print(msg)
@@ -845,6 +1271,24 @@ class MainWindow(QMainWindow):
             msg = f"[日志-I4] 警告：未找到工具卡片: {tool_name}"
             print(msg)
             logger.warning(msg)
+        # 工作流详情页中的卡片（若存在）
+        try:
+            if self.workflows_detail_view and hasattr(self.workflows_detail_view, 'cards'):
+                wcard = self.workflows_detail_view.cards.get_card_by_name(tool_name)
+                if wcard:
+                    if hasattr(wcard, 'set_installing_state'):
+                        wcard.set_installing_state(False, 0, "")
+                    if hasattr(wcard, 'update_tool_status'):
+                        wcard.update_tool_status("installed", 
+                                                 executable_path=f"/path/to/{tool_name.lower()}",
+                                                 disk_usage="15.2 MB")
+                    elif hasattr(wcard, 'tool_data'):
+                        wcard.tool_data['status'] = 'installed'
+                        wcard.tool_data['executable_path'] = f"/path/to/{tool_name.lower()}"
+                        wcard.tool_data['disk_usage'] = "15.2 MB"
+                        wcard.update(); wcard.repaint()
+        except Exception:
+            pass
         
         # 更新最近使用列表
         msg = f"[日志-I7] 更新最近使用列表: {tool_name}"
@@ -925,6 +1369,14 @@ class MainWindow(QMainWindow):
                 self.main_content_stack.repaint()
             QApplication.processEvents()
             logger.info(f"🎨 [MainWindow-强制刷新] 已强制刷新父容器和QStackedWidget")
+
+        # 启动兜底轮询（用于无法正确回调停止的工具）
+        try:
+            self._running_tool_name = tool_name
+            if hasattr(self, 'tool_manager') and getattr(self.tool_manager, 'usage_tracker', None):
+                self._run_state_timer.start()
+        except Exception:
+            pass
     
     def _on_tool_uninstalled(self, tool_name: str):
         """工具卸载完成处理"""
@@ -956,21 +1408,16 @@ class MainWindow(QMainWindow):
             card.set_installing_state(False, 0, "")
             print(f"[日志-D5] 已清除卸载进度状态: {tool_name}")
             
-            # 更新工具数据状态（适配ToolCardV3）
-            if hasattr(card, 'tool_data'):
+            # 优先使用卡片API切换按钮与状态
+            if hasattr(card, 'update_tool_status'):
+                card.update_tool_status("available", executable_path="", disk_usage="")
+                print(f"[日志-D6] 已通过update_tool_status切换为未安装状态: {tool_name}")
+            elif hasattr(card, 'tool_data'):
                 card.tool_data['status'] = 'available'
                 card.tool_data['executable_path'] = ""
                 card.tool_data['disk_usage'] = ""
-                # 强制重绘卡片
-                card.update()
-                card.repaint()
+                card.update(); card.repaint()
                 print(f"[日志-D6] 已更新ToolCardV3数据并重绘为未安装状态: {tool_name}")
-            elif hasattr(card, 'update_tool_status'):
-                # 兼容老版本ToolCard
-                card.update_tool_status("available", 
-                                      executable_path="",
-                                      disk_usage="")
-                print(f"[日志-D6] 已更新ToolCard为未安装状态: {tool_name}")
             else:
                 print(f"[日志-D6] 警告：未知的卡片类型，无法更新状态: {tool_name}")
         else:
@@ -992,6 +1439,21 @@ class MainWindow(QMainWindow):
         print(f"[日志-D9] *** 开始强制刷新UI ***: {tool_name}")
         logger.info(f"[日志-D9] *** 开始强制刷新UI ***: {tool_name}")
         self._force_refresh_all_ui()
+
+        # 同步更新工作流详情页中的卡片
+        try:
+            if self.workflows_detail_view and hasattr(self.workflows_detail_view, 'cards'):
+                wcard = self.workflows_detail_view.cards.get_card_by_name(tool_name)
+                if wcard:
+                    if hasattr(wcard, 'set_installing_state'):
+                        wcard.set_installing_state(False, 0, "")
+                    if hasattr(wcard, 'tool_data'):
+                        wcard.tool_data['status'] = 'available'
+                        wcard.tool_data['executable_path'] = ""
+                        wcard.tool_data['disk_usage'] = ""
+                        wcard.update(); wcard.repaint()
+        except Exception:
+            pass
         
         # 如果当前在详情页面且是刚卸载的工具，刷新详情页面显示
         if (self.current_detail_page and 
@@ -1003,6 +1465,12 @@ class MainWindow(QMainWindow):
             # 更新工具数据状态
             print(f"[日志-D12] 更新详情页面工具数据状态: {tool_name} -> available")
             logger.info(f"[日志-D12] 更新详情页面工具数据状态: {tool_name} -> available")
+            # 确保运行状态复位
+            try:
+                if hasattr(self.current_detail_page, 'update_running_state'):
+                    self.current_detail_page.update_running_state(False)
+            except Exception:
+                pass
             self.current_detail_page.tool_data['status'] = 'available'
             self.current_detail_page.tool_data['executable_path'] = ""
             self.current_detail_page.tool_data['disk_usage'] = ""
@@ -1031,19 +1499,44 @@ class MainWindow(QMainWindow):
         print(f"[状态变更] 工具状态变化: {tool_name} -> {new_status}")
         logger.info(f"[状态变更] 工具状态变化: {tool_name} -> {new_status}")
 
-        # 更新卡片状态
+        # 更新主网格卡片
         card = self.tools_grid.get_card_by_name(tool_name)
         if card:
             # 清除任何进行中的安装/卸载进度显示
             if hasattr(card, 'set_installing_state'):
                 card.set_installing_state(False, 0, "")
-            if hasattr(card, 'tool_data'):
+            if hasattr(card, 'update_tool_status'):
+                card.update_tool_status(new_status)
+            elif hasattr(card, 'tool_data'):
                 card.tool_data['status'] = new_status
                 card.update(); card.repaint()
-            elif hasattr(card, 'update_tool_status'):
-                card.update_tool_status(new_status)
         else:
             logger.info(f"[状态变更] 未找到卡片: {tool_name}，刷新整个工具网格")
+
+        # 同步更新工作流详情页中的卡片
+        try:
+            if self.workflows_detail_view and hasattr(self.workflows_detail_view, 'cards'):
+                wcard = self.workflows_detail_view.cards.get_card_by_name(tool_name)
+                if wcard:
+                    if hasattr(wcard, 'set_installing_state'):
+                        wcard.set_installing_state(False, 0, "")
+                    if hasattr(wcard, 'update_tool_status'):
+                        wcard.update_tool_status(new_status)
+                    elif hasattr(wcard, 'tool_data'):
+                        wcard.tool_data['status'] = new_status
+                        wcard.update(); wcard.repaint()
+        except Exception:
+            pass
+
+        # 如果当前详情显示的是该工具且状态变为非已安装，复位“运行中”按钮
+        try:
+            if (self.current_detail_page and hasattr(self.current_detail_page, 'tool_data') and
+                self.current_detail_page.tool_data.get('name') == tool_name and
+                str(new_status).lower() != 'installed' and
+                hasattr(self.current_detail_page, 'update_running_state')):
+                self.current_detail_page.update_running_state(False)
+        except Exception:
+            pass
 
         # 刷新列表并重应用筛选，确保所有视图（包括收藏、筛选视图）立即反映新状态
         self._update_tools_display()
@@ -1053,6 +1546,7 @@ class MainWindow(QMainWindow):
         """安装/卸载进度更新处理（接收 ToolManager 的进度信号）"""
         import logging
         logger = logging.getLogger(__name__)
+        import time
         
         # 🎯 判断是安装还是卸载任务
         is_uninstall = "卸载" in status_text or "删除" in status_text or "清理" in status_text or "停止" in status_text
@@ -1061,9 +1555,23 @@ class MainWindow(QMainWindow):
         print(f"【下载状态链路-P1】收到{task_type}进度信号: {tool_name} - {progress}% - {status_text}")
         logger.info(f"【下载状态链路-P1】收到{task_type}进度信号: {tool_name} - {progress}% - {status_text}")
         
-        # 更新工具卡片状态
+        # 进度节流：避免频繁重绘导致的闪烁
+        try:
+            now = time.time()
+            cache = self._progress_cache.get(tool_name) or {'p': None, 's': None, 'ts': 0}
+            same_progress = (progress == cache['p'])
+            same_status = (status_text == cache['s'])
+            too_fast = (now - (cache['ts'] or 0)) < 0.15
+            # 对于仅状态文本变化且时间间隔过短的更新，跳过卡片重绘（仍更新下载卡片）
+            skip_card_update = (too_fast and same_progress and same_status)
+            # 更新缓存
+            self._progress_cache[tool_name] = {'p': progress, 's': status_text, 'ts': now}
+        except Exception:
+            skip_card_update = False
+
+        # 更新主网格卡片状态
         card = self.tools_grid.get_card_by_name(tool_name)
-        if card:
+        if card and not skip_card_update:
             print(f"【下载状态链路-P2】✅ 找到工具卡片，更新进度显示")
             logger.info(f"【下载状态链路-P2】✅ 找到工具卡片，更新进度显示")
             # 根据任务类型设置状态：安装=True，卸载=False
@@ -1073,6 +1581,18 @@ class MainWindow(QMainWindow):
             print(f"【下载状态链路-P2】⚠️ 未找到工具卡片: {tool_name}")
             logger.warning(f"【下载状态链路-P2】⚠️ 未找到工具卡片: {tool_name}")
         
+        # 同步更新：工作流详情页中的卡片（如果存在）
+        if not skip_card_update:
+            try:
+                if self.workflows_detail_view and hasattr(self.workflows_detail_view, 'cards'):
+                    wcard = self.workflows_detail_view.cards.get_card_by_name(tool_name)
+                    if wcard and hasattr(wcard, 'set_installing_state'):
+                        is_installing_operation = not is_uninstall
+                        wcard.set_installing_state(is_installing_operation, progress, status_text)
+                        wcard.update(); wcard.repaint()
+            except Exception:
+                pass
+
         print(f"【下载状态链路-P2.5】✅ 工具卡片更新完成，继续执行后续流程")
         logger.info(f"【下载状态链路-P2.5】✅ 工具卡片更新完成，继续执行后续流程")
         
@@ -1186,6 +1706,34 @@ class MainWindow(QMainWindow):
                 self.main_content_stack.repaint()
             QApplication.processEvents()
             logger.info(f"🎨 [MainWindow-强制刷新] 已强制刷新父容器和QStackedWidget")
+
+        # 停止兜底轮询
+        try:
+            if self._running_tool_name == tool_name:
+                self._run_state_timer.stop()
+                self._running_tool_name = None
+        except Exception:
+            pass
+
+    def _poll_running_state(self):
+        """兜底轮询：检测详情页显示的工具是否已退出进程（防止回调丢失）。"""
+        try:
+            if not self._running_tool_name:
+                return
+            ut = getattr(self.tool_manager, 'usage_tracker', None)
+            active = getattr(ut, 'active_sessions', {}) if ut else {}
+            if self._running_tool_name not in active:
+                # 主动将按钮置回“启动”
+                if (self.current_detail_page and hasattr(self.current_detail_page, 'tool_data') and
+                    self.current_detail_page.tool_data.get('name') == self._running_tool_name and
+                    hasattr(self.current_detail_page, 'update_running_state')):
+                    self.current_detail_page.update_running_state(False)
+                    self.current_detail_page.update(); self.current_detail_page.repaint()
+                self._run_state_timer.stop()
+                self._running_tool_name = None
+        except Exception:
+            # 静默失败，避免干扰
+            pass
 
         # 检查当前详情页
         logger.info(f"🔍 [MainWindow-详情页检查] current_detail_page: {self.current_detail_page}")
@@ -1375,6 +1923,7 @@ class MainWindow(QMainWindow):
 
         # 🔥 关键修复：如果当前已经显示该工具的详情页，不要重建！
         if (self.current_detail_page and
+            self.main_content_stack.currentWidget() is self.current_detail_page and
             hasattr(self.current_detail_page, 'tool_data') and
             self.current_detail_page.tool_data.get('name') == tool_name):
             logger.info(f"✅ [_on_card_selected] 已在显示 {tool_name} 详情页，跳过重建")
@@ -1422,6 +1971,21 @@ class MainWindow(QMainWindow):
             print(f"【下载状态链路-2】❌ 警告：下载卡片不存在！状态可能丢失")
             logger.warning(f"【下载状态链路-2】❌ 警告：下载卡片不存在！状态可能丢失")
         
+        # 规范化工具名（大小写不敏感匹配到注册名称）
+        try:
+            canonical = tool_name
+            try:
+                all_td = self.tool_manager.get_all_tools_data()
+                for it in all_td:
+                    if it.get('name','').lower() == tool_name.lower():
+                        canonical = it.get('name', tool_name)
+                        break
+            except Exception:
+                pass
+            tool_name = canonical
+        except Exception:
+            pass
+
         msg = f"【下载状态链路-3】开始调用 tool_manager.install_tool: {tool_name}"
         print(msg)
         logger.info(msg)
@@ -1454,7 +2018,21 @@ class MainWindow(QMainWindow):
         """处理工具启动请求"""
         if self.monitor:
             self.monitor.log_user_operation("请求启动工具", {"工具名": tool_name})
-        
+        # 规范化工具名
+        try:
+            canonical = tool_name
+            try:
+                all_td = self.tool_manager.get_all_tools_data()
+                for it in all_td:
+                    if it.get('name','').lower() == tool_name.lower():
+                        canonical = it.get('name', tool_name)
+                        break
+            except Exception:
+                pass
+            tool_name = canonical
+        except Exception:
+            pass
+
         success = self.tool_manager.launch_tool(tool_name)
         if not success:
             QMessageBox.warning(self, self.tr("启动失败"), self.tr("无法启动 {0}").format(tool_name))
@@ -1478,6 +2056,21 @@ class MainWindow(QMainWindow):
         if self.monitor:
             self.monitor.log_user_operation("请求卸载工具", {"工具名": tool_name})
         
+        # 规范化工具名
+        try:
+            canonical = tool_name
+            try:
+                all_td = self.tool_manager.get_all_tools_data()
+                for it in all_td:
+                    if it.get('name','').lower() == tool_name.lower():
+                        canonical = it.get('name', tool_name)
+                        break
+            except Exception:
+                pass
+            tool_name = canonical
+        except Exception:
+            pass
+
         # 🎯 检查下载卡片是否存在
         if self.modern_download_card:
             print(f"【下载状态链路-U2】✅ 下载卡片已存在，准备接收卸载状态更新")
@@ -1705,13 +2298,17 @@ class MainWindow(QMainWindow):
         # 确保工具数据包含收藏状态
         tool_data['is_favorite'] = self.config_manager.is_tool_favorite(tool_data['name'])
 
-        # 从 config_manager.tools 加载最新的使用时间（关键修复！）
-        # usage_tracker将数据保存到config_manager.tools中
+        # 从 config_manager.tools 加载最新的使用时间/启动次数（关键修复！）
+        # usage_tracker 将数据保存到 config_manager.tools 中
         if self.config_manager and self.config_manager.tools:
             for tool in self.config_manager.tools:
                 if tool.get('name') == tool_data['name']:
                     total_runtime = tool.get('total_runtime', 0)
                     tool_data['total_runtime'] = total_runtime
+                    # Web 工具的启动次数
+                    if 'launch_count' in tool:
+                        tool_data['launch_count'] = tool.get('launch_count', 0)
+                        logger.info(f"🌐 [show_tool_detail_page] 从config加载启动次数: {tool_data['launch_count']} 次")
                     logger.info(f"📊 [show_tool_detail_page] 从config加载使用时间: {total_runtime}秒")
                     break
 
@@ -1727,9 +2324,13 @@ class MainWindow(QMainWindow):
             logger.info(f"⚠️ [show_tool_detail_page] 已在显示 {tool_data['name']} 详情页，跳过重建，只刷新数据")
             # 更新数据到当前页面
             self.current_detail_page.tool_data['total_runtime'] = tool_data.get('total_runtime', 0)
-            # 刷新显示
+            self.current_detail_page.tool_data['launch_count'] = tool_data.get('launch_count', 0)
+            # 刷新显示：根据工具类型传入合适的值
             if hasattr(self.current_detail_page, 'update_usage_time'):
-                self.current_detail_page.update_usage_time(tool_data.get('total_runtime', 0))
+                is_web = (tool_data.get('tool_type') == 'web_launcher') or (tool_data.get('install_source') == 'web') \
+                         or (str(tool_data.get('version','')).lower() == 'online')
+                value = tool_data.get('launch_count', 0) if is_web else tool_data.get('total_runtime', 0)
+                self.current_detail_page.update_usage_time(value)
             return  # 直接返回，不重建
 
         print(f"[详情页面] 创建详情页面: {tool_data['name']}, 收藏状态: {'收藏' if tool_data['is_favorite'] else '未收藏'}")
@@ -1793,6 +2394,23 @@ class MainWindow(QMainWindow):
         
         # 切换工具栏到详情页模式
         self.toolbar.switch_to_detail_mode()
+        # 根据来源视图设置动态返回目标标签
+        try:
+            back_map = {
+                'all-tools': self.tr('全部工具'),
+                'my-tools': self.tr('我的工具'),
+                'settings': self.tr('设置'),
+                'workflows': (self._current_workflow_name or self.tr('工作流')),
+            }
+            label = back_map.get(getattr(self, '_last_non_detail_view', ''), '')
+            self.toolbar.set_back_target(label)
+            # 同步设置返回目标：确保从工作流进入详情时返回到工作流页面
+            if getattr(self, '_last_non_detail_view', '') == 'workflows':
+                self._back_target = 'workflows'
+            else:
+                self._back_target = 'main'
+        except Exception:
+            pass
         
         # 记录操作
         if self.monitor:
@@ -1811,6 +2429,8 @@ class MainWindow(QMainWindow):
         
         # 切换工具栏到列表模式
         self.toolbar.switch_to_list_mode()
+        self.toolbar.set_default_buttons_visible(True)
+        self.toolbar.clear_actions()
         
         # 记录操作
         if self.monitor:

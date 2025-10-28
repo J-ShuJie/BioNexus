@@ -64,7 +64,31 @@ class ToolCardV3(QWidget):
         total_width = self.CARD_WIDTH - 2 * self.PADDING
         button_width = (total_width - button_spacing) // 2
         
-        if self.tool_data['status'] == 'installed':
+        # 识别 Web 启动器：无需安装，统一显示“在浏览器中打开 + 详情”
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = (tool_type == 'web_launcher') or (self.tool_data.get('install_source') == 'web') \
+            or (str(self.tool_data.get('version', '')).lower() == 'online')
+
+        if is_web_launcher:
+            # Web 工具：打开网页 + 详情
+            self.launch_btn = QPushButton(self.tr("Open in Browser"), self)
+            self.launch_btn.setGeometry(
+                self.PADDING, button_y, button_width, self.BUTTON_HEIGHT
+            )
+            self.launch_btn.clicked.connect(
+                lambda: self.launch_clicked.emit(self.tool_data['name'])
+            )
+            self._style_button(self.launch_btn, "primary")
+
+            self.detail_btn = QPushButton(self.tr("Details"), self)
+            self.detail_btn.setGeometry(
+                self.PADDING + button_width + button_spacing,
+                button_y, button_width, self.BUTTON_HEIGHT
+            )
+            self.detail_btn.clicked.connect(self._on_detail_clicked)
+            self._style_button(self.detail_btn, "secondary")
+
+        elif self.tool_data['status'] == 'installed':
             # 已安装：启动按钮 + 详情按钮
             self.launch_btn = QPushButton(self.tr("Launch"), self)
             self.launch_btn.setGeometry(
@@ -372,6 +396,21 @@ class ToolCardV3(QWidget):
     
     def _draw_status_indicator(self, painter):
         """绘制状态指示器"""
+        # 识别 Web 工具，显示“🌐”而非下载/安装标识
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = (tool_type == 'web_launcher') or (self.tool_data.get('install_source') == 'web') \
+            or (str(self.tool_data.get('version', '')).lower() == 'online')
+
+        if is_web_launcher:
+            painter.setPen(QColor("#3b82f6"))
+            painter.setFont(QFont("", 11))
+            painter.drawText(
+                QRect(self.PADDING, self.height() - 32, 20, 20),
+                Qt.AlignCenter,
+                "🌐"
+            )
+            return
+
         if self.tool_data['status'] == 'installed':
             # 已安装 - 绿色勾
             painter.setPen(QColor("#10b981"))
@@ -433,6 +472,73 @@ class ToolCardV3(QWidget):
     def _on_detail_clicked(self):
         """详情按钮点击处理"""
         self.clicked.emit(self.tool_data)
+
+    # === 动态状态更新（安装 <-> 已安装） ===
+    def update_tool_status(self, new_status: str, executable_path: str = None, disk_usage: str = None):
+        """在不重建卡片的情况下切换按钮与状态。
+
+        Args:
+            new_status: 'installed' 或 'available'
+            executable_path: 可选，已安装时的可执行路径
+            disk_usage: 可选，已安装时的磁盘占用
+        """
+        status = (new_status or '').lower()
+        if status not in ('installed', 'available'):
+            return
+        self.tool_data['status'] = 'installed' if status == 'installed' else 'available'
+        if executable_path is not None:
+            self.tool_data['executable_path'] = executable_path
+        if disk_usage is not None:
+            self.tool_data['disk_usage'] = disk_usage
+
+        button_y = self.CARD_HEIGHT - self.BUTTON_HEIGHT - 8
+        button_spacing = 5
+        total_width = self.CARD_WIDTH - 2 * self.PADDING
+        button_width = (total_width - button_spacing) // 2
+
+        # 切换按钮集合
+        if status == 'installed':
+            # 移除安装按钮（如存在）
+            if hasattr(self, 'install_btn') and self.install_btn:
+                try:
+                    self.install_btn.hide(); self.install_btn.setParent(None)
+                except Exception:
+                    pass
+                self.install_btn = None
+            # 创建/显示启动按钮
+            if not hasattr(self, 'launch_btn') or self.launch_btn is None:
+                self.launch_btn = QPushButton(self.tr("Launch"), self)
+                self.launch_btn.clicked.connect(lambda: self.launch_clicked.emit(self.tool_data['name']))
+                self._style_button(self.launch_btn, "primary")
+            self.launch_btn.setGeometry(self.PADDING, button_y, button_width, self.BUTTON_HEIGHT)
+            self.launch_btn.show(); self.launch_btn.setEnabled(True)
+            # 保证详情按钮存在
+            if hasattr(self, 'detail_btn') and self.detail_btn:
+                self.detail_btn.setGeometry(self.PADDING + button_width + button_spacing, button_y, button_width, self.BUTTON_HEIGHT)
+                self.detail_btn.show()
+
+        else:  # available
+            # 移除启动按钮（如存在）
+            if hasattr(self, 'launch_btn') and self.launch_btn:
+                try:
+                    self.launch_btn.hide(); self.launch_btn.setParent(None)
+                except Exception:
+                    pass
+                self.launch_btn = None
+            # 创建/显示安装按钮
+            if not hasattr(self, 'install_btn') or self.install_btn is None:
+                self.install_btn = QPushButton(self.tr("Install"), self)
+                self.install_btn.clicked.connect(lambda: self.install_clicked.emit(self.tool_data['name']))
+                self._style_button(self.install_btn, "success")
+            self.install_btn.setGeometry(self.PADDING, button_y, button_width, self.BUTTON_HEIGHT)
+            self.install_btn.show(); self.install_btn.setEnabled(True)
+            # 保证详情按钮存在
+            if hasattr(self, 'detail_btn') and self.detail_btn:
+                self.detail_btn.setGeometry(self.PADDING + button_width + button_spacing, button_y, button_width, self.BUTTON_HEIGHT)
+                self.detail_btn.show()
+
+        # 触发重绘
+        self.update(); self.repaint()
     
     def set_selected(self, selected: bool):
         """设置选中状态 - 保持兼容性"""
@@ -472,8 +578,11 @@ class ToolCardV3(QWidget):
     def retranslateUi(self):
         """Update all translatable text - called when language changes"""
         # Update button texts based on tool status
+        tool_type = self.tool_data.get('tool_type', '')
+        is_web_launcher = (tool_type == 'web_launcher') or (self.tool_data.get('install_source') == 'web') \
+            or (str(self.tool_data.get('version', '')).lower() == 'online')
         if hasattr(self, 'launch_btn'):
-            self.launch_btn.setText(self.tr("Launch"))
+            self.launch_btn.setText(self.tr("Open in Browser") if is_web_launcher else self.tr("Launch"))
         if hasattr(self, 'install_btn'):
             self.install_btn.setText(self.tr("Install"))
         if hasattr(self, 'detail_btn'):

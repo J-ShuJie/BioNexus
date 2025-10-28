@@ -260,6 +260,15 @@ class ToolManager(QObject):
                 self.error_occurred.emit(tool_name, error_msg)
                 return False
             
+            # 如果正在跟踪使用，先停止，避免UI仍显示“运行中”
+            try:
+                if self.usage_tracker and hasattr(self.usage_tracker, 'active_sessions'):
+                    if tool_name in self.usage_tracker.active_sessions:
+                        self.usage_tracker.stop_tracking(tool_name)
+                        self.logger.info(f"已停止使用跟踪: {tool_name}")
+            except Exception as e:
+                self.logger.warning(f"停止使用跟踪失败(忽略): {e}")
+
             # 执行卸载（添加进度反馈）
             self.installation_progress.emit(tool_name, 25, "正在停止工具进程...")
             
@@ -318,13 +327,22 @@ class ToolManager(QObject):
                 self.logger.info(f"工具 {tool_name} 启动成功")
                 self.tool_launched.emit(tool_name)
 
-                # 开始跟踪工具使用时间
+                # 跟踪工具使用
                 if self.usage_tracker:
                     try:
-                        # 尝试获取工具进程PID（如果可能）
-                        pid = self._get_tool_process_pid(tool_name)
-                        self.usage_tracker.start_tracking(tool_name, pid)
-                        self.logger.info(f"开始跟踪工具使用时间: {tool_name}, PID: {pid or '未知'}")
+                        # 检查是否为Web启动器
+                        metadata = tool_instance.get_metadata()
+                        is_web_launcher = metadata.get('tool_type') == 'web_launcher'
+
+                        if is_web_launcher:
+                            # Web工具只记录启动次数
+                            self.usage_tracker.record_launch(tool_name)
+                            self.logger.info(f"记录Web工具启动: {tool_name}")
+                        else:
+                            # 本地工具跟踪使用时间
+                            pid = self._get_tool_process_pid(tool_name)
+                            self.usage_tracker.start_tracking(tool_name, pid)
+                            self.logger.info(f"开始跟踪工具使用时间: {tool_name}, PID: {pid or '未知'}")
                     except Exception as e:
                         self.logger.warning(f"启动工具使用跟踪失败: {e}")
 
@@ -438,8 +456,8 @@ class ToolManager(QObject):
             import psutil
             import time
 
-            # 等待一小段时间让进程完全启动
-            time.sleep(0.5)
+            # 等待一小段时间让进程完全启动（部分GUI冷启动较慢）
+            time.sleep(1.0)
 
             # 常见工具的进程名映射
             process_name_map = {
@@ -449,6 +467,7 @@ class ToolManager(QObject):
                 'BLAST': ['blastn.exe', 'blastp.exe', 'blastx.exe'],
                 'BWA': ['bwa.exe'],
                 'SAMtools': ['samtools.exe'],
+                'UGENE': ['ugeneui.exe', 'UGENEDesktop.exe', 'ugene.exe', 'ugenem.exe', 'ugenecl.exe'],
             }
 
             possible_names = process_name_map.get(tool_name, [f"{tool_name.lower()}.exe"])
@@ -461,8 +480,8 @@ class ToolManager(QObject):
                 try:
                     proc_name = proc.info['name']
                     if proc_name and any(name.lower() in proc_name.lower() for name in possible_names):
-                        # 只考虑最近10秒内启动的进程
-                        if current_time - proc.info['create_time'] < 10:
+                        # 只考虑最近20秒内启动的进程
+                        if current_time - proc.info['create_time'] < 20:
                             candidates.append((proc.info['pid'], proc.info['create_time']))
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
